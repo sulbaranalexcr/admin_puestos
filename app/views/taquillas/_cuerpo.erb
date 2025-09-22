@@ -1,0 +1,114 @@
+<script>
+function myFunction() {
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("mysearch");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("usuarios_tabla");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
+
+<style>
+#mysearch {
+  background-image: url('/assets/searchicon.png'); /* Add a search icon to input */
+  background-position: 10px 12px; /* Position the search icon */
+  background-repeat: no-repeat; /* Do not repeat the icon image */
+  width: 100%; /* Full-width */
+  font-size: 16px; /* Increase font-size */
+  padding: 12px 20px 12px 40px; /* Add some padding */
+  border: 1px solid #ddd; /* Add a grey border */
+  margin-bottom: 12px; /* Add some space below the input */
+}
+
+#usuarios_tabla {
+  border-collapse: collapse; /* Collapse borders */
+  width: 100%; /* Full-width */
+  border: 1px solid #ddd; /* Add a grey border */
+  font-size: 18px; /* Increase font-size */
+}
+
+#usuarios_tabla th, #usuarios_tabla td {
+  text-align: left; /* Left-align text */
+  padding: 12px; /* Add padding */
+}
+
+#usuarios_tabla tr {
+  /* Add a bottom border to all table rows */
+  border-bottom: 1px solid #ddd;
+}
+
+#usuarios_tabla tr.header, #usuarios_tabla tr:hover {
+  /* Add a grey background color to the table header and on hover */
+  background-color: #f1f1f1;
+}
+
+</style>
+
+<input type="text" id="mysearch" onkeyup="myFunction()" placeholder="Ingrese nombre a buscar">
+<table id="usuarios_tabla" class="table table-bordered table-striped dataTable" role="grid">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Alias</th>
+      <th>Tel&eacute;fono</th>
+      <th>Moneda</th>
+      <th>Saldo</th>
+      <th>Activo</th>
+      <%if session[:usuario_actual]['tipo'].in?(%w(GRP ADM))%>
+        <th>Editar</th>
+        <!--th>Recarga</th>
+        <th>Retiro</th>
+        <th>Ajustes</th-->
+      <%end%>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @taquillas.each do |taquilla| %>
+      <tr>
+        <td> <%= taquilla.nombre %> </td>
+        <td> <%= taquilla.alias %> </td>
+        <td> <%= taquilla.telefono %> </td>
+        <td> <%= taquilla.simbolo_moneda_default %> </td>        
+        <td> <%= number_with_precision(taquilla.saldo_usd, precision: 2, separator: '.', delimiter: ',') %> </td>
+        <td> <%= taquilla.activo ? "SI":"NO" %> </td>
+        <%if session[:usuario_actual]['tipo'].in?(%w(GRP ADM))%>
+          <td>
+          <div class="btn-row">
+              <%= link_to raw('<i style="font-size:20px;font-weight: bold;" class="fa fa-cogs"></i>'), edit_taquilla_url(taquilla), class: 'btn btn btn-warning' %>
+            </div>
+          </td>
+          <!--td>
+            <div class="btn-row">
+              <a class="btn btn btn-success" rel="nofollow" onclick="recargar(<%=taquilla.id%>)"><i style="font-size:20px;font-weight: bold;" class="glyphicon glyphicon-plus"></i></a>
+            </div>
+          </td>
+          <td>
+            <div class="btn-row">
+              <a class="btn btn btn-danger" rel="nofollow" onclick="retirar(<%=taquilla.id%>)"><i style="font-size:20px;font-weight: bold;" class="glyphicon glyphicon-minus"></i></a>
+            </div>
+          </td>
+          <td>
+            <div class="btn-row">
+              <%= link_to raw('<i style="font-size:20px;font-weight: bold;" class="fa fa-gear"></i>'), '/solicitudes/ajustar_saldos?id=' + taquilla.id.to_s, class: 'btn btn btn-warning' %>
+            </div>
+          </td-->
+        <%end%>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

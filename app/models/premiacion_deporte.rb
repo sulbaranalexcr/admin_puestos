@@ -1,0 +1,2 @@
+class PremiacionDeporte < ApplicationRecord
+end

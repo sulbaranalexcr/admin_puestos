@@ -1,0 +1,45 @@
+<%= form_for @urls, url: '/bases_urls/update', role: :form, html: { multipart: true } do |f| %>
+    <div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+
+            <div class="box-header">
+            <h3 class="box-title">Listado de URLS</h3>
+            </div>
+
+            <div class="box-body">
+            <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                <div class="row">
+                <div class="col-sm-12">
+                    <table id="user_index" class="table table-bordered table-striped dataTable" role="grid">
+                    <thead>
+                        <tr>
+                        <th class="col-6">Gticket</th>
+                        <th class="col-6">Pendientes</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                          <td class="col-6"> <input type="text" class="form-control" style="width: 100%" name="gticket" value="<%=@urls.gticket%>"> </td>
+                          <td class="col-6"> <input type="text" class="form-control" style="width: 100%" name="pendientes" value="<%=@urls.pendientes%>"> </td>
+                        </tr>
+                    </tbody>
+
+                    </table>
+                </div>
+                </div>
+
+            </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+
+    <div class="row">
+    <div class="col-md-2 col-md-offset-10">
+    <input type="submit" class='btn btn-success pull-right' value="Aceptar">
+    </div>
+    </div>
+<%end%>

@@ -1,0 +1,36 @@
+          <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+
+            <div class="row">
+              <div class="col-sm-10 text-right">
+                <table id="caballos_enter" class="table table-bordered table-striped dataTable" role="grid" style="width: 90% !important;">
+                  <thead>
+                    <tr>
+                      <th class="col-sm-4 text-left">Hipodromo</th>
+                      <th class="col-sm-1 text-right">Carrera</th>
+                      <th class="col-sm-1 text-right"># Puesto</th>
+                      <th class="col-sm-2 text-left">Nombre Ejemplar</th>
+                      <th class="col-sm-2 text-center">Estado</th>
+                      <th class="col-sm-2 text-center">Retirar</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% CaballosRetiradosConfirmacion.where(status: [1,9], created_at: Time.now.all_day).order(:hipodromo_id, :carrera_id, :caballos_carrera_id).each do |caba| %>
+                      <tr id="id_retirar<%= caba.caballos_carrera.id %>">
+                        <td style="vertical-align: middle;" class="col-sm-4 text-left"> <%= caba.hipodromo.nombre %> </td>
+                        <td style="vertical-align: middle;"  class="col-sm-1 text-right"> <%= caba.carrera.numero_carrera %> </td>
+                        <td style="vertical-align: middle;"  class="col-sm-1 text-right"> <%= caba.caballos_carrera.numero_puesto %> </td>
+                        <td style="vertical-align: middle;"  class="col-sm-2 text-left"><input type="text" readOnly id="numcab<%= caba.caballos_carrera.id %>" data-hip="<%= caba.hipodromo_id %>" data-carr_id="<%= caba.carrera_id %>" data-puesto="<%= caba.caballos_carrera.numero_puesto %>" value="<%= caba.caballos_carrera.nombre %>" class="form-control" /> </td>
+                        <td class="col-sm-2 text-center" > <%= caba.status.upcase %> </td>
+                        <td class="col-sm-2 text-center" >
+                          <input style="transform: scale(1.7);margin: 10px;" type="checkbox" tabindex="-1" title="Esta opcion es delicada, usela con cuidado." data-group-cls="btn-group-sm" id="checab<%= caba.caballos_carrera.id %>" <%= caba.valido? ? "" : "checked" %> <%= (caba.valido? || caba.invalido?) ? "" : "readonly" %> />
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+
+          </div>

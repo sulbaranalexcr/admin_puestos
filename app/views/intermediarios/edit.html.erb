@@ -1,0 +1,68 @@
+<%= form_for @intermediario, url: @url, role: :form, html: { multipart: true } do |f| %>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Editando Intermediario</h3>
+        </div>
+
+        <div class="box-body">
+          <div class="form-group">
+            <%= f.label 'Nombre' %>
+            <%= f.text_field :nombre, class: "form-control", style: 'width: 50%' %>
+            <span class="help-block"><i>* Este campo es requerido</i><span>
+
+          </div>
+
+
+          <div class="form-group">
+            <%= f.label 'Representante' %>
+            <%= f.text_field :representante, class: "form-control", style: 'width: 50%' %>
+            <span class="help-block"><i>* Este campo es requerido</i><span>
+          </div>
+
+
+          <div class="form-group">
+            <%= f.label 'Direccion' %>
+            <%= f.text_field :direccion, class: "form-control", style: 'width: 50%' %>
+            <span class="help-block"><i>* Este campo es requerido</i><span>
+          </div>
+
+
+          <div class="form-group">
+            <%= f.label 'Telefono' %>
+            <%= f.text_field :telefono, class: "form-control", style: 'width: 50%' %>
+            <span class="help-block"><i>* Este campo es requerido</i><span>
+          </div>
+
+          <div class="form-group">
+            <%= f.label 'E-mail' %>
+            <%= f.email_field :correo, class: "form-control", style: 'width: 50%' %>
+            <span class="help-block"><i>* Este campo es requerido</i><span>
+          </div>
+
+          <div class="form-group">
+            <%= f.label '% Banca' %>
+            <%= f.number_field :porcentaje_banca, class: "form-control", style: 'width: 50%' %>
+            <span class="help-block"><i>* Este campo es requerido</i><span>
+          </div>
+
+
+          <div class="form-group">
+            <%= f.label 'Activo' %>
+            <%= f.check_box :activo, {}%>
+          </div>
+
+
+        </div>
+
+        <div class="box-footer">
+          <%= link_to 'Cancelar', intermediarios_path, class: 'btn btn-danger' %>
+          <%= f.submit 'Enviar', class: "btn btn-success" %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+<% end %>

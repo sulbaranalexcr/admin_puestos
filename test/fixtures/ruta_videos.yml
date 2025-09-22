@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nombre: MyString
+  tipo: 1
+  hipodromo: MyString
+  url: MyText
+
+two:
+  nombre: MyString
+  tipo: 1
+  hipodromo: MyString
+  url: MyText

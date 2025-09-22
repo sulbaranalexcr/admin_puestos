@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  operacaiones_cajero_id: 1
+  usuarios_taquilla_id: 1
+  integrador_id: 1
+  monto: 9.99
+  detalle: MyString
+  tipo: 1
+  enviado: false
+  procesado: false
+
+two:
+  operacaiones_cajero_id: 1
+  usuarios_taquilla_id: 1
+  integrador_id: 1
+  monto: 9.99
+  detalle: MyString
+  tipo: 1
+  enviado: false
+  procesado: false

@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  premios_ingresado: one
+  carrera: one
+  usuarios_taquilla: one
+  operaciones_cajero: one
+  propuestas_caballo: one
+  activo: false
+  status: 1
+
+two:
+  premios_ingresado: two
+  carrera: two
+  usuarios_taquilla: two
+  operaciones_cajero: two
+  propuestas_caballo: two
+  activo: false
+  status: 1

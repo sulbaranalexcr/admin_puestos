@@ -1,0 +1,93 @@
+  <%= javascript_include_tag "axios.js" %>
+<script>
+
+
+
+
+function grabar(){
+  swal({
+     title: "Esta seguro de retirar el(los) caballo(s)?",
+     text:  "Aceptar para confirmar retiro.",
+     icon: "warning",
+     buttons: {
+       confirm: "Aceptar",
+        cancel: "Cancelar",
+      },
+   })
+   .then((aceptar) => {
+     if (aceptar) {
+       grabar_final();
+     } else {
+     }
+   });
+
+}
+
+function grabar_final(){
+  datos = [];
+  pase = 0 ;
+      $( "input[id*='numcab']" ).each(function() { 
+        if (!$('#checab'+this.id.substring(6)).prop("checked")){
+          datos.push({"id": this.getAttribute("data-puesto"),"cab_id": this.id.substring(6),"hid": this.getAttribute("data-hip"), "carr_id": this.getAttribute("data-carr_id"),"retirado": !$('#checab'+this.id.substring(6)).prop("checked") });
+          if (this.value.length == 0){
+            pase += 1
+          }
+        }
+      });
+      if (pase > 0){
+          swal("Lo siento", "Debe ingresar todos los caballos.", "error");
+      }else{
+          axios({
+              method: 'POST',
+                url: '/retirados/retirar_pendientes',
+              data: {
+                "data": datos,
+              },
+            })
+            .then(function(response) {
+              swal("Completo", "Caballos retirados.", "success").then((aceptar) => {
+                  location.reload();
+                });
+            }
+
+          )
+          .catch(function (error) {
+              swal("Lo siento", error.response.data.msg, "error");
+          });
+      }
+}
+
+
+</script>
+
+<form>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+
+      <div class="box-header">
+        <h3 class="box-title">Retirar Caballos Pendientes</h3>
+      </div>
+
+      <div class="form-group">
+        <div class="box-body">
+
+        <div class="form-group">
+           <div id='caballos_div'>
+               <%= render partial: 'caballos_pendiente'%>
+           </div>
+        </div>
+      </div>
+
+      <div class="box-footer">
+           <input type="button" value="Aceptar" class="btn btn-success" onclick="grabar()"/>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</form>
+<script>
+   window.boton_check() ;
+</script>

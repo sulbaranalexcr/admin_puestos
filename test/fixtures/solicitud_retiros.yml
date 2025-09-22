@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  usuarios_taquilla: one
+  tipo: 1
+  cuentas_cliente: one
+  monto: 9.99
+  status: 1
+
+two:
+  usuarios_taquilla: two
+  tipo: 1
+  cuentas_cliente: two
+  monto: 9.99
+  status: 1

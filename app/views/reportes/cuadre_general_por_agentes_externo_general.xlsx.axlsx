@@ -1,0 +1,56 @@
+wb = xlsx_package.workbook
+wb.styles do |style|
+  project_heading = style.add_style(b: true, sz: 14)
+  heading = style.add_style(b: true,bg_color: "E9EAEA")
+  wb.add_worksheet(name: "Cuadre General Taquillas" ) do |sheet|
+    # Create the header row
+      sheet.add_row ["Cuadre General Taquillas"], style: project_heading
+      
+      col_widths= [20,20,20,20,20,20,20] 
+      sheet.column_widths *col_widths
+      sheet.add_row ["Fecha: " +  @desde + " al " + @hasta]
+      sheet.add_row ["General"], style: project_heading
+      sheet.add_row ["Nombre","Ventas", "Premios","Balance","Mi Comision 2.5%", "Mi Comision 5%","Total Comisiones"], style: heading
+      # Create entries for each item
+      total1 = 0
+      total2 = 0
+      total3 = 0
+      total4 = 0
+      total5 = 0
+      total6 = 0
+      inicio = 5
+      final = 4
+      @reporte.each do |repo|
+        sheet.add_row [
+          repo['nombre'],
+          number_with_precision( repo['venta'] , precision: 2, separator: ',', delimiter: '.'), 
+          number_with_precision( repo['premio'], precision: 2, separator: ',', delimiter: '.'),
+          number_with_precision( repo['venta'].to_f - repo['premio'].to_f , precision: 2, separator: ',', delimiter: '.'),
+          number_with_precision( repo['comision_oc'].to_f , precision: 2, separator: ',', delimiter: '.'),
+          number_with_precision( repo['comision'].to_f, precision: 2, separator: ',', delimiter: '.'),
+          number_with_precision( repo['comision_oc'].to_f  + repo['comision'].to_f  , precision: 2, separator: ',', delimiter: '.'), 
+          ]
+        total1 += repo['venta'].to_f
+        total2 += repo['premio'].to_f 
+        total3 += (repo['venta'].to_f - repo['premio']).to_f
+        total4 += repo['comision_oc'].to_f
+        total5 += repo['comision'].to_f
+        total6 += repo['comision_oc'].to_f  + repo['comision'].to_f
+        
+        final += 1
+      end
+      total1 = number_with_precision(total1, precision: 2, separator: ',', delimiter: '.')
+      total2 = number_with_precision(total2, precision: 2, separator: ',', delimiter: '.')
+      total3 = number_with_precision(total3, precision: 2, separator: ',', delimiter: '.')
+      total4 = number_with_precision(total4, precision: 2, separator: ',', delimiter: '.')
+      total5 = number_with_precision(total5, precision: 2, separator: ',', delimiter: '.')
+      total6 = number_with_precision(total6, precision: 2, separator: ',', delimiter: '.')
+      sheet.add_row ["Totales",total1, total2, total3 , total4, total5, total6], style: heading
+      sheet.add_style 'B4:G4', alignment: { horizontal: :right }
+      sheet.add_style "B#{inicio}:G#{final}", alignment: { horizontal: :right }
+      sheet.add_style "B#{final+1}:G#{final+1}", alignment: { horizontal: :right }
+
+
+ end
+  
+end

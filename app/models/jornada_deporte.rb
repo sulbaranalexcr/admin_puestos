@@ -1,0 +1,3 @@
+class JornadaDeporte < ApplicationRecord
+  
+end

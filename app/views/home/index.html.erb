@@ -1,0 +1,211 @@
+<% javascript_include_tag "char_google.js" %>
+
+
+<%if session[:usuario_actual]['tipo'] == "ADM"%>
+
+<div class="row">
+
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box">
+      <span class="info-box-icon bg-yellow"><img src="/assets/laptop.svg"></i></span>
+
+      <div class="info-box-content">
+        <span class="info-box-text">Taquillas</span>
+        <span class="info-box-text">En juego</span>
+        <span class="info-box-number" id="taquillas_conectadas"><%= @total_taquilla%></span>
+      </div>
+      <!-- /.info-box-content -->
+    </div>
+    <!-- /.info-box -->
+  </div>
+
+
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-yellow" style="padding-left: 6px;padding-right: 6px;"><img src="/assets/dispositivos.svg"></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Dispositivos</span>
+              <table border=0>
+                <tr>
+                  <td style="width: 70%">
+                    <span class="info-box-text">Web</span>
+                  </td>
+                  <td style="width: 30%;text-align: right;">
+                    <span class="info-box-number" id="dispositivo_web">0</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="width: 70%">
+                    <span class="info-box-text">Movil</span>
+                  </td>
+                  <td style="width: 30%;text-align: right;">
+                    <span class="info-box-number" id="dispositivo_movil">0</span>
+                  </td>
+                </tr>
+              </table>
+
+            </div>
+          </div>
+        </div>
+
+
+      <!-- /.col -->
+      <!-- <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+          <span class="info-box-icon bg-red"><img src="/assets/devueltas.svg"></i></span>
+          <div class="info-box-content">
+            <span class="info-box-text">Propuestas</span>
+            <span class="info-box-text">Devueltas</span>
+            <span class="info-box-number">40</span>
+          </div>
+        </div>
+      </div> -->
+
+        <!-- fix for small devices only -->
+        <div class="clearfix visible-sm-block"></div>
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-green"><img src="/assets/totales.svg"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Total</span>
+              <span class="info-box-text">Propuestas</span>
+              <span class="info-box-number" id="total_propuestas"><%= @total_propuestas%></span>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-green"><img src="/assets/cruzadas.svg"></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Propuestas</span>
+              <span class="info-box-text">Cruzadas</span>
+              <span class="info-box-number" id="jugadas_cruzadas"><%= @cruzadas %></span>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+
+    <center>
+      <div class="progress-bar" id="barra_progreso" role="progressbar" style="height: 3px;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+      <br>
+      <div id="columnchart_values" style="width: 1200; height: 530px;">
+      </div>
+    </center>
+
+
+
+<!--script type="text/javascript">
+   window.datos_json_barras = <%= "#{@todas}".html_safe %>
+   window.datos_json_barras_id = <%= "#{@posicion_todas}".html_safe %>
+   progreso = 0 ;
+   $(document).ready(function() {
+      window.reloj_refresca = setInterval(function(){ actualizar_datos() }, 16000);
+      window.reloj_barra = setInterval(function(){ actualizar_progreso() }, 1000);
+   });
+   function actualizar_progreso(){
+     progreso += 6.6  ;
+     $('#barra_progreso').css("width", progreso + "%")
+     if (progreso > 99){
+       progreso = 0;
+     }
+     // setInterval(function(){ actualizar_progreso() }, 10000);
+   }
+
+
+   function actualizar_datos(){
+     clearInterval(window.reloj_barra);
+     clearInterval(window.reloj_refresca);
+     progreso = 0;
+     $('#barra_progreso').css("width", progreso + "%")
+
+     $.ajax({
+       type : "POST",
+       url : '/home/actualizar_datos',
+       data : {
+       },
+       success : function(request) {
+         $('#taquillas_conectadas').text(request.total_taquilla);
+         $('#total_propuestas').text(request.total_propuestas);
+         $('#jugadas_cruzadas').text(request.cruzadas);
+     //    $('#jugadas_cruzadas_bs').text(request.cruzadas_bs);
+      //   $('#jugadas_cruzadas_usd').text(request.cruzadas_usd);
+         redraw(JSON.parse(request.todas));
+         window.reloj_refresca = setInterval(function(){ actualizar_datos() }, 15000);
+         window.reloj_barra = setInterval(function(){ actualizar_progreso() }, 1000);
+         progreso = 0 ;
+       }
+     });
+   }
+
+   function update_cant_taquillas(cant){
+     cantidad = Number(cant);
+     ant = Number($('#taquillas_conectadas').text());
+     $('#taquillas_conectadas').text(ant += cantidad) ;
+   }
+
+   function update_cant_cruzadas(cant,moneda){
+     cantidad = Number(cant);
+     ant = Number($('#jugadas_cruzadas').text());
+     $('#jugadas_cruzadas').text(ant += cantidad) ;
+     if (Number(moneda) == 1){
+       ant2 = Number($('#jugadas_cruzadas_bs').text());
+       $('#jugadas_cruzadas_bs').text(ant2 += cantidad) ;
+     }else{
+       ant2 = Number($('#jugadas_cruzadas_usd').text());
+       $('#jugadas_cruzadas_usd').text(ant2 += cantidad) ;
+     }
+
+   }
+
+
+
+   function redraw_act(id, cantidad){
+       window.datos_json_barras_id.forEach(function(element,index) {
+          if (Number(id) == Number(element)){
+             window.datos_json_barras[index + 1][1] += cantidad ;
+          }
+       });
+       ant2 = Number($('#total_propuestas').text());
+       $('#total_propuestas').text(ant2 += cantidad) ;
+
+     redraw(window.datos_json_barras)
+   }
+
+   function redraw(json){
+
+       google.charts.load("current", {packages:['corechart']});
+       google.charts.setOnLoadCallback(drawChart);
+       function drawChart() {
+         var data = google.visualization.arrayToDataTable(json);
+         var view = new google.visualization.DataView(data);
+         view.setColumns([0, 1,{ calc: "stringify", sourceColumn: 1, type: "string", role: "annotation" }, 2]);
+         var options = {
+           title: "PROPUESTAS POR GRUPO",
+           titleTextStyle: { fontSize: 28, bold: false, italic: true, color: 'black' },
+           width: 1200,
+           height: 525,
+           bar: {groupWidth: "95%"},
+           legend: { position: "none",alignment: 'center' },
+         };
+         var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+         chart.draw(view, options);
+        $("text:contains(PROPUESTAS POR GRUPO)").attr({'x':'360', 'y':'50'}) ;
+     }
+   }
+
+redraw(window.datos_json_barras);
+
+
+
+</script-->
+<%end%>

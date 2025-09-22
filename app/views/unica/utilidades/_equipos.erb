@@ -1,0 +1,55 @@
+
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">Equipos</h3>
+      </div>
+      <div class="box-body">
+        <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+          <H4>General</H4>
+          <div class="row">
+            <div class="col-sm-12">
+              <table id="user_index" class="table table-bordered table-striped dataTable" role="grid" style="width: 100%;">
+                <thead>
+                  <tr>
+                    <th style="text-align: left;">Nombre Actual</th>
+                    <th style="text-align: left;">Nombre Nuevo</th>
+                    <th style="text-align: left;">Actualizar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @equipos.each do |equipo| %>
+                    <%if equipo.nombre == equipo.nombre_largo %>
+                      <%bg_color = "red"%>
+                    <%else%>  
+                       <%bg_color = ""%>
+                    <%end%>
+                    <tr>
+                      <td> 
+                        <input type="text" value="<%= equipo.nombre %>" class="form-control" id="equipos_ant_<%= equipo.id%>" readonly>
+                      </td>
+                      <td id="td_bg_color_<%= equipo.id%>" style="background-color: <%= bg_color%>"> <input type="text" value="<%= equipo.nombre %>" class="form-control" id="equipos_<%= equipo.id%>">
+                      </td>
+                      <td>
+                      <div class="btn-row">
+                        <a class='btn btn-sm btn-success' onclick="cambiar_nombre_func(<%= equipo.id%>);"><i class="fa fa-gear"></i></a>
+                      </div>
+                    </td>
+            
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+
+
+
+
+        </div>
+      </div>
+    </div>
+
+

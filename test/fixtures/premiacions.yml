@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  carrera: one
+  caballo_carrera: one
+  tipo_apuesta: 1
+  id_quien_juega: 1
+  id_quien_banquea: 1
+  monto_quien_juega: 9.99
+  monto_quien_banquea: 9.99
+  usuario_premia_id: 1
+  llegada_caballo: 1
+  repremiado: false
+  monto_pagado: 9.99
+
+two:
+  carrera: two
+  caballo_carrera: two
+  tipo_apuesta: 1
+  id_quien_juega: 1
+  id_quien_banquea: 1
+  monto_quien_juega: 9.99
+  monto_quien_banquea: 9.99
+  usuario_premia_id: 1
+  llegada_caballo: 1
+  repremiado: false
+  monto_pagado: 9.99

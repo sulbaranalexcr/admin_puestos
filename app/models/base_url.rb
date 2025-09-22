@@ -1,0 +1,2 @@
+class BaseUrl < ApplicationRecord
+end

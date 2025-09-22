@@ -1,0 +1,55 @@
+<div id="div_proxima"  class="form-group">
+    <div class="form-group">
+    <label for="hipodromo_tipo">Proximas Carreras</label>
+    <select size=10 class="form-control" placeholder="Tipo"  name="proxima_carrera_hipodromo<%= tipo_vista%>" id="proxima_carrera_hipodromo<%= tipo_vista%>" onchange="buscar_proxima(this.value, <%= tipo_vista%>);">
+    </select>
+    </div>
+
+
+    <script>
+
+    function set_hora_taquillas(minutos_resta){
+        var carrera_id_bus = 0 ;
+
+        $("#carreras2 > option").each(function() {
+            encontrado = false;
+            carr_id = this.value ;
+            minutos_resta.forEach(function(element) {
+                if (element.id == Number(carr_id )){
+                encontrado = true;
+                }
+            });
+            if (encontrado == false){
+            $(this).remove();
+            }
+        });
+
+
+
+        $('#carreras2').children('option').each(function () {
+        nombre_sel = this ;
+        texto = $("."+$(nombre_sel).attr("class")).text().split(' - ')  ;
+        text_nor = texto[0]
+        id = $(nombre_sel).val() ;
+        minutos_resta.forEach(function(element) {
+            if (Number(id) == element.id){
+                $("."+$(nombre_sel).attr("class")).text( text_nor + " - " + parseInt(element.resta) + " MTP")
+                if (parseInt(element.resta) < 1 ){
+                // $("."+$(nombre_sel).attr("class")).text( text_nor + " - Cerrada")
+                $("."+$(nombre_sel).attr("class")).remove();
+                }
+                if (parseInt(element.resta) < 5 ){
+                $("."+$(nombre_sel).attr("class")).css("color", "red")
+                }
+
+            }
+
+        })
+
+        })
+
+    }
+
+
+    </script>
+</div>

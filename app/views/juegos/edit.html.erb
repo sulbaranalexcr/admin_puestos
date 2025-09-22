@@ -1,0 +1,40 @@
+<%= form_for @juego, url: @url, role: :form, html: { multipart: true } do |f| %>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Editar Deporte</h3>
+        </div>
+
+       <div class="box-body">
+          <div class="form-group">
+            <%= f.label 'Deporte ID' %>
+            <%= f.text_field :juego_id, class: "form-control", style: 'width: 20%', required: true, readonly: true %>
+            <span class="help-block"><i>* Este campo es requerido</i><span>
+          </div>
+
+
+          <div class="form-group">
+            <%= f.label 'Nombre' %>
+            <%= f.text_field :nombre, class: "form-control", placeholder: "Ingrese nombre del deporte", required: true %>
+            <span class="help-block"><i>* Este campo es requerido</i><span>
+          </div>
+
+          <div class="form-group">
+            <%= f.label 'Imagen' %>
+            <%= f.file_field :imagen, class: "form-control", placeholder: "seleccione imagen del deporte", required: true %>
+            <span class="help-block"><i>* Este campo es requerido</i><span>
+          </div>
+
+        </div>
+
+        <div class="box-footer">
+          <%= link_to 'Cancelar', juegos_path, class: 'btn btn-danger' %>
+          <%= f.submit 'Enviar', class: "btn btn-success" %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  app: 1
+  app_detalle: MyString
+  error: MyString
+  detalle: MyText
+  nivel: 1
+  reportado: false
+
+two:
+  app: 1
+  app_detalle: MyString
+  error: MyString
+  detalle: MyText
+  nivel: 1
+  reportado: false

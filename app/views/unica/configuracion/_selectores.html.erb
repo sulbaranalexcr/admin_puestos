@@ -1,0 +1,12 @@
+<div id="div_proximas_premiar"  style="margin-right: 50px;" class="form-group pull-right">
+    <%= render partial: 'proximas_premiar'%>
+</div>
+
+<div id="div_cerradas_premiar"  style="margin-right: 50px;" class="form-group pull-right">
+    <%= render partial: 'pendientes_premiar'%>
+    <input type="button" value="Cerrar Carrera" class="btn btn-danger pull-right" onclick="cerrar_carrera_unica()" style="display: none;margin-right: 50px;" id="boton_cerrar_2"/>
+</div>
+<input type="hidden" id="codigo_carrera">
+<div id="div_proximas"  style="margin-right: 50px;" class="form-group pull-right">
+    <%= render partial: 'proximas'%>
+</div>

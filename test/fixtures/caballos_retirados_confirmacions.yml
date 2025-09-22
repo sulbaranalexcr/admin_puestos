@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  hipodromo: one
+  carrera: one
+  caballos_carrera: one
+  status: 1
+  user: one
+
+two:
+  hipodromo: two
+  carrera: two
+  caballos_carrera: two
+  status: 1
+  user: two

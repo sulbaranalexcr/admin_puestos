@@ -1,0 +1,64 @@
+<table id="recargas_index" class="table table-bordered table-striped dataTable" role="grid" >
+  <thead>
+    <tr>
+    <th>Usuario</th>
+    <th>Taquilla</th>
+    <% if request.user_agent =~ /Mobile/ %>
+      <th style="text-align: center;">Monto</th>
+      <th style="text-align: center;">Tipo</th>
+      <th style="text-align: center;">Estado</th>
+    <% else %>
+      <th>Cuenta </th>
+      <th style="text-align: center;">Monto</th>
+      <th style="text-align: center;">Tipo</th>
+      <th style="text-align: center;">Estado</th>
+      <th style="text-align: center;">Fecha Solicitud</th>
+      <th style="text-align: center;">Fecha Proceso</th>
+    <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%for solicitud in @solicitudes%>
+      <tr>
+        <td class="titulo" style="cursor: zoom-in;font-weight: bold;line-height:20pt;font-size: 11px;" data-title="<%= solicitud['numero_cuenta'] %> (<%= solicitud['tipo2'] %>)">
+          <%= solicitud['user'] %>
+        </td>
+        <td class="titulo" style="cursor: zoom-in;font-weight: bold;line-height:20pt;font-size: 11px;" data-title="<%= solicitud['numero_cuenta'] %> (<%= solicitud['tipo2'] %>)">
+          <%= solicitud['nombre'] %>
+        </td>
+        <% if request.user_agent =~ /Mobile/ %>
+          <td  class="titulo" style="font-weight: bold;line-height:20pt;font-size: 11px;text-align: right" data-title="<%= number_with_precision(solicitud['monto'], precision: 2, separator: '.', delimiter: ',') %>">
+            <%=solicitud['moneda'].to_i == 1 ? "BsS. " : "USD "%> <%= number_with_precision(solicitud['monto'], precision: 2, separator: '.', delimiter: ',') %>
+          </td>
+          <td style="font-weight: bold;text-align: right;font-size: 12px;text-align: center">
+              <%= solicitud['tipo'] %>
+          </td>
+          <td style="font-weight: bold;text-align: right;font-size: 12px;text-align: center">
+            <%= solicitud['status'] %>
+          </td>
+        <% else %>
+          <td class="titulo" style="cursor: zoom-in;font-weight: bold;line-height:20pt;font-size: 11px;" data-title="<%= solicitud['numero_cuenta'] %> (<%= solicitud['tipo2'] %>)">
+            <%= solicitud['numero_cuenta'] %> (<%= solicitud['tipo2'] %>)
+          </td>
+          <td  class="titulo" style="font-weight: bold;line-height:20pt;font-size: 11px;text-align: right" data-title="<%= number_with_precision(solicitud['monto'], precision: 2, separator: '.', delimiter: ',') %>">
+            <%=solicitud['moneda'].to_i == 1 ? "BsS. " : "USD "%> <%= number_with_precision(solicitud['monto'], precision: 2, separator: '.', delimiter: ',') %>
+          </td>
+          <td style="font-weight: bold;text-align: right;font-size: 12px;text-align: center">
+              <%= solicitud['tipo'] %>
+          </td>
+          <td style="font-weight: bold;text-align: right;font-size: 12px;text-align: center">
+            <%= solicitud['status'] %>
+          </td>
+          <td style="font-weight: bold;text-align: right;font-size: 12px;text-align: center">
+            <%= solicitud['fecha'] %>
+          </td>
+          <td style="font-weight: bold;text-align: right;font-size: 12px;text-align: center">
+            <%= solicitud['fecha_p'] %>
+          </td>
+        <% end %>
+      </tr>
+      <%end%>
+  </tbody>
+
+</table>

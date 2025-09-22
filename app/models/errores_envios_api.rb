@@ -1,0 +1,2 @@
+class ErroresEnviosApi < ApplicationRecord
+end

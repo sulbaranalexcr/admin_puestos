@@ -1,0 +1,2 @@
+class ResultadosNyra < ApplicationRecord
+end

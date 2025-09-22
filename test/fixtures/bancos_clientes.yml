@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  usuarios_taquilla: one
+  banco_id: MyString
+  nombre: MyString
+  tipo_cuenta: 1
+  nombre_cliente: MyString
+  cedula_cliente: MyString
+  telefono: MyString
+  email: MyString
+
+two:
+  usuarios_taquilla: two
+  banco_id: MyString
+  nombre: MyString
+  tipo_cuenta: 1
+  nombre_cliente: MyString
+  cedula_cliente: MyString
+  telefono: MyString
+  email: MyString

@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  usuario_premia: 1
+  juego_id: 1
+  liga_id: 1
+  match_id: 1
+  resultado: MyText
+  repremio: false
+
+two:
+  usuario_premia: 1
+  juego_id: 1
+  liga_id: 1
+  match_id: 1
+  resultado: MyText
+  repremio: false

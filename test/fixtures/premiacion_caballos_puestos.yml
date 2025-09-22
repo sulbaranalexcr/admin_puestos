@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  moneda: 1
+  carrera: one
+  id_quien_juega: 1
+  id_quien_banquea: 1
+  id_gana: 1
+  monto_pagado_completo: 1.5
+
+two:
+  moneda: 1
+  carrera: two
+  id_quien_juega: 1
+  id_quien_banquea: 1
+  id_gana: 1
+  monto_pagado_completo: 1.5

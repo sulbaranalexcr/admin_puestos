@@ -1,0 +1,49 @@
+<style>
+ .tarjeta {
+   border-bottom: 1px solid #D5DBDB;
+   margin-bottom: 10px;
+   width: 99%;
+   font-size: 18px;
+ }
+
+ .blink{
+		height: 30px;
+	    background-color: #15E8E8;
+		padding: 5px;	
+		line-height: 20px;
+	}
+</style>
+
+<script>
+   function quitar_blik(){
+     setTimeout(() => {
+        $( "p" ).removeClass("blink");
+     }, 3000);
+   }
+
+   function update_pizarra_propuestas(data){
+      if ($("#tarjetas_propuestas").children().length == 17){
+        $("#tarjetas_propuestas").children()[16].remove();
+      }
+      if ($("#tarjetas_propuestas").children().length >0){
+         $( "p" ).removeClass("blink");
+      }
+      $("#tarjetas_propuestas").prepend('<p class="tarjeta blink">' + data + '</p>') ;
+      quitar_blik();
+   }
+</script>
+
+
+<div class="row" >
+  <div class="col-xs-12">
+      <div class="box" style="height: 90vh;">
+       <div class="box-header" style="text-align: center">
+           <h3>Actualizaci&oacute;n Propuestas Cruzadas</h3>
+           <hr style="border: 1px solid #D5DBDB;">
+        </div>
+          <div id="tarjetas_propuestas" style="text-align: left; margin-left: 1%;">
+
+          </div>
+     </div>
+  </div>
+</div>

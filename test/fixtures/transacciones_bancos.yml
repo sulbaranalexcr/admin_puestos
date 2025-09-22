@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  banco_id: MyString
+  tipo_operacion: 1
+  forma_pago: 1
+  monto: 9.99
+  status: 1
+  referencia: MyString
+  cuenta_id: 1
+
+two:
+  banco_id: MyString
+  tipo_operacion: 1
+  forma_pago: 1
+  monto: 9.99
+  status: 1
+  referencia: MyString
+  cuenta_id: 1

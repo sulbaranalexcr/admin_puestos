@@ -1,0 +1,136 @@
+wb = xlsx_package.workbook
+wb.styles do |style|
+  project_heading = style.add_style(b: true, sz: 14)
+  heading = style.add_style(b: true,bg_color: "E9EAEA")
+  wb.add_worksheet(name: "Cuadre General Taquillas" ) do |sheet|
+    # Create the header row
+      sheet.add_row ["Cuadre General Taquillas"], style: project_heading
+      sheet.add_row ["Fecha: " +  @desde + " al " + @hasta]
+      sheet.add_row ["General"], style: project_heading
+      sheet.add_row ["Nombre","Jugadas Cruzado", "Jugadas Premiadas","Jugadas Ganadas","Jugadas Perdidas", "Comisión","Comisión Banca", "Monto a Pagar", "Balance"], style: heading
+      # Create entries for each item
+      total1 = 0
+      total2 = 0
+      total3 = 0
+      total4 = 0
+      total5 = 0
+      total6 = 0
+      total7 = 0
+      total8 = 0
+      inicio = 5
+      final = 4
+      @reporte.each do |repo|
+        sheet.add_row [
+          repo['nombre'],
+          number_with_precision( repo['venta'] , precision: 2, separator: ',', delimiter: '.'), 
+          number_with_precision(repo['premio'] + repo['gano_oc'], precision: 2, separator: ',', delimiter: '.'),
+          number_with_precision( (repo['premio'].to_f + repo['gano_oc'].to_f) - (((repo['premio'].to_f + repo['gano_oc'].to_f) * 5) /100) , precision: 2, separator: ',', delimiter: '.'),
+          number_with_precision( repo['perdio_oc'].to_f + repo['premio'].to_f , precision: 2, separator: ',', delimiter: '.'),
+          number_with_precision( repo['comision'].to_f + repo['comision_oc'].to_f , precision: 2, separator: ',', delimiter: '.'),
+          number_with_precision( ((repo['comision'].to_f  + repo['comision_oc'].to_f )* repo['comision_banca'].to_f) / 100 , precision: 2, separator: ',', delimiter: '.'), 
+          number_with_precision( repo['monto_otro_grupo'].to_f , precision: 2, separator: ',', delimiter: '.'),
+          number_with_precision( repo['monto_otro_grupo'].to_f - (((repo['comision'].to_f + repo['comision_oc'].to_f) * repo['comision_banca'].to_f) / 100), precision: 2, separator: ',', delimiter: '.')
+          ]
+        total1 += repo['venta'].to_f
+        total2 += repo['premio'].to_f  + repo['gano_oc'].to_f 
+        total3 += (repo['premio'].to_f + repo['gano_oc'].to_f) - (((repo['premio'].to_f + repo['gano_oc'].to_f) * 5) /100) 
+        total4 += repo['perdio_oc'].to_f + repo['premio'].to_f 
+        total5 += repo['comision'].to_f + repo['comision_oc'].to_f 
+        total6 += ((repo['comision'].to_f  + repo['comision_oc'].to_f )* repo['comision_banca'].to_f) / 100
+        total7 += repo['monto_otro_grupo'].to_f
+        total8 += repo['monto_otro_grupo'].to_f - (((repo['comision'].to_f + repo['comision_oc'].to_f) * repo['comision_banca'].to_f) / 100)
+        final += 1
+      end
+      total1 = number_with_precision(total1, precision: 2, separator: ',', delimiter: '.')
+      total2 = number_with_precision(total2, precision: 2, separator: ',', delimiter: '.')
+      total3 = number_with_precision(total3, precision: 2, separator: ',', delimiter: '.')
+      total4 = number_with_precision(total4, precision: 2, separator: ',', delimiter: '.')
+      total5 = number_with_precision(total5, precision: 2, separator: ',', delimiter: '.')
+      total6 = number_with_precision(total6, precision: 2, separator: ',', delimiter: '.')
+      total7 = number_with_precision(total7, precision: 2, separator: ',', delimiter: '.')
+      total8 = number_with_precision(total8, precision: 2, separator: ',', delimiter: '.')
+      sheet.add_row ["Totales",total1, total2, total3 , total4, total5, total6,total7,total8], style: heading
+      sheet.add_style 'B4:I4', alignment: { horizontal: :right }
+      sheet.add_style "B#{inicio}:I#{final}", alignment: { horizontal: :right }
+      sheet.add_style "B#{final+1}:I#{final+1}", alignment: { horizontal: :right }
+
+     sheet.add_row [""]
+     sheet.add_row [""]
+     sheet.add_row ["Cuadre de Jugadas Mismo Agente"], style: project_heading
+      sheet.add_row ["Nombre", "", "Jugadas Premiadas","Jugadas Ganadas","Jugadas Perdidas", "Comisión","Comisión Banca"], style: heading
+      total1 = 0
+      total2 = 0
+      total3 = 0
+      total4 = 0
+      total5 = 0
+      inicio2 = final + 5 
+      final2 = final + 5 
+      @reporte.each do |repo|
+        sheet.add_row [
+          repo['nombre'], 
+          "",
+          number_with_precision(repo['premio'], precision: 2, separator: ',', delimiter: '.'),
+          number_with_precision( repo['premio'].to_f - ((repo['premio'].to_f  * 5) /100) , precision: 2, separator: ',', delimiter: '.'),
+          number_with_precision( repo['premio'].to_f , precision: 2, separator: ',', delimiter: '.'),
+          number_with_precision( repo['comision'].to_f , precision: 2, separator: ',', delimiter: '.'),
+          number_with_precision( (repo['comision'].to_f  * repo['comision_banca'].to_f) / 100 , precision: 2, separator: ',', delimiter: '.')
+          ]
+        total1 += repo['premio'].to_f
+        total2 += repo['premio'].to_f - ((repo['premio'].to_f  * 5) /100) 
+        total3 += repo['premio'].to_f 
+        total4 += repo['comision'].to_f
+        total5 += (repo['comision'].to_f  * repo['comision_banca'].to_f) / 100
+        final2 += 1
+      end
+      total1 = number_with_precision(total1, precision: 2, separator: ',', delimiter: '.')
+      total2 = number_with_precision(total2, precision: 2, separator: ',', delimiter: '.')
+      total3 = number_with_precision(total3, precision: 2, separator: ',', delimiter: '.')
+      total4 = number_with_precision(total4, precision: 2, separator: ',', delimiter: '.')
+      total5 = number_with_precision(total5, precision: 2, separator: ',', delimiter: '.')
+      sheet.add_row ["Totales"," ",total1,total2, total3, total4,total5 ], style: heading
+      sheet.add_style "B#{inicio2}:D#{inicio2}", alignment: { horizontal: :right }
+      sheet.add_style "C#{inicio2}:G#{final2}", alignment: { horizontal: :right }
+      sheet.add_style "C#{final2+1}:G#{final2+1}", alignment: { horizontal: :right }
+
+
+     sheet.add_row [""]
+     sheet.add_row [""]
+     sheet.add_row ["Cuadre de Jugadas Otro Agente"], style: project_heading
+      sheet.add_row ["Nombre", "", "Jugadas Premiadas","Jugadas Ganadas","Jugadas Perdidas", "Comisión","Comisión Banca"], style: heading
+      total1 = 0
+      total2 = 0
+      total3 = 0
+      total4 = 0
+      total5 = 0
+      inicio3 = final2 + 5 
+      final3 = final2 + 5 
+      @reporte.each do |repo|
+        sheet.add_row [
+          repo['nombre'], 
+          "",
+          number_with_precision(repo['gano_oc'], precision: 2, separator: ',', delimiter: '.'),
+          number_with_precision( repo['gano_oc'].to_f - ((repo['gano_oc'].to_f  * 5) /100) , precision: 2, separator: ',', delimiter: '.'),
+          number_with_precision( repo['gano_oc'].to_f , precision: 2, separator: ',', delimiter: '.'),
+          number_with_precision( repo['comision_oc'].to_f , precision: 2, separator: ',', delimiter: '.'),
+          number_with_precision( (repo['comision_oc'].to_f  * repo['comision_banca'].to_f) / 100 , precision: 2, separator: ',', delimiter: '.')
+          ]
+        total1 += repo['gano_oc'].to_f
+        total2 += repo['gano_oc'].to_f - ((repo['gano_oc'].to_f  * 5) /100) 
+        total3 += repo['gano_oc'].to_f 
+        total4 += repo['comision_oc'].to_f
+        total5 += (repo['comision_oc'].to_f  * repo['comision_banca'].to_f) / 100
+        final3 += 1
+      end
+      total1 = number_with_precision(total1, precision: 2, separator: ',', delimiter: '.')
+      total2 = number_with_precision(total2, precision: 2, separator: ',', delimiter: '.')
+      total3 = number_with_precision(total3, precision: 2, separator: ',', delimiter: '.')
+      total4 = number_with_precision(total4, precision: 2, separator: ',', delimiter: '.')
+      total5 = number_with_precision(total5, precision: 2, separator: ',', delimiter: '.')
+      sheet.add_row ["Totales", "", total1, total2, total3 , total4, total5], style: heading
+      sheet.add_style "B#{inicio3}:D#{inicio3}", alignment: { horizontal: :right }
+      sheet.add_style "C#{inicio3}:G#{final3}", alignment: { horizontal: :right }
+      sheet.add_style "C#{final3+1}:G#{final3+1}", alignment: { horizontal: :right }
+
+ end
+  
+end

@@ -1,0 +1,125 @@
+<%= form_for @cobradore, url: @url, role: :form, html: { multipart: true } do |f| %>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Editando Agente</h3>
+        </div>
+        <div class="box-header">
+          <h3 class="box-title;font-weight-bold">
+            ID Agente: <%= @cobradore.id if @cobradore.id.present?%>
+          </h3>
+        </div>
+        <table border="0" style="width: 100%">
+          <tr>
+            <td style="width: 50%" valign="top">
+              <div class="box-body">
+                <div class="form-group">
+                  <%= f.label 'Nombre' %>
+                  <%= f.text_field :nombre, class: "form-control" %>
+                  <span class="help-block"><i>* Este campo es requerido</i><span>
+                </div>
+
+
+                <div class="form-group">
+                  <%= f.label 'Apellido' %>
+                  <%= f.text_field :apellido, class: "form-control" %>
+                  <span class="help-block"><i>* Este campo es requerido</i><span>
+                </div>
+
+
+                <div class="form-group">
+                  <%= f.label 'Telefono' %>
+                  <%= f.text_field :telefono, class: "form-control" %>
+                  <span class="help-block"><i>* Este campo es requerido</i><span>
+                </div>
+
+                <div class="form-group">
+                  <%= f.label 'E-mail' %>
+                  <%= f.email_field :correo, class: "form-control" %>
+                  <span class="help-block"><i>* Este campo es requerido</i><span>
+                </div>
+
+
+                <div class="form-group">
+                  <%= f.label 'Asigne Moneda' %>
+                  <select size=1 class="form-control" name="cobradore[moneda_id]" id="cobradore_moneda_id" style="width: 50%">
+                    <%for moneda in Moneda.all.order(:id) %>
+                      <option value="<%=moneda.id%>" <%= (moneda.id.to_i == @cobradore.moneda_id.to_i) ? "selected":""%> ><%=moneda.nombre%> (<%= moneda.abreviatura%>)</option>
+                    <%end%>
+                  </select>
+                </div>
+
+
+                <div class="form-group">
+                  <%= f.label 'Asigne Deportes' %>
+                  <select size=10 multiple class="form-control" name="cobradore[deporte_id][]" multiple="multiple" id="cobradore_deporte_id" style="width: 50%">
+                     <option value="C1" <%= (JSON.parse(@cobradore.deporte_id).include?("C1") or JSON.parse(@cobradore.deporte_id).length == 0 ) ? "selected":""%> > Caballos Puestos </option>
+                     <option value="C2" <%= (JSON.parse(@cobradore.deporte_id).include?("C2") or JSON.parse(@cobradore.deporte_id).length == 0) ? "selected":""%> > Caballos Logros </option>
+                    <%for deporte in Juego.all.order(:nombre) %>
+                      <option value="<%=deporte.juego_id%>" <%= (JSON.parse(@cobradore.deporte_id).include?(deporte.juego_id.to_s) or JSON.parse(@cobradore.deporte_id).length == 0) ? "selected":""%> ><%=deporte.nombre%> </option>
+                    <%end%>
+                  </select>
+                </div>
+
+
+                <div class="form-group">
+                  <%= f.label 'Comision Banca' %>
+                  <%= f.number_field :comision_banca, class: "form-control", style: 'width: 50%' %>
+                  <span class="help-block"><i>* Este campo es requerido</i><span>
+                </div>
+
+                <div class="form-group">
+                  <%= f.label 'Comision Integrador' %>
+                  <%= f.number_field :comision_integrador, class: "form-control", style: 'width: 50%' %>
+                  <span class="help-block"><i>* Este campo es requerido</i><span>
+                </div>
+
+                <div class="form-group">
+                  <%= f.label 'Comision Grupo' %>
+                  <%= f.number_field :comision_grupo, class: "form-control", style: 'width: 50%' %>
+                  <span class="help-block"><i>* Este campo es requerido</i><span>
+                </div>
+
+
+
+                <div class="form-group">
+                <%= f.label "Asigne Integrador" %>
+                  <select size=1 class="form-control" name="cobradore[integrador_id]" id="cobradore_integrador_id" style="width: 50%">
+                    <option value="0">Sin integrador</option>
+                  <% for integrador in @integradores %>
+                    <option value="<%= integrador.id %>" <%= @cobradore.integrador_id.to_i == integrador.id ? "selected" : "" %>><%= integrador.nombre %></option>
+                  <% end %>
+                </select>
+              </div>
+
+                <div class="form-group">
+                  <%= f.label 'Activo' %>
+                  <%= f.check_box :activo, {}%>
+                </div>
+            </td>
+            <td style="width: 50%;padding-left: 20px;" valign="top">
+              <div class="form-group" style="height:  70vh; overflow: auto;">
+                <label>Taquillas</label><br/>
+                <%for taq in @taquillas%>
+                   <input type="checkbox" id="taq<%= taq.id%>" name="taquillas[<%= taq.id%>]" <%= @taquis_otros.include?(taq.id) ? "disabled":""%> <%= @todas_taq.include?(taq.id) ? "checked":""%>> &nbsp;<label><%= taq.alias %> <%= @taquis_otros.include?(taq.id) ? " (Otro Agente)":""%></label><br/>
+                <%end%>
+              </div>
+
+            </td>
+          </tr>
+        </table>
+
+
+        </div>
+
+        <div class="box-footer">
+          <%= link_to 'Cancelar', cobradores_path, class: 'btn btn-danger' %>
+          <%= f.submit 'Enviar', class: "btn btn-success" %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,72 @@
+<script type="text/javascript">
+    window.total_inicial_ca = Number(<%= @caballos_array.count %>) ;
+    window.cantidad_total = Number(<%= @canti_p %> );
+    window.cab_en_ju = Number(<%= @caballos_array.count %>) - 1;
+    window.cab_en_ju_total = window.cab_en_ju +1 ;
+    function minmax(value, min, max) {
+        if(parseInt(value) < min || isNaN(parseInt(value)))
+            return min;
+        else if(parseInt(value) > max)
+            return max;
+        else return value;
+    }
+</script>
+
+          <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+
+            <div class="row">
+              <div class="col-sm-7 text-right">
+                <table id="caballos_enter" class="table table-bordered table-striped dataTable" role="grid">
+                  <thead>
+                    <tr>
+                      <th class="col-sm-1 text-right">Numero</th>
+                      <th class="col-sm-2 text-left">Nombre</th>
+                      <th class="col-sm-3 text-right">Retirado</th>
+                      <th class="col-sm-1 text-left">Posici&oacute;n</th>
+                      <th class="col-sm-1 text-left">Sugeridos API</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @caballos_array.each do |caba| %>
+                      <tr>
+                        <td class="col-sm-1 text-right"> <%= caba['numero_puesto'] %> </td>
+                        <td class="col-sm-2 text-left"><%= caba['nombre'] %> </td>
+                        <td class="col-sm-3 text-right"><input type="checkbox"  title="Esta opcion es delicada, usela con cuidado." data-group-cls="btn-group-sm" id="checab<%= caba['numero_puesto'] %>" <%= caba['retirado']  ? "" : "checked" %> onChange="retirar_cab(<%= caba['numero_puesto']%>,this.checked);" /> </td>
+                        <td class="col-sm-1 text-left"> <input type="number" onChange="validar_cantidad();" value="<%= caba['llegada']%>" onkeyup="verificar(this.value,this.id);"  <%=caba['retirado'] ? 'disabled' : ''%> id="posici<%= caba['numero_puesto'] %>" data-id="<%= caba['id'] %>" name="posicion" maxlength="2" onkeyup="this.value = minmax(this.value, 1, <%= @caballos_array.count%>)" class="form-control premiados" min="0" max="<%= @canti_p %>" style="width: 80px;" > </td>
+                        <td class="col-sm-1 text-left"> <input type="number" onChange="validar_cantidad();" value="<%= caba['sugerido']%>"  id="sugerido<%= caba['numero_puesto'] %>" data-id2="<%= caba['id'] %>" data-puesto="<%= caba['numero_puesto'] %>" name="sugerido" maxlength="2" class="form-control sugeridos" style="width: 80px;" readonly> </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+                <div class="box-footer">
+                   <%if @tiene_resultados%>
+                     <input type="button" value="Aplicar Resultados API" class="btn btn-danger" onclick="aplicar_api()"/>
+                   <%else%>   
+                      <p class="btn btn-danger"> No hay resulados sugeridos</p>
+                   <%end%>   
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+
+          <%= @premiados%>
+<script>
+// $(':checkbox').checkboxpicker();
+$(':checkbox').checkboxpicker({
+  html: true,
+  offLabel: "SI",
+  onLabel: "NO"
+});
+
+ function aplicar_api(){
+   $('.sugeridos').each(function( index ) {
+     id_bus = $( this ).data("id2") ;
+     id_puesto = $( this ).data("puesto") ;
+     valor_bus = $( this ).val() ;
+     $("#posici"+id_puesto).val(valor_bus);
+   });
+ }
+</script>

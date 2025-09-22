@@ -1,0 +1,80 @@
+<div class="row">
+  <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Premios Deportes</h3>
+        </div>
+
+        <div class="box-body">
+          <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+
+            <div class="row">
+              <div class="col-sm-12">
+                <table id="user_index" class="table table-bordered table-striped dataTable" role="grid">
+                  <thead>
+                    <tr>
+                      <th>Usuario</th>
+                      <th>Fecha</th>
+                      <th>Deporte</th>
+                      <th>Liga</th>
+                      <th>Match</th>
+                      <th>Tipo</th>
+                      <th>Acci&oacute;n</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @reporte.each do |repo| %>
+                    <% resultado_prem = JSON.parse(repo.resultado)%>
+                      <tr>
+                        <td> <%= repo.nombre_usuario%> </td>
+                        <td> <%= repo.created_at.strftime('%d/%m/%Y %I:%M %p')%> </td>
+                        <td> <%= repo.nombre_deporte%> </td>
+                        <td> <%= repo.liga  %> </td>
+                        <td> <%= resultado_prem['nombre']  %> </td>
+                        <td> <%= tipo_resultado(resultado_prem['finalizado']) %> </td>
+                        <td>
+                          <div id="escondida<%=repo.id%>" style="display: none;">
+                            <table  class="table table-bordered table-striped dataTable" role="grid">
+                              <thead>
+                                <tr>
+                                  <th>Equipo</th>
+                                  <th>Resultado</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <% res = resultado_prem['resultado'] %>
+                                  <tr>
+                                    <td> <%=res['eq1']['nombre'] %> </td>
+                                    <td> <%=res['eq1']['resultado'] %> </td>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td> <%=res['eq2']['nombre'] %> </td>
+                                    <td> <%=res['eq2']['resultado'] %> </td>
+                                    </td>
+                                  </tr>
+                              </tbody>
+                            </table>
+                        </div>
+                        </td>
+                        <td>
+                          <a id="abrir<%=repo.id%>" class="fa fa-caret-square-o-down" style="font-size:24px;cursor:zoom-in;" onclick="abrir('escondida<%=repo.id%>','abrir<%=repo.id%>','cerrar<%=repo.id%>')"></a>
+                          <a id="cerrar<%=repo.id%>" class="fa fa-caret-square-o-up" style="font-size:24px;display: none;cursor:zoom-out;" onclick="cerrar('escondida<%=repo.id%>','abrir<%=repo.id%>','cerrar<%=repo.id%>')"></a>
+                        </td>
+                       </tr>
+                    <% end %>
+                  </tbody>
+
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+    </div>
+  </div>
+</div>
+

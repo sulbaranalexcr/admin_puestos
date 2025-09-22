@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  banco_id: MyString
+  numero_cuenta: MyString
+  tipo_cuenta: 1
+  nombre_cuenta: MyString
+  cedula_cuenta: MyString
+  email_cuenta: MyString
+  moneda: 1
+  detalle: MyString
+
+two:
+  banco_id: MyString
+  numero_cuenta: MyString
+  tipo_cuenta: 1
+  nombre_cuenta: MyString
+  cedula_cuenta: MyString
+  email_cuenta: MyString
+  moneda: 1
+  detalle: MyString

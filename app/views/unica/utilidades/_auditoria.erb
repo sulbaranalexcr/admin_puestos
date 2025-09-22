@@ -1,0 +1,64 @@
+<div class="responsive-container" style="width: 40rem; text-align: center; border-radius: 8px; border: 1px solid gray; margin-bottom: 1rem; padding: 0.5rem; background-color: #0052ff3d">
+  <label style="margin-bottom: 0">Usuario creado en fecha: <%= obj['creado'].strftime("%d/%m/%Y") %></label><label style="margin-left: 1rem; margin-bottom: 0"> a las: <%= obj['creado'].strftime("%H:%M") %></label>
+</div>
+<hr style="border: solid 1px gray; margin: 10px 0px">
+<strong style="margin-left: 1rem">Cantidad Propuestas</strong> 
+<div class="responsive-container responsive-font" style="width: 50%;border-radius: 8px; border: 1px solid gray; margin-bottom: 1rem; padding: 0.5rem;">
+  <div style="display: flex; justify-content: space-around; font-weight: bold; border-bottom: 1px solid gray; padding-bottom: 0.5rem;">
+    <div>Involucrado en</div>
+    <div>Cruzadas</div>
+    <div>Ganadas</div>
+  </div>
+  <div style="display: flex; justify-content: space-around; text-align: right; padding-top: 0.5rem;">
+    <div><%= obj['involucrado'] %></div>
+    <div><%= obj['cruzadas'] %></div>
+    <div><%= obj['ganadas'] %></div>
+  </div>
+</div>
+
+<hr style="border: solid 1px gray; margin: 10px 0px">
+
+<strong style="margin-left: 1rem">Propuestas</strong> 
+<div class="responsive-container responsive-font" style="width: 50%;border-radius: 8px; border: 1px solid gray; margin-bottom: 1rem; padding: 0.5rem;">
+  <div style="display: flex; justify-content: space-around; font-weight: bold; border-bottom: 1px solid gray; padding-bottom: 0.5rem;">
+    <div>Jugadas</div>
+    <div>Banqueadas</div>
+    <div>Ganadas Jugando</div>
+    <div>Ganadas Banqueando</div>
+  </div>
+  <div style="display: flex; justify-content: space-around; text-align: right; padding-top: 0.5rem;">
+    <div><%= obj['jugo'] %></div>
+    <div><%= obj['banqueo'] %></div>
+    <div><%= obj['win_jugo'] %></div>
+    <div><%= obj['win_banquea'] %></div>
+  </div>
+</div>
+
+<hr style="border: solid 1px gray; margin: 10px 0px"> 
+<div class="responsive-container" style="width: 25%;border-radius: 8px; border: 1px solid gray; margin-bottom: 1rem; padding: 0.5rem; background-color: #ff00003d">
+    <label style="margin-bottom: 0">Ganada con mayor monto: <%= obj['max_win'] %></label>
+  </div>
+
+<div class="responsive-container responsive-font2" style="width: 80%;border-radius: 8px; border: 1px solid gray; padding: 0.5rem;">
+  <div style="display: flex; font-weight: bold; border-bottom: 1px solid gray; padding-bottom: 0.5rem;">
+    <div style="width: 17% !important">Fecha</div>
+    <div style="width: 40% !important">Jugada</div>
+    <div style="width: 13% !important ;">Monto Arriesgado</div>
+    <div style="width: 13% !important ;">Monto Ganado</div>
+    <div style="width: 17% !important ;">Usuario Perdedor</div>
+  </div>
+  
+  <% obj['jugadas'].each do |jugada| %>
+    <div style="display: flex;  padding-top: 0.5rem;">
+      <div style="width: 17% !important"><%= jugada['fecha'] %></div>
+      <div style="width: 40% !important"><%= jugada['texto'] %></div>
+      <div style="width: 13% !important; text-align: center">
+        <%= number_with_precision(jugada['monto'], precision: 2, separator: '.', delimiter: ',') %>
+      </div>
+      <div style="width: 13% !important; text-align: center">
+        <%= number_with_precision(jugada['monto_pierde'], precision: 2, separator: '.', delimiter: ',') %>
+      </div>
+      <div style="width: 17% !important ;"><%= jugada['pierde'] %></div>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,80 @@
+<div class="row">
+  <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Listado de Hipodromos</h3>
+        </div>
+
+        <div class="box-body">
+          <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+            <select size=1 class="form-control" onchange="filtrar_hipodromos(this.value)" >
+              <option value="0">Todos</option>
+              <option value="1">Activos</option>
+              <option value="2">Inactivos</option>
+              <option value="3">Con Nyra</option>
+            </select>
+            <div class="row">
+              <div class="col-sm-12">
+                <table id="user_index" class="table table-bordered table-striped dataTable" role="grid">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th class="col-xs-1">Acci&oacute;n</th>
+                      <th>Tipo</th>
+                      <th>Pais</th>
+                      <th>Cierre/Api</th>
+                      <th>Activo</th>
+                      <th>Abreviatura</th>
+                      <th>Cod/Nyra</th>
+                    </tr>
+                  </thead>
+
+                  <tbody id="cuerpo_hipodromos">
+                    <% @hipodromos.each do |hipodromo| %>
+                      <tr style="color: <%= hipodromo.activo ? 'blue' : 'red' %>">
+                        <td> <%= hipodromo.nombre_largo.to_s.strip %> </td>
+                        <td>
+                          <div class="btn-row">
+                            <%= link_to raw('<i class="fa fa-cogs"></i>'), edit_hipodromo_url(hipodromo), class: 'btn btn-sm btn-warning' %>
+                            <!--%= link_to raw('<i class="fa fa-trash"></i>'), hipodromo_url(hipodromo), class: 'btn btn-sm btn-danger', method: :delete,
+                                            data: { confirm: 'Esta seguro de eliminar este hipodromo?' } %-->
+                          </div>
+                        </td>
+                        <td> <%= hipodromo.tipo.to_i == 1 ? 'Nacional' : 'Internacional' %> </td>
+                        <td> <%= hipodromo.pais %> </td>
+                        <td> <%= hipodromo.cierre_api ? "Si" : "No" %> </td>
+                        <td> <%= hipodromo.activo ? 'Si' : 'No' %> </td>
+                        <td> <%= hipodromo.abreviatura %> </td>
+                        <td> <%= hipodromo.codigo_nyra %> </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-2 col-md-offset-10">
+    <%= link_to 'Nuevo Hipodromo', new_hipodromo_path, class: 'btn btn-success pull-right' %>
+  </div>
+</div>
+
+<script>
+  function filtrar_hipodromos(id){
+    axios({
+      method: 'POST',
+      url: '/hipodromos/filtrar',
+      data: {"id": id},
+    })
+    .then(function(response) {
+      $('#cuerpo_hipodromos').html(response.data);
+      }
+    )
+  }
+</script>

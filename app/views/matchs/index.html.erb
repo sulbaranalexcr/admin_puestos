@@ -1,0 +1,151 @@
+<script>
+function myFunction() {
+  
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("mysearch");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("matches");
+  tr = table.getElementsByTagName("tr");
+
+  
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+
+
+function cerrar_match(id){
+    swal({
+    title: "Advertencia",
+    text: "Esta seguro de cerrar este match?",
+    icon: "warning",
+      dangerMode: false,
+    buttons: {
+    confirm: "Aceptar",
+      cancel: "Cancelar",
+      },
+  })
+  .then((willDelete) => {
+    if (willDelete) {
+            axios({
+                method: 'POST',
+                  url: '/matchs/cerrar_match',
+                data: {
+                  "id": id
+                },
+              })
+              .then(function(response) {
+                swal("Completo", "Match Cerrado con exito.", "success").then((aceptar) => {
+                  location.reload(true);
+                });
+              }
+            )
+            .catch(function (error) {
+                swal("Lo siento", "Ocurrio un error. Verifique todos los datos", "error");
+            });
+       }  
+  })
+
+}
+
+</script>
+
+<style>
+#mysearch {
+  background-image: url('/assets/searchicon.png'); /* Add a search icon to input */
+  background-position: 10px 12px; /* Position the search icon */
+  background-repeat: no-repeat; /* Do not repeat the icon image */
+  width: 100%; /* Full-width */
+  font-size: 16px; /* Increase font-size */
+  padding: 12px 20px 12px 40px; /* Add some padding */
+  border: 1px solid #ddd; /* Add a grey border */
+  margin-bottom: 12px; /* Add some space below the input */
+}
+</style>
+
+<div class="row">
+  <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Listado de Match</h3>
+        </div>
+
+        <div class="box-body">
+          <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+
+            <div class="row">
+              <div class="col-sm-12">
+
+                <input type="text" id="mysearch" onkeyup="myFunction()" placeholder="Ingrese deporte">
+                <div class="row">
+                  <div class="col-md-2 col-md-offset-10">
+                    <%= link_to 'Nuevo Match', new_match_path, class: 'btn btn-success pull-right' %>
+                  </div>
+                </div>
+                <table id="matches" class="table table-bordered table-striped dataTable" role="grid">
+                  <thead>
+                    <tr>
+                      <th>Match ID</th>
+                      <th>Tipo Juego</th>
+                      <th>Liga</th>
+                      <th>Match</th>
+                      <th>Hora Juego</th>
+                      <th style="width: 5%;text-align: center;">Editar</th>
+                      <th style="width: 5%;text-align: center;">Cerrar</th>
+                      <th style="width: 5%;text-align: center;">Eliminar</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @matchs.each do |match| %>
+                    <%color = (match.local < Time.now or match.activo == false) ? "red":"white"%>
+                    <%letras = match.local < Time.now ? "white":"black"%>
+                      <tr>
+                        <td style="background-color: <%= color%>;color: <%= letras%>"> <%= match.match_id %> </td>
+                        <td  style="background-color: <%= color%>;color: <%= letras%>"> <%= match.nombre_deporte %> </td>
+                        <td  style="background-color: <%= color%>;color: <%= letras%>"> <%= match.nombre_liga %> </td>
+                        <td  style="background-color: <%= color%>;color: <%= letras%>"> <%= match.nombre %> </td>
+                        <td  style="background-color: <%= color%>;color: <%= letras%>"> <%= match.local.strftime("%I:%M %p") %> </td>
+                        <td align="center">
+                            <%= link_to raw('<i class="fa fa-cogs"></i>'), edit_match_url(match), class: 'btn btn-sm btn-success' %>
+                        </td>
+                        <td align="center" >
+                            <%if match.activo == false %>
+                              <a class='btn btn-sm btn-warning'><i class="fa fa-window-close"></i> </a>
+                            <%else%>
+                               <a onclick="cerrar_match(<%=match.id%>);" class='btn btn-sm btn-warning'><i class="fa fa-window-close"></i> </a>
+                            <%end%>
+                       </td>
+                        <td align="center">
+                            <%= link_to raw('<i class="fa fa-trash"></i>'), match_url(match), class: 'btn btn-sm btn-danger', method: :delete,
+                                            data: { confirm: 'Esta seguro de eliminar este match?' } %>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-2 col-md-offset-10">
+    <%= link_to 'Nuevo Match', new_match_path, class: 'btn btn-success pull-right' %>
+  </div>
+</div>

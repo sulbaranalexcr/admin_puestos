@@ -1,0 +1,98 @@
+<%= javascript_include_tag "axios.js" %>
+<script>
+function consultar(){
+axios({
+    method: 'POST',
+      url: '/reportes/historial_tasas',
+    data: {
+           "moneda": $('#moneda').val(),
+           "desde": $('#desde').val(),
+           "hasta": $('#hasta').val()
+          },
+  })
+  .then(function(response) {
+       $('#cuerpo_div').html(response.data);
+    }
+
+)
+.catch(function (error) {
+    swal("Lo siento", "No hay datos.", "error");
+});
+
+}
+
+
+
+
+
+</script>
+
+<form>
+<div class="row">
+<div class="col-xs-12">
+  <div class="box">
+
+    <div class="box-header">
+      <h3 class="box-title">Historial de Tasas</h3>
+    </div>
+
+
+    <div class="form-group">
+      <table border=0>
+        <tr>
+          <td>
+            <div class="box-body">
+              <div class="form-group" style="margin-left: 10px;">
+                <label for="desde_fecha">Desde</label>
+                <input type="date"  class= "form-control"  id='desde' name='desde'  style= 'width: 150px;' required="true" value="<%= Time.now.strftime('%Y/%m/%d')%>">
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="box-body">
+              <div class="form-group" style="margin-left: 10px;">
+                <label for="hasta_fecha">Hasta</label>
+                <input type="date"  class= "form-control"  id ='hasta' name= 'hasta'  style= 'width: 150px;' required="true"  value="<%= Time.now.strftime('%Y/%m/%d')%>">
+              </div>
+            </div>
+          </td>
+          <!--td>
+            <div class="box-body">
+              <div class="form-group" style="margin-left: 10px;">
+                <label for="tipo">Moneda</label>
+                <select class="form-control" id="moneda">
+                <option value="0">Todas</option>
+                  <%for moneda in @monedas%>
+                    <option value="<%= moneda.id%>"><%= moneda.abreviatura%> (<%= moneda.pais%>)</option> 
+                  <%end%>
+                </select>
+              </div>
+            </div>
+          </td-->
+          <td>
+            <div class="box-footer">
+               <input type="button" value="Aceptar" class="btn btn-success" onclick="consultar()"/>
+            </div>
+          </td>
+        </tr>
+      </table>
+      <div class="form-group">
+         <div id='cuerpo_div'>
+         </div>
+      </div>
+
+
+
+    </div>
+
+
+
+  </div>
+</div>
+</div>
+</form>
+<script>
+   window.boton_check() ;
+   $('#desde').val("<%= Time.now.strftime('%Y-%m-%d')%>");
+   $('#hasta').val("<%= Time.now.strftime('%Y-%m-%d')%>");
+</script>

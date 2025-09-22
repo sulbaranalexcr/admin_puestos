@@ -1,0 +1,80 @@
+<%= form_for @equipo, url: @url, role: :form, html: { multipart: true } do |f| %>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Editar Equipo</h3>
+        </div>
+
+        <div class="box-body">
+
+
+          <div class="form-group">
+            <label for="hipodromo_tipo">Deporte</label>
+            <select size=1 class="form-control" placeholder="Tipo"  name="equipo[juego_id]" id="equipo_juego_id" onchange="busca_ligas(this.value);">
+              <option value="0" >Seleccione deporte</option>
+            <%for deporte in Juego.all.order(:juego_id)%>
+              <option value="<%= deporte.juego_id %>" ><%= deporte.nombre %></option>
+            <%end%>
+            </select>
+          </div>
+
+
+          <div class="form-group" id="cuerpo_liga">
+            <label for="hipodromo_tipo">Liga</label>
+            <select size=1 class="form-control" placeholder="Tipo"  name="equipo[liga_id]" id="equipo_liga_id" />
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+            <%= f.label 'Equipo ID' %>
+            <%= f.text_field :equipo_id, class: "form-control", required: true %>
+            <span class="help-block"><i>* Este campo es requerido</i><span>
+          </div>
+
+
+          <div class="form-group">
+            <%= f.label 'Nombre' %>
+            <%= f.text_field :nombre, class: "form-control", placeholder: "Nombre", required: true %>
+            <span class="help-block"><i>* Este campo es requerido</i><span>
+          </div>
+
+          <div class="form-group">
+            <%= f.label 'Nombre' %>
+            <%= f.text_field :nombre_largo, class: "form-control", placeholder: "Nombre largo", required: true %>
+            <span class="help-block"><i>* Este campo es requerido</i><span>
+          </div>
+
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+<% end %>
+
+
+
+<script>
+function busca_ligas(equipo){
+  if (equipo != "0"){
+      axios({
+        method: 'POST',
+        url: '/equipos/buscar_liga',
+        data: {"id": equipo},
+      })
+      .then(function(response) {
+        $('#cuerpo_liga').html(response.data);
+
+      }
+
+    )
+  }
+
+
+}
+</script>

@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  references: 
+  references: 
+  references: 
+  tasa_anterior: 1.5
+  nueva_tasa: 1.5
+
+two:
+  references: 
+  references: 
+  references: 
+  tasa_anterior: 1.5
+  nueva_tasa: 1.5

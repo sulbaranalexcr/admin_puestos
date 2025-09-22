@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ticketp_loto: one
+  draw_type_id: 1
+  numero: MyString
+  signo: 1
+  monto_premio: 9.99
+  status: 1
+
+two:
+  ticketp_loto: two
+  draw_type_id: 1
+  numero: MyString
+  signo: 1
+  monto_premio: 9.99
+  status: 1

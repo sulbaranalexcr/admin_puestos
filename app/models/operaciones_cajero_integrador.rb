@@ -1,0 +1,2 @@
+class OperacionesCajeroIntegrador < ApplicationRecord
+end

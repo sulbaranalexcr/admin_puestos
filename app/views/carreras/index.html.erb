@@ -1,0 +1,353 @@
+  <%= javascript_include_tag "axios.js" %>
+<script>
+function verificar_jornadas(hip){
+  $('#jornadas option').remove();
+  $('#carreras option').remove();
+  $('#caballos_div').html("");
+  if (hip != "0"){
+      axios({
+          method: 'POST',
+            url: '/carreras/buscar_jornadas',
+          data: {"id": hip},
+        })
+        .then(function(response) {
+          $('#jornadas').append(new Option("Seleccione Jornada", 0 ));
+            $.each(response.data.jornadas, function( index, value ) {
+              $('#jornadas').append(new Option(value.fecha_bonita, value.id ));
+            });
+          }
+
+      )
+      .catch(function (error) {
+          swal("Lo siento", "No hay jornadas para este hipodromo.", "error");
+      });
+  }
+
+}
+
+
+
+function verificar_carreras(carid){
+  $('#caballos_div').html("");
+  $('#cantidad_caballos').val(0);
+  $('#hora_carrera').val("");
+  $('#carreras option').remove();
+  axios({
+      method: 'POST',
+        url: '/carreras/buscar_carreras',
+      data: {"id": carid},
+    })
+    .then(function(response) {
+      $('#c_ingresaas').show();
+      $('#carreas_ingresadas_p').text(response.data.cantidad_carreras);
+      $('#carreras').append(new Option("Seleccione Carrera", 0 ));
+
+       select = document.getElementById('carreras');
+       response.data.carreras.forEach(function(entry) {
+         var opt = document.createElement('option');
+         opt.value = entry.id;
+         opt.innerHTML = entry.numero_carrera;
+         if (response.data.cantidad_carreras.includes(entry.numero_carrera)){
+            opt.setAttribute("style","background-color:green");
+         }else{
+           opt.setAttribute("style","background-color:red");
+         }
+         select.appendChild(opt);
+
+       });
+       $('#carreras option').css("color","white");
+       $('#carreras option').css("font-weight","bold");
+
+      }
+
+  )
+  .catch(function (error) {
+      swal("Lo siento", "No hay carrerras para esta jornada.", "error");
+  });
+
+}
+
+
+function verificar_caballos(cabid){
+  $('#caballos_div').html("");
+  $('#cantidad_caballos').val(0);
+  $('#hora_carrera').val("");
+  axios({
+      method: 'POST',
+        url: '/carreras/buscar_caballos',
+      data: {"id": cabid},
+    })
+    .then(function(response) {
+      console.log(response.data);
+        if (response.data.status == "OK"){
+          $('#cantidad_caballos').val(response.data.cantidad);
+          $('#hora_carrera').val(response.data.hora)
+          $('#checab1a').prop("checked", response.data.a1) ;
+          $('#checab1x').prop("checked", response.data.x1) ;
+          $('#checab2b').prop("checked", response.data.b2) ;
+          $('#checab2x').prop("checked", response.data.x2) ;
+          crear_caballos(cabid);
+        }else{
+          $('#checab1a').prop("checked", false);
+          $('#checab1x').prop("checked", false);
+          $('#checab2b').prop("checked", false);
+          $('#checab2x').prop("checked", false);
+          $('#cuerpo_crear_caballos').show();
+          $('#boton_crear').show();
+          $('#boton_modificar_caballos').hide();
+          window.es_modifica = false ;
+
+        }
+    }
+
+  )
+  .catch(function (error) {
+      swal("Lo siento", "Ocurrio un error.", "error");
+  });
+
+}
+
+
+function crear_caballos(cabid){
+  $('#caballos_div').html("");
+  axios({
+      method: 'POST',
+        url: '/carreras/crear_caballos',
+      data: {
+        "id": $('#carreras').val(),
+        "cantidad": $('#cantidad_caballos').val(),
+        "a1": $('#checab1a').prop("checked"),
+        "x1": $('#checab1x').prop("checked"),
+        "b2": $('#checab2b').prop("checked"),
+        "x2": $('#checab2x').prop("checked")
+      },
+    })
+    .then(function(response) {
+      $('#caballos_div').html(response.data);
+    }
+
+  )
+  .catch(function (error) {
+      swal("Lo siento", "Ocurrio un error.", "error");
+  });
+
+}
+
+
+function crear_caballos2(cabid){
+  $('#caballos_div').html("");
+  axios({
+      method: 'POST',
+        url: '/carreras/crear_caballos2',
+      data: {
+        "id": $('#carreras').val(),
+        "cantidad": $('#cantidad_caballos').val(),
+        "a1": $('#checab1a').prop("checked"),
+        "x1": $('#checab1x').prop("checked"),
+        "b2": $('#checab2b').prop("checked"),
+        "x2": $('#checab2x').prop("checked")
+      },
+    })
+    .then(function(response) {
+      $('#caballos_div').html(response.data);
+    }
+
+  )
+  .catch(function (error) {
+      swal("Lo siento", "Ocurrio un error.", "error");
+  });
+
+}
+
+
+
+
+function grabar(){
+  datos = [];
+  pase = 0 ;
+  if ($('#hora_carrera').val().length > 0){
+      $( "input[id*='numcab']" ).each(function() {
+        datos.push({"id": this.id.substring(6,8), "nombre": this.value, "retirado": !$('#checab'+this.id.substring(6,8)).prop("checked"), "jinete": $('#jin'+this.id.substring(6,8)).val(), "entrenador": $('#entre'+this.id.substring(6,8)).val() });
+        if (this.value.length == 0){
+          pase += 1
+        }
+      });
+      if (pase > 0){
+          swal("Lo siento", "Debe ingresar todos los caballos.", "error");
+      }else{
+          axios({
+              method: 'POST',
+                url: '/carreras/crear_final_carrera',
+              data: {
+                "id": $('#carreras').val(),
+                "caballos": datos,
+                "hora": $('#hora_carrera').val(),
+                "modificar": window.es_modifica,
+                "nombre_carrera": $('#nombre_carrera').val(),
+                "distancia": $('#distancia').val(),
+                "purse": $('#purse').val()
+              },
+            })
+            .then(function(response) {
+              swal("Completo", "Datos almacenados.", "success").then((aceptar) => {
+                $('#checab1a').prop("checked", false) ;
+                $('#checab1x').prop("checked", false) ;
+                $('#checab2a').prop("checked", false) ;
+
+                verificar_carreras($('#jornadas').val());
+              });
+            }
+
+          )
+          .catch(function (error) {
+              swal("Lo siento", error.response.data.msg, "error");
+          });
+      }
+   }else{
+     swal("Lo siento", "Debe ingresar hora de carrera.", "error");
+   }
+}
+
+
+</script>
+
+<form>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+
+      <div class="box-header">
+        <h3 class="box-title">Crear carreras</h3>
+      </div>
+
+      <div class="form-group">
+        <div class="box-body">
+        <table boder=0>
+          <tr>
+            <td style="width: 40%" valign="top">
+                <div class="form-group">
+                  <label for="hipodromo_tipo">Hipodromo</label><br>
+                  <select size=1 class="form-control" placeholder="Tipo"  name="hipodromos" id="hipodromos"  style= '' onchange="verificar_jornadas(this.value);"/>
+                  <option value="0" >Seleccione </option>
+                  <%for hipo in @hipodromos%>
+                      <option value="<%= hipo.id%>" ><%= hipo.nombre_largo%> (<%= hipo.tipo == 1 ? "Nacional" : "Internacional"%>) </option>
+                  <%end%>
+                  </select>
+                </div>
+            </td>
+            <td style="width: 30%;" valign="top">
+              <div class="form-group" style="margin-left: 10px;">
+                <label for="hipodromo_tipo">Jornadas</label>
+                <select size=1 class="form-control" placeholder="Tipo"  name="jornadas" id="jornadas"  style= '' onchange="verificar_carreras(this.value);"/>
+                </select>
+              </div>
+            </td>
+            <td style="width: 15%;" valign="top">
+              <div class="form-group" style="margin-left: 10px;">
+                <label for="hipodromo_tipo">Carreras</label>
+                <select size=1 class="form-control" placeholder="Tipo"  name="carreras" id="carreras"  style= '' onchange="verificar_caballos(this.value);"/>
+                </select>
+              </div>
+              <div id="c_ingresaas"  style= 'margin-left: 10px;display: none;'>
+                   <label style="color: #00a65a">Carreras Ingresadas</label>
+                   <p id="carreas_ingresadas_p"></p>
+              </div>
+            </td>
+            <td style="width: 15%;" valign="top">
+              <div class="form-group" style="margin-left: 10px;">
+                <label for="hipodromo_tipo">Hora de carrera</label>
+                <input type="time"  class= "form-control"  placeholder= "Hora" required= true id ='hora_carrera' name= 'hora_carrera'  style= 'width: 150px;' required="true" >
+              </div>
+            </td>
+          </tr>
+        </table>
+
+
+        <div class="form-group" style="display: none;" id="cuerpo_crear_caballos">
+          <table border=0 style="width: 80%" id="tabla_crear">
+            <tr>
+              <td style="width: 15%">
+              <label for="hipodromo_tipo"  style= 'margin-left: 10px;'>Cantidad de caballos</label>
+              <input type="text" value ="0"  class= "form-control"  placeholder= "Cantidad" required= true id='cantidad_caballos' name='cantidad_caballos' maxlength="2" style= 'margin-left: 10px;width: 150px;'>
+            </td>
+            <td style="width: 20%;" valign="middle">
+              <label style= 'margin-left: 10px;margin-top: 30px;'>Llave 1A</label>
+              <input type="checkbox"  style= 'margin-left: 10px;width: 150px;' tabindex="-1" title="Esta opcion es delicada, usela con cuidado." data-group-cls="btn-group-sm" id="checab1a"  onchange="desactivar_bot();" />
+            </td>
+            <td style="width: 20%;" valign="middle">
+              <label style= 'margin-left: 10px;margin-top: 30px;'>Llave 1X</label>
+              <input type="checkbox"  style= 'margin-left: 10px;width: 150px;' tabindex="-1" title="Esta opcion es delicada, usela con cuidado." data-group-cls="btn-group-sm" id="checab1x"  onchange="activar2(1);"/>
+            </td>
+            <td style="width: 20%;" valign="middle">
+              <label style= 'margin-left: 10px;margin-top: 30px;'>Llave 2B</label>
+              <input type="checkbox"  style= 'margin-left: 10px;width: 150px;' tabindex="-1" title="Esta opcion es delicada, usela con cuidado." data-group-cls="btn-group-sm" id="checab2b" />
+            </td>
+            <td style="width: 20%;" valign="middle">
+              <label style= 'margin-left: 10px;margin-top: 30px;'>Llave 2X</label>
+              <input type="checkbox"  style= 'margin-left: 10px;width: 150px;' tabindex="-1" title="Esta opcion es delicada, usela con cuidado." data-group-cls="btn-group-sm" id="checab2x"  />
+            </td>
+          </tr>
+          <tr>
+              <td valign="top" style="width: 20%" colspan="4">
+                <input type="button" id="boton_crear" style= 'margin-left: 10px;margin-top: 15px;' value="Crear caballos" onclick="crear_caballos()"  class="btn btn-success" style="margin-left: 0px;margin-top: 25px"/>
+                <input type="button" id="boton_modificar_caballos" style= 'margin-left: 10px;margin-top: 15px;' value="Modificar caballos" onclick="crear_caballos2()"  class="btn btn-success" style="margin-left: 0px;margin-top: 25px"/>
+              </td>
+            </tr>
+          </table>
+           <div id='caballos_div'>
+           </div>
+        </div>
+
+        <div id="caballos"  style= 'margin-left: 10px;'>
+        </div>
+
+
+      </div>
+
+
+    </div>
+  </div>
+</div>
+<input type="hidden" name="carrera_hidden" id="carrera_hidden" />
+</form>
+
+
+<script>
+// $(':checkbox').checkboxpicker();
+window.boton_check() ;
+  $("#hipodromos").select2({
+    matcher: select_con_busqueda
+  });
+
+$(':checkbox').checkboxpicker({
+  html: true,
+  offLabel: "NO",
+  onLabel: "SI"
+});
+
+function activar2(tipo){
+  if (!$('#checab1a').prop("checked")){
+    if (tipo == 1){
+       $('#checab1x').prop("checked", false);
+    }else{
+      $('#checab2b').prop("checked", false);
+      $('#checab2x').prop("checked", false);
+    }
+
+  }
+}
+
+function desactivar_bot(){
+  if (!$('#checab1a').prop("checked")){
+    $('#checab1x').prop("checked", false);
+  }
+    $('#checab2b').prop("checked", false);
+    $('#checab2x').prop("checked", false);
+}
+
+
+
+
+
+
+</script>

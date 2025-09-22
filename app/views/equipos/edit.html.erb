@@ -1,0 +1,59 @@
+<%= form_for @equipo, url: @url, role: :form, html: { multipart: true } do |f| %>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Editar Equipo</h3>
+        </div>
+
+        <div class="box-body">
+
+          <div class="form-group">
+            <%= f.label 'Deporte' %>
+            <input type="text" class="form-control" value="<%= @deporte.nombre %>" disabled>
+          </div>
+
+
+          <div class="form-group">
+            <label for="hipodromo_tipo">Liga</label>
+            <select size=1 class="form-control" placeholder="Tipo"  name="equipo[juego_id]" id="equipo_juego_id" />
+            <%for liga in Liga.where(juego_id: @deporte.juego_id).order(:juego_id)%>
+              <option value="<%= liga.id %>" <%= liga.liga_id == @equipo.liga_id ? "selected":""%> ><%= liga.nombre %></option>
+            <%end%>
+
+          </select>
+          </div>
+
+
+          <div class="form-group">
+            <%= f.label 'Equipo ID' %>
+            <%= f.text_field :equipo_id, class: "form-control", disabled: true %>
+          </div>
+
+
+          <div class="form-group">
+            <%= f.label 'Nombre' %>
+            <%= f.text_field :nombre, class: "form-control", placeholder: "Nombre", required: true %>
+            <span class="help-block"><i>* Este campo es requerido</i><span>
+          </div>
+
+
+          <div class="form-group">
+            <%= f.label 'Nombre' %>
+            <%= f.text_field :nombre_largo, class: "form-control", placeholder: "Nombre largo", required: true %>
+            <span class="help-block"><i>* Este campo es requerido</i><span>
+          </div>
+
+
+        </div>
+
+        <div class="box-footer">
+          <%= link_to 'Cancelar', equipos_path, class: 'btn btn-danger' %>
+          <%= f.submit 'Enviar', class: "btn btn-success" %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+<% end %>

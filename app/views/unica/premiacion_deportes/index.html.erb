@@ -1,0 +1,367 @@
+  <%= javascript_include_tag "axios.js" %>
+  <%= javascript_include_tag "swalert.js" %>
+
+<script>
+  window.premiadas = false ;
+
+function buscar_deporte(){
+   $('#deportes').find('option:not(:first)').remove();
+   $('#ligas').find('option:not(:first)').remove();
+   $('#matchs').find('option:not(:first)').remove();
+   $('#finalizado').find('option').remove();
+   $('#div_juego').html('') ;
+
+   if (!$('#fecha')[0].checkValidity()){
+      swal("Lo siento", "Debe seleccionar una fecha.", "error");
+      $('#deportes').val("0");
+      return
+   }
+
+    axios({
+        method: 'POST',
+          url: '/unica/premiacion_deportes/buscar_deportes',
+        data: {
+          "fecha": $('#fecha').val()
+        },
+      })
+      .then(function(response) {
+         $('#div_deportes').html(response.data) ;
+         deporte_id = Number('<%= params[:deporte_id] %>') ;
+         if ( deporte_id > 0 ){
+           setdeporte(deporte_id)
+         }
+      }
+
+    )
+    .catch(function (error) {
+        swal("Lo siento", "Ocurrio un error. Verifique todos los datos", "error");
+    });
+}
+
+
+function verificar_deporte(id){
+   $('#ligas').find('option:not(:first)').remove();
+   $('#matchs').find('option:not(:first)').remove();
+   $('#finalizado').find('option').remove();
+   $('#div_juego').html('') ;
+
+   if (!$('#fecha')[0].checkValidity()){
+      swal("Lo siento", "Debe seleccionar una fecha.", "error");
+      $('#deportes').val("0");
+      return
+   }
+
+    axios({
+        method: 'POST',
+          url: '/unica/premiacion_deportes/buscar_ligas',
+        data: {
+          "id": id,
+          "fecha": $('#fecha').val()
+        },
+      })
+      .then(function(response) {
+         $('#div_ligas').html(response.data) ;
+         $("#ligas").select2({
+            matcher: select_con_busqueda
+         });
+         liga_id = Number('<%= params[:liga_id] %>') ;
+         if ( liga_id > 0 ){
+           setliga(liga_id)
+         }
+
+
+        // swal("Completo", "Datos almacenados.", "success").then((aceptar) => {verificar_carreras($('#jornadas').val());});
+      }
+
+    )
+    .catch(function (error) {
+        swal("Lo siento", "Ocurrio un error. Verifique todos los datos", "error");
+    });
+}
+
+function verificar_liga(id){
+   $('#matchs').find('option:not(:first)').remove();
+   $('#finalizado').find('option').remove();
+   $('#div_juego').html('') ;
+
+   if (!$('#fecha')[0].checkValidity()){
+      swal("Lo siento", "Debe seleccionar una fecha.", "error");
+      $('#deportes').val("0");
+      return
+   }
+
+    axios({
+        method: 'POST',
+          url: '/unica/premiacion_deportes/buscar_matchs',
+        data: {
+          "liga_id": id,
+          "deporte_id": $('#deportes').val(),
+          "fecha": $('#fecha').val()
+        },
+      })
+      .then(function(response) {
+         $('#div_matchs').html(response.data) ;
+         match_id = Number('<%= params[:match_id] %>') ;
+         if ( match_id > 0 ){
+           setmatch(match_id)
+         }
+
+      }
+
+    )
+    .catch(function (error) {
+        swal("Lo siento", "Ocurrio un error. Verifique todos los datos", "error");
+    });
+}
+
+
+function verificar_match(id){
+  $('#finalizado').find('option').remove();
+  if (id == "0"){
+    $('#div_juego').html('') ;
+    return
+  }
+     axios({
+         method: 'POST',
+           url: '/unica/premiacion_deportes/buscar_juego',
+         data: {
+           "id": id,
+           "fecha": $('#fecha').val()
+         },
+       })
+       .then(function(response) {
+          $('#div_juego').html(response.data) ;
+       }
+
+     )
+     .catch(function (error) {
+         swal("Lo siento", "Ocurrio un error. Verifique todos los datos", "error");
+     });
+
+}
+
+
+function notificar_premiacion_deportes(){
+      Swal.fire({
+      type: 'info',
+      title: 'Premiacion completada, espere mientras se generan reportes.',
+      text: 'Esta ventana se cerrara cuando finzalice el proceso',
+      showConfirmButton: false,
+      allowOutsideClick: false
+    })
+}
+
+function cerrar_notificar_premiacion_deportes(){
+  Swal.close();
+}
+
+
+function grabar(){
+  verificar = true ;
+  if (!$('#fecha')[0].checkValidity()){
+    verificar = false ;
+  }
+  try {
+    if (!$('#resultado_equipo1')[0].checkValidity()){
+      verificar = false ;
+    }
+
+    if (!$('#resultado_equipo2')[0].checkValidity()){
+      verificar = false ;
+    }
+  }catch(error) {
+    verificar = false ;
+  }
+
+  if ($('#deportes').val() == '0'){
+    verificar = false ;
+  }
+  if ($('#ligas').val() == '0'){
+    verificar = false ;
+  }
+  if ($('#matchs').val() == '0'){
+    verificar = false ;
+  }
+
+  if (verificar == false) {
+      swal("Lo siento", "Verifique todos los datos", "error");
+      return
+  }
+
+  if (window.premiadas){
+        swal({
+          title: "Juego ya fue premiado",
+          text: "Esta seguro que desea repremiarlo?",
+          icon: "warning",
+           dangerMode: true,
+          buttons: {
+          confirm: "Cancelar",
+           cancel: "Aceptar",
+           },
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+          } else {
+            grabar2();
+          }
+        });
+  }else{
+    grabar2();
+  }
+
+}
+
+function grabar2(){
+  datos = [];
+      swal({
+        title: "Verifique los resultados antes de premiar!",
+        text: "Esta seguro que todos los datos son correctos?",
+        icon: "warning",
+         dangerMode: true,
+        buttons: {
+        confirm: "Cancelar",
+         cancel: "Aceptar",
+         },
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+        } else {
+            axios({
+                method: 'POST',
+                  url: '/unica/premiacion_deportes/premiar_juego',
+                data: {
+                  "deporte_id": $('#deportes').val(),
+                  "liga_id": $('#ligas').val(),
+                  "match_id": $('#matchs option:selected').data('match_id'),
+                  "id_match": $('#matchs').val(),
+                  "eq1_id": $('#resultado_equipo1').data('idequi'),
+                  "eq2_id": $('#resultado_equipo2').data('idequi'),
+                  "eq1_resul": $('#resultado_equipo1').val(),
+                  "eq2_resul": $('#resultado_equipo2').val(),
+                  "eq1_nombre": $('#resultado_equipo1_nombre').val(),
+                  "eq2_nombre": $('#resultado_equipo2_nombre').val(),
+                  "finalizado": $('#finalizado').val(),
+                  "fecha": $('#fecha').val()
+
+                },
+              })
+              .then(function(response) {
+                swal("Completo", "Datos almacenados.", "success").then((aceptar) => {
+                  window.location.href = '/unica/deportes/utilidades/verificar_deportes';
+                });
+              }
+
+            )
+            .catch(function (error) {
+                swal("Lo siento", "Ocurrio un error. Verifique todos los datos", "error");
+            });
+        }
+      });
+
+
+}
+
+
+
+
+</script>
+
+<form>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+
+      <div class="box-header">
+        <h3 class="box-title">Premiar Juego (Unica)</h3>
+      </div>
+      <div class="form-group">
+        <div class="box-body">
+        <table boder=0>
+          <tr>
+            <td style="width: 10%" valign="top">
+                <div class="form-group">
+                  <label for="deporte_label">Fecha</label>
+                  <input type="date" id="fecha" value="<%= Time.now.strftime('%Y-%m-%d')%>" name="fecha" class="form-control" required onchange="buscar_deporte(this.value);" min="<%= (Time.now - 3.day).strftime('%Y-%m-%d') %>" max="<%= Time.now.strftime('%Y-%m-%d') %>">
+                </div>
+            </td>
+
+            <td style="width: 20%" valign="top">
+                <div class="form-group" style="margin-left: 10px;" id="div_deportes">
+                  <label for="deporte_label">Deporte</label>
+                  <select size=1 class="form-control" name="deportes" id="deportes"  style= '' onchange="verificar_deporte(this.value);">
+                  <option value="0" >Seleccione deporte</option>
+                  </select>
+                </div>
+            </td>
+            <td style="width: 25%;" valign="top">
+              <div class="form-group" style="margin-left: 10px;" id="div_ligas">
+                <label for="deporte_label">Liga</label>
+                <select size=1 class="form-control" name="ligas" id="ligas"  style= '' onchange="verificar_liga(this.value);">
+                  <option value="0" >Seleccione Liga </option>
+                </select>
+              </div>
+            </td>
+            <td style="width: 25%;" valign="top">
+              <div class="form-group" style="margin-left: 10px;" id="div_matchs">
+                <label for="deporte_label">Match</label>
+                <select size=1 class="form-control" name="matchs" id="matchs"  style= '' onchange="verificar_match(this.value);">
+                  <option value="0" >Seleccione Match </option>
+                </select>
+              </div>
+            </td>
+            <td style="width: 20%;" valign="top">
+              <div class="form-group" style="margin-left: 10px;" id="div_finalizado">
+                <label for="deporte_label">Finalizado</label>
+                <select size=1 class="form-control" name="finalizado" id="finalizado"  style= ''>
+                </select>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <div class="form-group">
+           <div id='div_juego'>
+           </div>
+        </div>
+
+
+      </div>
+
+      <div class="box-footer">
+
+           <input type="button" value="Aceptar" class="btn btn-success" onclick="grabar()"/>
+      </div>
+
+    </div>
+  </div>
+</div>
+</form>
+
+<script>
+   $( document ).ready(function() {
+     if ('<%= params[:tipo] %>' == '2'){
+       split_date = '<%= params[:fecha] %>'.split('/');
+       fecha = split_date[2] + '-' + split_date[1] + '-' + split_date[0];
+       deporte_id = '<%= params[:deporte_id] %>';
+       liga_id = '<%= params[:liga_id] %>';
+       match_id = '<%= params[:match_id] %>';
+       $("#fecha").val(fecha);
+     }
+
+     $("#fecha").change();
+   });
+
+  function setdeporte(deporte_id){
+    $('#deportes').val(deporte_id) ;
+    $("#deportes").change();
+  }
+  function setliga(liga_id){
+    $('#ligas').val(liga_id) ;
+    $("#ligas").change();
+  }
+  function setmatch(match_id){
+    $('#matchs').val(match_id) ;
+    $("#matchs").change();
+  }
+
+</script>

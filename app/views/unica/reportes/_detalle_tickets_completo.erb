@@ -1,0 +1,115 @@
+<%if @user_taq.present?&& @datos.present?%>
+  <%results = @datos.present? ? @datos['results'].pluck('llegada', 'puesto') : ''%>
+  <div style="border: 2px solid #D5DBDB;margin-left: 10px; margin-bottom: 5px; padding: 5px; border-radius: 3px; width: 15%;">
+    <strong >Resultados de la carrera:</strong><br> 
+    <% results.each do |res| %>  
+      <%= "<strong>#{res[0]}</strong>&nbsp; = &nbsp;# #{res[1]}<br>".html_safe  %>  
+    <%end%> 
+  </div>
+<table id="recargas_index" class="table table-bordered table-striped dataTable" role="grid">
+  <thead>
+    <tr>
+      <th style="text-align: left;width: 50%;background-color: #D5DBDB">Cliente: <label style="font-weight: normal"> <%= @user_taq.nombre %></label></th>
+      <th colspan="2" style="text-align: left;width: 40%;background-color: #D5DBDB">Fecha/Hora:
+        <label style="font-weight: normal"><%= @datos['fathers'].first['data'].created_at.strftime('%d/%m/%Y %I:%M %p')%></label>
+      </th>
+      <th style="text-align: left;width: 10%;background-color: #D5DBDB"></th>
+    </tr>
+    <tr>
+      <th style="text-align: left;width: 50%">Descripcion</th>
+      <th style="text-align: right;width: <%= @valor_dolar > 1 ? '15%' : '40%'%>">Monto </th>
+        <%if @valor_dolar != 1 %>
+          <th style="text-align: right;width: 25%"> <%= @simbolo %> </th>
+        <%end%>
+      <th style="text-align: center;width: 10%">Estado </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @datos['fathers'].each do |father_dat|%>
+      <% father = father_dat['data']%>
+      <tr>
+        <td class="titulo" style="cursor: zoom-in;font-weight: bold;line-height:20pt;font-size: 14px;">
+        <%= father.accion_id == 1 ? father.reference_id_juega : father.reference_id_banquea%> -
+        <%= father.tipo_ticket(@user_taq.id)%> <%= father.texto_jugada%>
+        </td>
+        <td class="titulo" style="cursor: zoom-in;font-weight: bold;line-height:20pt;font-size: 14px;text-align: right">
+          <%= number_with_precision( father.monto_ticket(@user_taq.id) , precision: 2, separator: '.', delimiter: ',')%>
+        </td>
+          <%if @valor_dolar != 1 %>
+            <td class="titulo" style="cursor: zoom-in;font-weight: bold;line-height:20pt;font-size: 14px;text-align: right">
+              <%= number_with_precision( (father.monto_ticket(@user_taq.id) * @valor_dolar), precision: 2, separator: '.', delimiter: ',')%>
+            </td>
+          <%end%>
+        <td class="titulo" style="cursor: zoom-in;font-weight: bold;line-height:20pt;font-size: 14px;text-align: center">
+          <%= father.status_propuesta_banca(@user_taq.id)%>
+        </td>
+      </tr>
+      <% father_dat['childrens'].each do |hija|%>
+        <%next if hija.status2 == 4%>
+        <tr>
+          <td class="titulo" style="cursor: zoom-in;line-height:20pt;font-size: 14px;padding-left: 2%">
+            <%= hija.accion_id == 1 ? hija.reference_id_juega : hija.reference_id_banquea%> - <%= hija.texto_jugada%>
+          </td>
+          <td class="titulo" style="cursor: zoom-in;line-height:20pt;font-size: 14px;text-align: right">
+            <%= number_with_precision( hija.monto_ticket(@user_taq.id) , precision: 2, separator: '.', delimiter: ',')%>
+          </td>
+            <%if @valor_dolar != 1 %>
+            <td class="titulo" style="cursor: zoom-in;font-weight: bold;line-height:20pt;font-size: 14px;text-align: right">
+              <%= number_with_precision( (hija.monto_ticket(@user_taq.id) * @valor_dolar), precision: 2, separator: '.', delimiter: ',')%>
+            </td>
+            <%end%>
+          <td class="titulo" style="cursor: zoom-in;line-height:20pt;font-size: 14px;text-align: center">
+            <%= hija.status_propuesta_banca(@user_taq.id)%>
+          </td>
+        </tr>
+      <%end%>  
+    <%end%>
+   
+    <% @datos['fathers'].each do |father_dat|%>
+      <% father = father_dat['data']%>
+      <%if father.id_gana == @user_taq.id%>
+      <table id="recargas_index" class="table table-bordered table-striped dataTable" role="grid">
+        <thead>
+          <tr>
+            <th style="text-align: right;width: 33%;background-color: #D5DBDB">
+              <label> Arriesga: </label>
+              <% arriesga = father.id_propone == @user_taq.id ? father.monto : father.cuanto_gana_completo%>
+              <%= number_with_precision(arriesga , precision: 2, separator: '.', delimiter: ',')%>
+            </th>
+            <th style="text-align: right;width: 33%;background-color: #D5DBDB">
+              <label> Gana: </label>
+              <% gana = father.id_propone == @user_taq.id ? father.cuanto_gana : (father.monto.to_f - ((father.monto.to_f * @user_taq.comision.to_f) / 100) )%>
+              <%= number_with_precision(gana , precision: 2, separator: '.', delimiter: ',')%>
+            </th>
+            <th style="text-align: right;width: 33%;background-color: #D5DBDB">
+              <label> Recibe: </label>
+              <%total_recibe = arriesga + gana%>
+              <%= number_with_precision(total_recibe , precision: 2, separator: '.', delimiter: ',')%>
+            </th>
+          </tr>
+        </thead>
+      <%end%>
+    <%end%>
+
+    
+  </tbody>
+</table>
+<%end%>
+
+<p><%= @gticket.present? ? "Gticket: #{@gticket}" : ''%></p>
+<%if datos_gticket.present?%>
+  <div style="border: 1px solid #D5DBDB;padding: 10px;width: 40%;margin-bottom: 10px;margin-left: 5px">
+    <p> <label>Ticket Externo: </label> <%= datos_gticket['ticket']['ticket']%> </p>
+    <p> <label> Usuario Externo: </label> <%= datos_gticket['ticket']['usuario']%> </p>
+    <p> <label> Total: </label> <%= datos_gticket['ticket']['total'].to_f.round(2)%> </p>
+    <p> <label> Estado: </label> <%= datos_gticket['ticket']['estadoText']%> </p>
+  </div>
+  <p class="ml-1"> <label class="ml-1"> &nbsp;&nbsp;Detalle: </label></p>
+  <% datos_gticket['detalle'].each do |det| %>
+    <div style="border: 1px solid #D5DBDB;padding: 10px;width: 40%;margin-left: 5px">
+    <p> <label> Monto: </label><%= det['amount']%> </p>
+    <p> <label> Transactión Id: </label> <%= det['transactionId']%>-<%= det['reference'] || ''%> </p>
+    <p> <label> Operación: </label> <%= det['operation'] || det['type']%> </p>
+    </div>
+  <% end %>
+ <% end %>

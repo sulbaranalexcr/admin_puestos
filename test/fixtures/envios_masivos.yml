@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  carrera: one
+  integrador: one
+  type_data: 1
+  data: 
+
+two:
+  carrera: two
+  integrador: two
+  type_data: 1
+  data: 

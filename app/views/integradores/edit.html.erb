@@ -1,0 +1,82 @@
+<%= form_for @integrador, url: @url, role: :form, html: { multipart: true } do |f| %>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Editando Integrador</h3>
+        </div>
+              <div class="box-body">
+                <div class="form-group">
+                  <%= f.label 'Nombre' %>
+                  <%= f.text_field :nombre, class: "form-control" %>
+                  <span class="help-block"><i>* Este campo es requerido</i><span>
+                </div>
+
+
+                <div class="form-group">
+                  <%= f.label 'Representamte' %>
+                  <%= f.text_field :representante, class: "form-control" %>
+                  <span class="help-block"><i>* Este campo es requerido</i><span>
+                </div>
+
+
+                <div class="form-group">
+                  <%= f.label 'Telefono' %>
+                  <%= f.text_field :telefono, class: "form-control" %>
+                  <span class="help-block"><i>* Este campo es requerido</i><span>
+                </div>
+
+                <div class="form-group">
+                  <%= f.label 'Api Key' %>
+                  <%= f.text_field :api_key, class: "form-control", readonly: true %>
+                </div>
+
+                <div class="form-group">
+                  <label for="grupo_id">Grupo</label>
+                  <select size=1 class="form-control" placeholder="Grupo"  name="integrador[grupo_id]" id="integrador_grupo_id" style="width: 50%;"/>
+                    <%for grupo in Grupo.all.order(:nombre)%>
+                    <option value="<%= grupo.id %>" <%= grupo.id.to_i == @integrador.grupo_id.to_i ? "selected":""%>><%= grupo.nombre %></option>
+                  <%end%>
+                </select>
+                </div>
+                <%datos_cajero = JSON.parse(@integrador.datos_cajero_integrador.datos_cajero)%>
+
+                <hr style="margin-top: 5px; margin-bottom: 0px">
+                <label>Datos Cajero</label><br>
+                <div style="display: inline-flex;width: 100%;">
+                  <div style="width: 50%;">
+                    <%= render partial: 'obtener_saldo', locals: { datos_cajero: datos_cajero }%>
+                    <hr>
+                    <%= render partial: 'debitar_saldo', locals: { datos_cajero: datos_cajero }%>
+                  </div>
+                  <div style="width: 50%;">
+                    <%= render partial: 'acreditar_saldo', locals: { datos_cajero: datos_cajero }%>
+                    <hr>
+                    <%= render partial: 'acreditar_saldo_bloque', locals: { datos_cajero: datos_cajero }%>
+                  </div>
+                </div>
+
+
+
+                <div class="form-group">
+                  <%= f.label 'Activo' %>
+                  <%= f.check_box :activo, {}%>
+                </div>
+
+              <div class="form-group">
+                <%= f.label "Usa Cajero Propio?" %>
+                <%= f.check_box :usa_cajero_externo, {} %>
+              </div>
+
+        </div>
+
+        <div class="box-footer">
+          <%= link_to 'Cancelar', '/integradores', class: 'btn btn-danger' %>
+          <%= f.submit 'Enviar', class: "btn btn-success" %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+<% end %>

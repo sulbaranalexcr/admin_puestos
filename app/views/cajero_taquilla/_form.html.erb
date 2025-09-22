@@ -1,0 +1,158 @@
+<div class="form-group">
+  <%= f.label 'Nombre' %>
+  <%= f.text_field :nombre, class: "form-control", style: 'width: 50%' %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+
+</div>
+
+<div class="form-group">
+  <%= f.label 'Cedula' %>
+  <%= f.text_field :cedula, class: "form-control", style: 'width: 50%' %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+
+<div class="form-group">
+  <%= f.label 'Alias' %>
+  <%= f.text_field :alias, class: "form-control", style: 'width: 50%' %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+<div class="form-group">
+  <%= f.label 'Clave' %>
+  <%= f.text_field :clave, class: "form-control", style: 'width: 50%' %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+<div class="form-group">
+  <%= f.label 'Telefono' %>
+  <%= f.text_field :telefono, class: "form-control", style: 'width: 50%' %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+<div class="form-group">
+  <%= f.label 'E-mail' %>
+  <%= f.email_field :correo, class: "form-control validar", style: 'width: 50%', onkeyup: 'validar();' ,autocomplete: "new-email"%>
+  <span class="validar2" style="display: none;">Ya existe un usuario con ese Correo.<span>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+<div class="form-group">
+  <%= f.label 'Saldo Dolares' %>
+  <%= f.number_field :saldo_usd, value: 0, class: "form-control", style: 'width: 50%', disabled: true %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+<%if session[:usuario_actual]['tipo'] == "ADM"%>
+  <div class="form-group">
+    <%= f.label 'Comision' %>
+    <%= f.number_field :comision, class: "form-control", style: 'width: 50%', value: @porcentajet %>
+  </div>
+
+<!--div class="form-group">
+  <label for="moneda_id">Moneda Local</label>
+  <select size=1 class="form-control"  name="usuarios_taquilla[modena_default]" id="usuarios_taquilla_moneda_default" style="width: 50%;"/>
+  <%for moneda in Moneda.all.order(:id, :nombre)%>
+    <option value="<%=moneda.id%>"><%=moneda.pais%> - <%=moneda.nombre%> (<%=moneda. abreviatura%>)</option>
+  <%end%>
+</select>
+</div-->
+
+  <div class="form-group">
+      <label for="grupo_id">Grupo</label>
+      <select size=1 class="form-control" placeholder="Grupo"  name="usuarios_taquilla[grupo_id]" id="usuarios_taquilla_grupo_id" style="width: 50%;" />
+        <%for grupo in @grupos%>
+          <option value="<%= grupo.id%>" <%= @grupo_sel.to_i == grupo.id.to_i ? "selected":"" %> ><%= grupo.nombre%></option>
+        <%end%>
+      </select>
+  </div>
+
+  <div class="form-group">
+      <label for="grupo_id">Agente</label>
+      <select size=1 class="form-control" placeholder="Grupo"  name="usuarios_taquilla[cobrador_id]" id="usuarios_taquilla_cobrador_id" style="width: 50%;" />
+        <%for cobrador in Cobradore.where(grupo_id: session[:usuario_actual]['grupo_id']).order(:nombre)%>
+          <option value="<%= cobrador.id%>"> <%= cobrador.nombre%></option>
+        <%end%>
+      </select>
+  </div>
+<%else%>
+  <input type="hidden" value="<% session[:usuario_actual]['grupo_id'] %>" name="usuarios_taquilla[grupo_id]" id="usuarios_taquilla_grupo_id" />
+<%end%>
+
+<%if session[:usuario_actual]['tipo'] == "GRP"%>
+  <div class="form-group">
+    <label for="grupo_id">Agente</label>
+    <select size=1 class="form-control" placeholder="Grupo"  name="usuarios_taquilla[cobrador_id]" id="usuarios_taquilla_cobrador_id" style="width: 50%;" />
+      <%for cobrador in Cobradore.where(grupo_id: session[:usuario_actual]['grupo_id']).order(:nombre)%>
+        <option value="<%= cobrador.id%>"> <%= cobrador.nombre%></option>
+      <%end%>
+    </select>
+  </div>
+<%end%>
+
+
+<%if session[:usuario_actual]['tipo'] == "ADM"%>
+  <div class="form-group">
+    <%= f.label 'Monto minimo de jugada UND' %>
+    <%= f.number_field :jugada_minima_usd, class: "form-control", style: 'width: 50%' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label 'Monto maximo de jugada UND' %>
+    <%= f.number_field :jugada_maxima_usd, class: "form-control", style: 'width: 50%' %>
+  </div>
+
+
+  <div class="form-group">
+    <%= f.label 'Es Demo?' %>
+    <%= f.check_box :demo, {}%>
+  </div>
+<%end%>
+
+
+<div class="form-group">
+  <%= f.label 'Activo' %>
+  <%= f.check_box :activo, {}%>
+</div>
+
+<%if session[:usuario_actual]['tipo'] == "ADM"%>
+  <div class="form-group">
+    <%= f.label 'Usa Cajero Externo?' %>
+    <%= f.check_box :usa_cajero_externo, {}%>
+  </div>
+<%end%>
+
+<script>
+  function validar(){
+    email = $('#usuarios_taquilla_correo').val();
+    if (email.indexOf("@") > 0 && email.indexOf(".") > 0){
+      $.ajax({
+        type : "POST",
+        url : '/taquillas/validar_correo',
+        data : {
+          correo: email,
+          tipo: 1
+        },
+        success : function(request) {
+           if (request.existe){
+             // swal("Error", "Reglas almacenadas", "success");
+             $('.validar').css("background-color", "red");
+             $('.validar2').show();
+             $('#boton_grabar').prop("disabled", true);
+             $('#boton_grabar').hide();
+
+           }else{
+             $('.validar').css("background-color", "white");
+             $('.validar2').hide();
+             $('#boton_grabar').show();
+             $('#boton_grabar').prop("disabled", false);
+           }
+        }
+      });
+
+    }else{
+      $('.validar2').hide();
+      $('.validar').css("background-color", "white");
+    }
+  }
+</script>

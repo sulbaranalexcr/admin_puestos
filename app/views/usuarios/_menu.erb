@@ -1,0 +1,11 @@
+<label>MENU DE OPCIONES</label><br>
+  <% @menu_completo.each{|men,value|%>
+    <%if value['id']['tipo'].include?(@tipo) %>
+            <input type="checkbox" <%= value['id']['activo'] ? "checked":""%> id="p<%= value['id']['id']%>" name="usuarios_check_p<%= value['id']['id']%>"  onclick="verificar_principal(this.id,this.checked);"> <span style="font-weight: bold;" ><%= men%> </span><br>
+          <%value['menu'].each{|men2|%>
+              <%if men2['tipo'].include?(@tipo) %>
+                  &nbsp;&nbsp; <input type="checkbox" class="subp<%= value['id']['id']%>"  <%= men2['activo'] ? "checked":""%> id="s<%= men2['id']%>" name="usuarios_check_s<%= men2['id']%>" onclick="verificar_sub('p<%= value['id']['id']%>',this.checked);"> <%=men2['nombre']%><br>
+              <%end%>
+           <%}%>
+    <%end%>
+  <%}%>

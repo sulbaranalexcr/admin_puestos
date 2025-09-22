@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tipo: 1
+  hipodromo_id: 1
+  carrera_id: 1
+  data_enviada: MyText
+  data_recibida: MyText
+  reintento: false
+
+two:
+  tipo: 1
+  hipodromo_id: 1
+  carrera_id: 1
+  data_enviada: MyText
+  data_recibida: MyText
+  reintento: false

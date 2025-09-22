@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  estructura: one
+  venta: 1.5
+  premio: 1.5
+  comision: 1.5
+  utilidad: 1.5
+  modena: 1
+
+two:
+  estructura: two
+  venta: 1.5
+  premio: 1.5
+  comision: 1.5
+  utilidad: 1.5
+  modena: 1

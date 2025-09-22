@@ -1,0 +1,31 @@
+
+          <div  class="dataTables_wrapper form-inline dt-bootstrap">
+
+            <div class="row">
+              <div class="col-sm-10 text-right">
+                <table id="caballos_enter" class="table table-bordered table-striped dataTable" role="grid" style="width: 90% !important;">
+                  <thead>
+                    <tr>
+                      <th class="col-sm-4 text-left">Hipodromo</th>
+                      <th class="col-sm-1 text-right">Carrera</th>
+                      <th class="col-sm-1 text-right">Acción</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @prem_pend.each do |prem| %>
+                      <tr>
+                        <td style="vertical-align: middle;" class="col-sm-4 text-left"> <%= prem.hipodromo.nombre %> </td>
+                        <td style="vertical-align: middle;"  class="col-sm-1 text-right"> <%= prem.carrera.numero_carrera %> </td>
+                        <td class="col-sm-2 text-right" >
+                          <a class="btn btn-success" href="/unica/premiacion_puestos">Ir a Premiar </a>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+
+          </div>

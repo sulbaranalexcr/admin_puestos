@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tipo_juego: 1
+  tickets_detalle_id: 1
+  status1: 1
+  status2: 1
+  status3: 1
+
+two:
+  tipo_juego: 1
+  tickets_detalle_id: 1
+  status1: 1
+  status2: 1
+  status3: 1

@@ -1,0 +1,48 @@
+<div class="box-body">
+  <div class="form-group" >
+    <label for="hipodromo_tipo">Hipodromo</label><br>
+    <select size=1 class="form-control hip_bus" placeholder="Tipo"  name="hipodromos<%= tipo_vista%>" id="hipodromos<%= tipo_vista%>" onchange="buscar_proxima_por_hip(this.value, <%= tipo_vista%>);"/>
+    <option value="0" >Seleccione </option>
+    <%for hipo in @hipodromos%>
+        <option value="<%= hipo.id%>" ><%= hipo.nombre_largo%> (<%= hipo.tipo == 1 ? "Nacional" : "Internacional"%>) </option>
+    <%end%>
+    </select>
+  </div>
+
+  <div id="cuerpo_selectores" >
+      <%= render partial: 'selector', locals: { tipo_vista: tipo_vista}%>
+  </div>
+
+  <div class="form-group" >
+    <label for="hipodromo_tipo">Hora de carrera</label>
+    <input type="time"  class= "form-control"  placeholder= "Hora" disabled required= true id ='hora_carrera<%= tipo_vista%>' name= 'hora_carrera<%= tipo_vista%>'  style= 'width: 150px;' required="true" >
+  </div>
+
+  <div class="form-group">
+    <label for="hipodromo_tipo">Nueva Hora de carrera</label>
+    <input type="time"  class= "form-control"  placeholder= "Hora" disabled required= true id='hora_carrera2<%= tipo_vista%>' name='hora_carrera2<%= tipo_vista%>'  style= 'width: 150px;' required="true" readonly>
+  </div>
+
+  <div class="form-group">
+    <label for="hipodromo_tipo">Sumar Minuto(s)</label>
+    <input type="number" class="form-control" disabled required=true id='minutos<%= tipo_vista%>' name='minutos<%= tipo_vista%>' style='width: 150px;' required="true" onkeyup="sumar(this.value, <%= tipo_vista%>, 1);" onchange="sumar(this.value, <%= tipo_vista%>, 1);">
+  </div>
+
+  <div style="display: flex; justify-content: start;margin-right: 2rem; margin-bottom: 1rem;">
+    <input type="button" value="+ 1 min" class="btn boton-suma" style="background-color: #f2ff00;margin-right: 1rem; "  onclick="sumar(1, <%= tipo_vista%>, 2)">
+    <input type="button" value="+ 2 min" class="btn boton-suma" style="background-color: #ffbf00 ;margin-right: 1rem;"  onclick="sumar(2, <%= tipo_vista%>, 2)">
+    <!--input type="button" value="+ 5 min" class="btn boton-suma" style="background-color: #ff8800 "  onclick="sumar(5, <%= tipo_vista%>, 2)">
+    <input type="button" value="+ 10 min" class="btn boton-suma" style="background-color: #ff6200 "  onclick="sumar(10, <%= tipo_vista%>, 2)"/-->
+  </div>
+
+  <div class="form-group">
+    <input type="button" value="Actualizar MTP" class="btn btn-success" onclick="grabar_unica(<%= tipo_vista%>)"/>
+  </div>
+
+  <div class="form-group" >
+    <input type="button" value="Cerrar Carrera" class="btn btn-danger" onclick="cerrar_carrera_unica(<%= tipo_vista%>)" style="display: none;" id="boton_cerrar<%= tipo_vista%>"/>
+    <input type="button" value="Cuadrando" class="btn btn-success" onclick="cuadrando(<%= tipo_vista%>)" style="display: none;margin-right: 2px;" id="boton_cuadrando<%= tipo_vista%>"/>
+  </div>
+
+</div>
+

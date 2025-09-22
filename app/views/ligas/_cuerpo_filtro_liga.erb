@@ -1,0 +1,16 @@
+<% @ligas.each do |liga| %>
+    <tr>
+      <td> <%= liga.juego_id %> </td>
+      <td> <%= liga.nombre_deporte %> </td>
+      <td> <%= liga.liga_id %> </td>
+      <td> <%= liga.nombre %> </td>
+      <td> <%= liga.activo ? "SI":"NO" %> </td>
+      <td>
+        <div class="btn-row">
+          <%= link_to raw('<i class="fa fa-cogs"></i>'), edit_liga_url(liga), class: 'btn btn-sm btn-warning' %>
+          <%= link_to raw('<i class="fa fa-trash"></i>'), liga_url(liga), class: 'btn btn-sm btn-danger', method: :delete,
+                          data: { confirm: 'Esta seguro de eliminar este liga?' } %>
+        </div>
+      </td>
+    </tr>
+<% end %>

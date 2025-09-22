@@ -1,0 +1,43 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  deporte_id: 1
+  liga_id: 1
+  match_id: 1
+  equipo_id: 1
+  accion_id: 1
+  tipo_apuesta: 1
+  logro: 1.5
+  monto: 1.5
+  carreras_dadas: 1.5
+  alta_baja: 1.5
+  tipo_altabaja: 1
+  id_juega: 1
+  id_banquea: 1
+  cuanto_gana: 1.5
+  cuento_gana_completo: 1.5
+  status: 1
+  status2: 1
+  activa: false
+  id_padre: 1
+
+two:
+  deporte_id: 1
+  liga_id: 1
+  match_id: 1
+  equipo_id: 1
+  accion_id: 1
+  tipo_apuesta: 1
+  logro: 1.5
+  monto: 1.5
+  carreras_dadas: 1.5
+  alta_baja: 1.5
+  tipo_altabaja: 1
+  id_juega: 1
+  id_banquea: 1
+  cuanto_gana: 1.5
+  cuento_gana_completo: 1.5
+  status: 1
+  status2: 1
+  activa: false
+  id_padre: 1

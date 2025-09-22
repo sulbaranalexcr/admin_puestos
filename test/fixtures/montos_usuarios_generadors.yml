@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  usuarios_generador: one
+  deporte_id: 1
+  tipo: 1
+  monto: MyString
+
+two:
+  usuarios_generador: two
+  deporte_id: 1
+  tipo: 1
+  monto: MyString

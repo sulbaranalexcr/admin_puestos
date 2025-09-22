@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)http://127.0.0.1:3000/carreras -->
+<html><script id="tinyhippos-injected">if (window.top.ripple) { window.top.ripple("bootstrap").inject(window, document); }</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">.swal-icon--error{border-color:#f27474;-webkit-animation:animateErrorIcon .5s;animation:animateErrorIcon .5s}.swal-icon--error__x-mark{position:relative;display:block;-webkit-animation:animateXMark .5s;animation:animateXMark .5s}.swal-icon--error__line{position:absolute;height:5px;width:47px;background-color:#f27474;display:block;top:37px;border-radius:2px}.swal-icon--error__line--left{-webkit-transform:rotate(45deg);transform:rotate(45deg);left:17px}.swal-icon--error__line--right{-webkit-transform:rotate(-45deg);transform:rotate(-45deg);right:16px}@-webkit-keyframes animateErrorIcon{0%{-webkit-transform:rotateX(100deg);transform:rotateX(100deg);opacity:0}to{-webkit-transform:rotateX(0deg);transform:rotateX(0deg);opacity:1}}@keyframes animateErrorIcon{0%{-webkit-transform:rotateX(100deg);transform:rotateX(100deg);opacity:0}to{-webkit-transform:rotateX(0deg);transform:rotateX(0deg);opacity:1}}@-webkit-keyframes animateXMark{0%{-webkit-transform:scale(.4);transform:scale(.4);margin-top:26px;opacity:0}50%{-webkit-transform:scale(.4);transform:scale(.4);margin-top:26px;opacity:0}80%{-webkit-transform:scale(1.15);transform:scale(1.15);margin-top:-6px}to{-webkit-transform:scale(1);transform:scale(1);margin-top:0;opacity:1}}@keyframes animateXMark{0%{-webkit-transform:scale(.4);transform:scale(.4);margin-top:26px;opacity:0}50%{-webkit-transform:scale(.4);transform:scale(.4);margin-top:26px;opacity:0}80%{-webkit-transform:scale(1.15);transform:scale(1.15);margin-top:-6px}to{-webkit-transform:scale(1);transform:scale(1);margin-top:0;opacity:1}}.swal-icon--warning{border-color:#f8bb86;-webkit-animation:pulseWarning .75s infinite alternate;animation:pulseWarning .75s infinite alternate}.swal-icon--warning__body{width:5px;height:47px;top:10px;border-radius:2px;margin-left:-2px}.swal-icon--warning__body,.swal-icon--warning__dot{position:absolute;left:50%;background-color:#f8bb86}.swal-icon--warning__dot{width:7px;height:7px;border-radius:50%;margin-left:-4px;bottom:-11px}@-webkit-keyframes pulseWarning{0%{border-color:#f8d486}to{border-color:#f8bb86}}@keyframes pulseWarning{0%{border-color:#f8d486}to{border-color:#f8bb86}}.swal-icon--success{border-color:#a5dc86}.swal-icon--success:after,.swal-icon--success:before{content:"";border-radius:50%;position:absolute;width:60px;height:120px;background:#fff;-webkit-transform:rotate(45deg);transform:rotate(45deg)}.swal-icon--success:before{border-radius:120px 0 0 120px;top:-7px;left:-33px;-webkit-transform:rotate(-45deg);transform:rotate(-45deg);-webkit-transform-origin:60px 60px;transform-origin:60px 60px}.swal-icon--success:after{border-radius:0 120px 120px 0;top:-11px;left:30px;-webkit-transform:rotate(-45deg);transform:rotate(-45deg);-webkit-transform-origin:0 60px;transform-origin:0 60px;-webkit-animation:rotatePlaceholder 4.25s ease-in;animation:rotatePlaceholder 4.25s ease-in}.swal-icon--success__ring{width:80px;height:80px;border:4px solid hsla(98,55%,69%,.2);border-radius:50%;box-sizing:content-box;position:absolute;left:-4px;top:-4px;z-index:2}.swal-icon--success__hide-corners{width:5px;height:90px;background-color:#fff;padding:1px;position:absolute;left:28px;top:8px;z-index:1;-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}.swal-icon--success__line{height:5px;background-color:#a5dc86;display:block;border-radius:2px;position:absolute;z-index:2}.swal-icon--success__line--tip{width:25px;left:14px;top:46px;-webkit-transform:rotate(45deg);transform:rotate(45deg);-webkit-animation:animateSuccessTip .75s;animation:animateSuccessTip .75s}.swal-icon--success__line--long{width:47px;right:8px;top:38px;-webkit-transform:rotate(-45deg);transform:rotate(-45deg);-webkit-animation:animateSuccessLong .75s;animation:animateSuccessLong .75s}@-webkit-keyframes rotatePlaceholder{0%{-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}5%{-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}12%{-webkit-transform:rotate(-405deg);transform:rotate(-405deg)}to{-webkit-transform:rotate(-405deg);transform:rotate(-405deg)}}@keyframes rotatePlaceholder{0%{-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}5%{-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}12%{-webkit-transform:rotate(-405deg);transform:rotate(-405deg)}to{-webkit-transform:rotate(-405deg);transform:rotate(-405deg)}}@-webkit-keyframes animateSuccessTip{0%{width:0;left:1px;top:19px}54%{width:0;left:1px;top:19px}70%{width:50px;left:-8px;top:37px}84%{width:17px;left:21px;top:48px}to{width:25px;left:14px;top:45px}}@keyframes animateSuccessTip{0%{width:0;left:1px;top:19px}54%{width:0;left:1px;top:19px}70%{width:50px;left:-8px;top:37px}84%{width:17px;left:21px;top:48px}to{width:25px;left:14px;top:45px}}@-webkit-keyframes animateSuccessLong{0%{width:0;right:46px;top:54px}65%{width:0;right:46px;top:54px}84%{width:55px;right:0;top:35px}to{width:47px;right:8px;top:38px}}@keyframes animateSuccessLong{0%{width:0;right:46px;top:54px}65%{width:0;right:46px;top:54px}84%{width:55px;right:0;top:35px}to{width:47px;right:8px;top:38px}}.swal-icon--info{border-color:#c9dae1}.swal-icon--info:before{width:5px;height:29px;bottom:17px;border-radius:2px;margin-left:-2px}.swal-icon--info:after,.swal-icon--info:before{content:"";position:absolute;left:50%;background-color:#c9dae1}.swal-icon--info:after{width:7px;height:7px;border-radius:50%;margin-left:-3px;top:19px}.swal-icon{width:80px;height:80px;border-width:4px;border-style:solid;border-radius:50%;padding:0;position:relative;box-sizing:content-box;margin:20px auto}.swal-icon:first-child{margin-top:32px}.swal-icon--custom{width:auto;height:auto;max-width:100%;border:none;border-radius:0}.swal-icon img{max-width:100%;max-height:100%}.swal-title{color:rgba(0,0,0,.65);font-weight:600;text-transform:none;position:relative;display:block;padding:13px 16px;font-size:27px;line-height:normal;text-align:center;margin-bottom:0}.swal-title:first-child{margin-top:26px}.swal-title:not(:first-child){padding-bottom:0}.swal-title:not(:last-child){margin-bottom:13px}.swal-text{font-size:16px;position:relative;float:none;line-height:normal;vertical-align:top;text-align:left;display:inline-block;margin:0;padding:0 10px;font-weight:400;color:rgba(0,0,0,.64);max-width:calc(100% - 20px);overflow-wrap:break-word;box-sizing:border-box}.swal-text:first-child{margin-top:45px}.swal-text:last-child{margin-bottom:45px}.swal-footer{text-align:right;padding-top:13px;margin-top:13px;padding:13px 16px;border-radius:inherit;border-top-left-radius:0;border-top-right-radius:0}.swal-button-container{margin:5px;display:inline-block;position:relative}.swal-button{background-color:#7cd1f9;color:#fff;border:none;box-shadow:none;border-radius:5px;font-weight:600;font-size:14px;padding:10px 24px;margin:0;cursor:pointer}.swal-button:not([disabled]):hover{background-color:#78cbf2}.swal-button:active{background-color:#70bce0}.swal-button:focus{outline:none;box-shadow:0 0 0 1px #fff,0 0 0 3px rgba(43,114,165,.29)}.swal-button[disabled]{opacity:.5;cursor:default}.swal-button::-moz-focus-inner{border:0}.swal-button--cancel{color:#555;background-color:#efefef}.swal-button--cancel:not([disabled]):hover{background-color:#e8e8e8}.swal-button--cancel:active{background-color:#d7d7d7}.swal-button--cancel:focus{box-shadow:0 0 0 1px #fff,0 0 0 3px rgba(116,136,150,.29)}.swal-button--danger{background-color:#e64942}.swal-button--danger:not([disabled]):hover{background-color:#df4740}.swal-button--danger:active{background-color:#cf423b}.swal-button--danger:focus{box-shadow:0 0 0 1px #fff,0 0 0 3px rgba(165,43,43,.29)}.swal-content{padding:0 20px;margin-top:20px;font-size:medium}.swal-content:last-child{margin-bottom:20px}.swal-content__input,.swal-content__textarea{-webkit-appearance:none;background-color:#fff;border:none;font-size:14px;display:block;box-sizing:border-box;width:100%;border:1px solid rgba(0,0,0,.14);padding:10px 13px;border-radius:2px;transition:border-color .2s}.swal-content__input:focus,.swal-content__textarea:focus{outline:none;border-color:#6db8ff}.swal-content__textarea{resize:vertical}.swal-button--loading{color:transparent}.swal-button--loading~.swal-button__loader{opacity:1}.swal-button__loader{position:absolute;height:auto;width:43px;z-index:2;left:50%;top:50%;-webkit-transform:translateX(-50%) translateY(-50%);transform:translateX(-50%) translateY(-50%);text-align:center;pointer-events:none;opacity:0}.swal-button__loader div{display:inline-block;float:none;vertical-align:baseline;width:9px;height:9px;padding:0;border:none;margin:2px;opacity:.4;border-radius:7px;background-color:hsla(0,0%,100%,.9);transition:background .2s;-webkit-animation:swal-loading-anim 1s infinite;animation:swal-loading-anim 1s infinite}.swal-button__loader div:nth-child(3n+2){-webkit-animation-delay:.15s;animation-delay:.15s}.swal-button__loader div:nth-child(3n+3){-webkit-animation-delay:.3s;animation-delay:.3s}@-webkit-keyframes swal-loading-anim{0%{opacity:.4}20%{opacity:.4}50%{opacity:1}to{opacity:.4}}@keyframes swal-loading-anim{0%{opacity:.4}20%{opacity:.4}50%{opacity:1}to{opacity:.4}}.swal-overlay{position:fixed;top:0;bottom:0;left:0;right:0;text-align:center;font-size:0;overflow-y:auto;background-color:rgba(0,0,0,.4);z-index:10000;pointer-events:none;opacity:0;transition:opacity .3s}.swal-overlay:before{content:" ";display:inline-block;vertical-align:middle;height:100%}.swal-overlay--show-modal{opacity:1;pointer-events:auto}.swal-overlay--show-modal .swal-modal{opacity:1;pointer-events:auto;box-sizing:border-box;-webkit-animation:showSweetAlert .3s;animation:showSweetAlert .3s;will-change:transform}.swal-modal{width:478px;opacity:0;pointer-events:none;background-color:#fff;text-align:center;border-radius:5px;position:static;margin:20px auto;display:inline-block;vertical-align:middle;-webkit-transform:scale(1);transform:scale(1);-webkit-transform-origin:50% 50%;transform-origin:50% 50%;z-index:10001;transition:opacity .2s,-webkit-transform .3s;transition:transform .3s,opacity .2s;transition:transform .3s,opacity .2s,-webkit-transform .3s}@media (max-width:500px){.swal-modal{width:calc(100% - 20px)}}@-webkit-keyframes showSweetAlert{0%{-webkit-transform:scale(1);transform:scale(1)}1%{-webkit-transform:scale(.5);transform:scale(.5)}45%{-webkit-transform:scale(1.05);transform:scale(1.05)}80%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}@keyframes showSweetAlert{0%{-webkit-transform:scale(1);transform:scale(1)}1%{-webkit-transform:scale(.5);transform:scale(.5)}45%{-webkit-transform:scale(1.05);transform:scale(1.05)}80%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}</style>
+  <title>Puestos Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-param" content="authenticity_token">
+<meta name="csrf-token" content="vLglKPwe57wThMe+yvS19yyLAf+ehikqxJtQ/a8KXb8xm8PfOnBFw97DV6SUvBTx4nptr7XJ0OdQr1sAp7719A==">
+  
+
+  <link rel="stylesheet" media="all" href="./Puestos Admin_files/grupos.self-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css" data-turbolinks-track="reload">
+<link rel="stylesheet" media="all" href="./Puestos Admin_files/home.self-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css" data-turbolinks-track="reload">
+<link rel="stylesheet" media="all" href="./Puestos Admin_files/_all-skins.self-70aceccc850ab339550158aba11e3aa642ef51612ad4a718e33eb73cefffa6df.css" data-turbolinks-track="reload">
+<link rel="stylesheet" media="all" href="./Puestos Admin_files/bootstrap-datepicker.min.self-c374364f86720f515b5ca1c449311e9c7a725c0fdca58cb3e8ad6054557687a4.css" data-turbolinks-track="reload">
+<link rel="stylesheet" media="all" href="./Puestos Admin_files/bootstrap.self-ce9ee257d9516a18acd15f8e6364d684f018da98aaf2b7cd7badc99bbce6fc02.css" data-turbolinks-track="reload">
+<link rel="stylesheet" media="all" href="./Puestos Admin_files/layout.self-acc966debb1c33dfbea3a38bd1df2eacc8fec83e6d07cb71cc5ca6f2567f624e.css" data-turbolinks-track="reload">
+<link rel="stylesheet" media="all" href="./Puestos Admin_files/pretty-checkbox.self-78431ff50fabd379c06c98f13081696209ac570b342190abc4bd00f13eedd153.css" data-turbolinks-track="reload">
+<link rel="stylesheet" media="all" href="./Puestos Admin_files/sweetalert2.self-e7167e6a09182bd5e4af4701b34f89808ab108fea782f14fcf2badddb43a4f9e.css" data-turbolinks-track="reload">
+<link rel="stylesheet" media="all" href="./Puestos Admin_files/login.self-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css" data-turbolinks-track="reload">
+<link rel="stylesheet" media="all" href="./Puestos Admin_files/premiar.self-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css" data-turbolinks-track="reload">
+<link rel="stylesheet" media="all" href="./Puestos Admin_files/reportes.self-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css" data-turbolinks-track="reload">
+<link rel="stylesheet" media="all" href="./Puestos Admin_files/application.self-c23a4627e2a2334de77e8a7b455b5aaf30db91e56aa533229960dfbb927ed201.css" data-turbolinks-track="reload">
+<link rel="stylesheet" media="all" href="./Puestos Admin_files/font-awesome.self-2a86d2017f4b74f22943750b3b50b9cb753581bab96cbdaaf2df53f4c04c995b.css" data-turbolinks-track="reload">
+  <script src="./Puestos Admin_files/jquery.self-bd7ddd393353a8d2480a622e80342adf488fb6006d667e8b42e4c0073393abee.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/jquery_ujs.self-784a997f6726036b1993eb2217c9cb558e1cbb801c6da88105588c56f13b466a.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/rails-ujs.self-3b600681e552d8090230990c0a2e8537aff48159bea540d275a620d272ba33a0.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/activestorage.self-0525629bb5bac7ed5f2bfc58a9679d75705e426dafd6957ae9879db97c8e9cbe.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/turbolinks.self-569ee74eaa15c1e2019317ff770b8769b1ec033a0f572a485f64c82ddc8f989e.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/axios.self-fd7b451b11492fae6a64f2f9966448b94b22c67749c2ab9112c3485f9f122905.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/bootstrap-checkbox.min.self-ca8893acfda5e94146c5558be0ff35dbb2882b5181cc9763dd2de7ac557527bb.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/action_cable.self-69fddfcddf4fdef9828648f9330d6ce108b93b82b0b8d3affffc59a114853451.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/cable.self-8484513823f404ed0c0f039f75243bfdede7af7919dda65f2e66391252443ce9.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/grupos.self-877aef30ae1b040ab8a3aba4e3e309a11d7f2612f44dde450b5c157aa5f95c05.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/home.self-877aef30ae1b040ab8a3aba4e3e309a11d7f2612f44dde450b5c157aa5f95c05.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/app.self-e9e0488f6ad17f36e735904b5465b310033ac396bcb25a2404f7d69dbd3ae772.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/axios.self-0063d9422c3f6d6ccdcb8e6d3c8f50defcf4b5cabd20d393b0f0fb06bb54b50b.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/bootstrap-datepicker.min.self-c053f2db2853667057aa2c210d592f93860a3cf2112cfa9da1cc3109ebb784c8.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/bootstrap.self-2bbd2c0465f01b1f8270958ddfc2e62a08915f295a35d22df2971eb936cf3c64.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/sweetalert2.self-ac8d41418faf233e7fbd800cba00bc61ae930ecd78e8763b4f2e790fa3fae4e5.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/theme_lte.self-4ef5b9cc2e9d957b5ede6426b6887c42f5b46287b789046baf29af2d2ba4eb29.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/premiar.self-877aef30ae1b040ab8a3aba4e3e309a11d7f2612f44dde450b5c157aa5f95c05.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/redirect.self-a1b17484ffc8788f8c3b03176e1fb887b28f1114521facec60bea2f1eb68884e.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/reportes.self-877aef30ae1b040ab8a3aba4e3e309a11d7f2612f44dde450b5c157aa5f95c05.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/swalert.self-c517df19a3eecca1c27936dfafd34163d0c1c81271aa6f914db8d5b1e7731d2f.js" data-turbolinks-track="reload"></script>
+<script src="./Puestos Admin_files/application.self-c42366556a32059e98ea27f1b42c93f0346c9657ce76effe0bc42a5a50a5891f.js" data-turbolinks-track="reload"></script>
+
+<script>
+
+function get_solicitudes(){
+  $('#cuerpo_solicitudes').html('');
+  $.ajax({
+    type : "POST",
+    url : '/solicitudes/get_solicitudes_pendientes',
+    data : {
+    },
+    success : function(request) {
+      $('#cuerpo_solicitudes').html(request);
+    },
+    error : function(request) {
+    }
+  });
+
+
+
+
+}
+
+function activar_notificacion(cantidad){
+    var el = document.querySelector('.notification');
+    // var count = Number(el.getAttribute('data-count')) || 0;
+    el.setAttribute('data-count', (cantidad));
+    el.classList.remove('notify');
+    el.offsetWidth = el.offsetWidth;
+    el.classList.add('notify');
+    if(cantidad > 0){
+        el.classList.add('show-count');
+    }
+ }
+
+ function activar_notificacion2(cantidad){
+     var el = document.querySelector('.notification');
+     // var count = Number(el.getAttribute('data-count')) || 0;
+     el.setAttribute('data-count', (cantidad));
+     el.offsetWidth = el.offsetWidth;
+     if (cantidad == 0){
+        el.classList.remove('notify');
+        el.classList.remove('show-count');
+     }
+  }
+
+
+  function revisar_solicitudes(){
+        $.ajax({
+          type : "POST",
+          url : '/solicitudes/revisar_solicitudes_pendientes',
+          data : {
+          },
+          success : function(request) {
+            if (request.hay){
+              activar_notificacion(request.cantidad);
+            }else{
+              activar_notificacion2(request.cantidad);
+            }
+          },
+          error : function(request) {
+          }
+        });
+
+
+
+  }
+
+
+  function mostar_campana(){
+    setTimeout(function(){ revisar_solicitudes();mostar_campana(); }, 30000);
+  }
+
+
+  $( document ).ready(function() {
+    mostar_campana();
+
+  });
+
+
+</script>
+
+  <style>
+  .container_campana {
+    position: absolute;
+    top: 50%;
+    left: 86%;
+    margin-right: -0%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+button {
+    display: block;
+    padding: 1em 2em;
+    outline: none;
+    font-weight: 600;
+    border: none;
+    color: #fff;
+    background-color: #3498db;
+    border: 1px solid #1f74ac;
+    border-radius: 0.3em;
+    margin-top: 4em;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #2487c9;
+}
+
+/* Notifications */
+
+.notification {
+    display: inline-block;
+    position: relative;
+    padding: 0.6em;
+    background: #222d32;
+    border-radius: 0.2em;
+    font-size: 1em;
+    box-shadow: 0 0 10px white;
+}
+
+.notification::before,
+.notification::after {
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.notification::before {
+    display: block;
+    content: "\f0f3";
+    font-family: "FontAwesome";
+    transform-origin: top center;
+}
+
+.notification::after {
+    font-family: Arial;
+    font-size: 0.8em;
+    font-weight: 600;
+    position: absolute;
+    top: -5px;
+    right: -15px;
+    padding: 4px 7px;
+    line-height: 100%;
+    border: 2px #fff solid;
+    border-radius: 60px;
+    background: red;
+    opacity: 0;
+    content: attr(data-count);
+    opacity: 0;
+    -webkit-transform: scale(0.5);
+    transform: scale(0.5);
+    transition: transform, opacity;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
+}
+
+.notification.notify::before {
+    -webkit-animation: ring 1.5s ease;
+    animation: ring 1.5s ease;
+}
+
+.notification.show-count::after {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+}
+
+@-webkit-keyframes ring {
+    0% {
+        -webkit-transform: rotate(35deg);
+    }
+    12.5% {
+        -webkit-transform: rotate(-30deg);
+    }
+    25% {
+        -webkit-transform: rotate(25deg);
+    }
+    37.5% {
+        -webkit-transform: rotate(-20deg);
+    }
+    50% {
+        -webkit-transform: rotate(15deg);
+    }
+    62.5% {
+        -webkit-transform: rotate(-10deg);
+    }
+    75% {
+        -webkit-transform: rotate(5deg);
+    }
+    100% {
+        -webkit-transform: rotate(0deg);
+    }
+}
+
+@keyframes ring {
+    0% {
+        -webkit-transform: rotate(35deg);
+        transform: rotate(35deg);
+    }
+    12.5% {
+        -webkit-transform: rotate(-30deg);
+        transform: rotate(-30deg);
+    }
+    25% {
+        -webkit-transform: rotate(25deg);
+        transform: rotate(25deg);
+    }
+    37.5% {
+        -webkit-transform: rotate(-20deg);
+        transform: rotate(-20deg);
+    }
+    50% {
+        -webkit-transform: rotate(15deg);
+        transform: rotate(15deg);
+    }
+    62.5% {
+        -webkit-transform: rotate(-10deg);
+        transform: rotate(-10deg);
+    }
+    75% {
+        -webkit-transform: rotate(5deg);
+        transform: rotate(5deg);
+    }
+    100% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+}
+
+  </style>
+</head>
+
+<body class="skin-green sidebar-mini">
+    
+    <div class="wrapper">
+      <header class="main-header">
+
+        <a href="http://127.0.0.1:3000/home" class="logo">
+          <span class="logo-mini"><b>P</b>A</span>
+          <span class="logo-lg"><b>Puestos</b>Admin</span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+          <a href="http://127.0.0.1:3000/carreras#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+          </a>
+
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+              <li class="">
+                <a rel="nofollow" data-method="DELETE" href="http://127.0.0.1:3000/login/alex">
+                  <i class="fa fa-sign-out"></i>
+</a>              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+
+
+      <aside class="main-sidebar">
+        <section class="sidebar" id="sideBarMenu">
+          <div class="user-panel">
+            <div class="pull-left image">
+              <img class="img-circle img-responsive" src="./Puestos Admin_files/user-fcd49a95cc03d730d6537465d1952023097990baaabd878537fee7f0683173f4.png">
+            </div>
+            <div class="container_campana">
+                <div class="notification" style="cursor: pointer;" onclick="get_solicitudes();" data-toggle="modal" data-target="#myModal"></div>
+            </div>
+            <div class="pull-left info">
+              <br>
+                 <a href="http://127.0.0.1:3000/carreras"> <i class="fa fa-circle text-success"></i> ALEX</a>
+            </div>
+          </div>
+          <ul class="sidebar-menu">
+            <li class="header">MENU DE OPCIONES</li>
+              <li class="">
+                <a href="http://127.0.0.1:3000/home">
+                <i class="fa fa-dashboard"></i> <span>Inicio</span>
+</a>              </li>
+              <li class="treeview">
+                <a href="http://127.0.0.1:3000/carreras#">
+                  <i class="fa fa-sitemap"></i>
+                  <span>Mantenimiento </span>
+                </a>
+                  <ul class="treeview-menu">
+                    <li class="">
+                      <a href="http://127.0.0.1:3000/cuentas_banca"><i class="fa fa-sitemap"></i> Cuentas Bancarias</a>
+                    </li>
+                    <li class="">
+                      <a href="http://127.0.0.1:3000/hipodromos"><i class="fa fa-sitemap"></i> Hipodromos</a>
+                    </li>
+                    <li class="">
+                      <a href="http://127.0.0.1:3000/jornadas"><i class="fa fa-users"></i> Jornadas</a>
+                    </li>
+                    <li class="">
+                      <a href="http://127.0.0.1:3000/carreras"><i class="fa fa-check"></i> Carreras</a>
+                    </li>
+                    <li class="">
+                      <a href="http://127.0.0.1:3000/usuarios"><i class="fa fa-user"></i> Usuarios</a>
+                    </li>
+                  </ul>
+              </li>
+              <li class="treevie">
+                <a href="http://127.0.0.1:3000/carreras#">
+                  <i class="fa fa-gear"></i>
+                  <span>Administración</span>
+                </a>
+                    <ul class="treeview-menu">
+                      <li class="">
+                        <a href="http://127.0.0.1:3000/grupos"><i class="fa fa-users"></i> Grupos</a>
+                      </li>
+                      <li class="">
+                        <a href="http://127.0.0.1:3000/taquillas"><i class="fa fa-users"></i> Taquillas</a>
+                      </li>
+                      <li class="">
+                        <a href="http://127.0.0.1:3000/premiar"><i class="fa fa-check"></i> Premiación</a>
+                      </li>
+                    </ul>
+              </li>
+              <li class="treevie">
+                <a href="http://127.0.0.1:3000/carreras#">
+                  <i class="fa fa-print"></i>
+                  <span>Reportes</span>
+                </a>
+                    <ul class="treeview-menu">
+                      <li class="">
+                        <a href="http://127.0.0.1:3000/reportes/cuadre_general"><i class="fa fa-print"></i> Cuadre General</a>
+                      </li>
+                      <li class="">
+                        <a href="http://127.0.0.1:3000/reportes/premios_ingresados_index"><i class="fa fa-print"></i> Premios Ingresados</a>
+                      </li>
+                    </ul>
+
+              </li>
+
+            </ul>
+
+          </section>
+        </aside>
+
+
+        <div class="content-wrapper">
+          <section class="content" style="min-height: 93.5vh;">
+              <script src="./Puestos Admin_files/axios.self-fd7b451b11492fae6a64f2f9966448b94b22c67749c2ab9112c3485f9f122905.js"></script>
+  <script src="./Puestos Admin_files/bootstrap-checkbox.min.self-ca8893acfda5e94146c5558be0ff35dbb2882b5181cc9763dd2de7ac557527bb.js"></script>
+<script>
+function verificar_jornadas(hip){
+  $('#jornadas option').remove();
+  $('#carreras option').remove();
+  $('#caballos_div').html("");
+  axios({
+      method: 'POST',
+        url: '/carreras/buscar_jornadas',
+      data: {"id": hip},
+    })
+    .then(function(response) {
+      $('#jornadas').append(new Option("Seleccione Jornada", 0 ));
+        $.each(response.data.jornadas, function( index, value ) {
+          $('#jornadas').append(new Option(value.fecha_bonita, value.id ));
+        });
+      }
+
+  )
+  .catch(function (error) {
+      swal("Lo siento", "No hay jornadas para este hipodromo.", "error");
+  });
+
+}
+
+
+
+function verificar_carreras(carid){
+  $('#caballos_div').html("");
+  $('#cantidad_caballos').val(0);
+  $('#hora_carrera').val("");
+  $('#carreras option').remove();
+  axios({
+      method: 'POST',
+        url: '/carreras/buscar_carreras',
+      data: {"id": carid},
+    })
+    .then(function(response) {
+      $('#c_ingresaas').show();
+      $('#carreas_ingresadas_p').text(response.data.cantidad_carreras);
+      $('#carreras').append(new Option("Seleccione Carrera", 0 ));
+
+       select = document.getElementById('carreras');
+       response.data.carreras.forEach(function(entry) {
+         var opt = document.createElement('option');
+         opt.value = entry.id;
+         opt.innerHTML = entry.numero_carrera;
+         if (response.data.cantidad_carreras.includes(entry.numero_carrera)){
+            opt.setAttribute("style","background-color:green");
+         }else{
+           opt.setAttribute("style","background-color:red");
+         }
+         select.appendChild(opt);
+
+       });
+       $('#carreras option').css("color","white");
+       $('#carreras option').css("font-weight","bold");
+
+      }
+
+  )
+  .catch(function (error) {
+      swal("Lo siento", "No hay carrerras para esta jornada.", "error");
+  });
+
+}
+
+
+function verificar_caballos(cabid){
+  $('#caballos_div').html("");
+  $('#cantidad_caballos').val(0);
+  $('#hora_carrera').val("");
+  axios({
+      method: 'POST',
+        url: '/carreras/buscar_caballos',
+      data: {"id": cabid},
+    })
+    .then(function(response) {
+        if (response.data.status == "OK"){
+          $('#cantidad_caballos').val(response.data.cantidad);
+          $('#hora_carrera').val(response.data.hora)
+          crear_caballos(cabid);
+        }else{
+          console.log("faild");
+        }
+    }
+
+  )
+  .catch(function (error) {
+      swal("Lo siento", "Ocurrio un error.", "error");
+  });
+
+}
+
+
+function crear_caballos(cabid){
+  $('#caballos_div').html("");
+  axios({
+      method: 'POST',
+        url: '/carreras/crear_caballos',
+      data: {
+        "id": $('#carreras').val(),
+        "cantidad": $('#cantidad_caballos').val()
+      },
+    })
+    .then(function(response) {
+      $('#caballos_div').html(response.data);
+    }
+
+  )
+  .catch(function (error) {
+      swal("Lo siento", "Ocurrio un error.", "error");
+  });
+
+}
+
+
+
+function grabar(){
+  datos = [];
+  pase = 0 ;
+  if ($('#hora_carrera').val().length > 0){
+      $( "input[id*='numcab']" ).each(function() {
+        datos.push({"id": this.id.substring(6,8), "nombre": this.value, "retirado": !$('#checab'+this.id.substring(6,8)).prop("checked") });
+        if (this.value.length == 0){
+          pase += 1
+        }
+      });
+      if (pase > 0){
+          swal("Lo siento", "Debe ingresar todos los caballos.", "error");
+      }else{
+          axios({
+              method: 'POST',
+                url: '/carreras/crear_final_carrera',
+              data: {
+                "id": $('#carreras').val(),
+                "caballos": datos,
+                "hora": $('#hora_carrera').val()
+              },
+            })
+            .then(function(response) {
+              swal("Completo", "Datos almacenados.", "success").then((aceptar) => {verificar_carreras($('#jornadas').val());});
+            }
+
+          )
+          .catch(function (error) {
+              swal("Lo siento", error.response.data.msg, "error");
+          });
+      }
+   }else{
+     swal("Lo siento", "Debe ingresar hora de carrera.", "error");
+   }
+}
+
+
+</script>
+
+<form>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+
+      <div class="box-header">
+        <h3 class="box-title">Crear carreras</h3>
+      </div>
+
+      <div class="form-group">
+        <div class="box-body">
+        <table boder="0">
+          <tbody><tr>
+            <td style="width: 40%" valign="top">
+                <div class="form-group">
+                  <label for="hipodromo_tipo">Hipodromo</label>
+                  <select size="1" class="form-control" placeholder="Tipo" name="hipodromos" id="hipodromos" style="" onchange="verificar_jornadas(this.value);">
+                  <option value="0">Seleccione </option>
+                      <option value="5">Gustring Miami (Internacional) </option>
+                  </select>
+                </div>
+            </td>
+            <td style="width: 30%;" valign="top">
+              <div class="form-group" style="margin-left: 10px;">
+                <label for="hipodromo_tipo">Jornadas</label>
+                <select size="1" class="form-control" placeholder="Tipo" name="jornadas" id="jornadas" style="" onchange="verificar_carreras(this.value);">
+                <option value="0">Seleccione Jornada</option><option value="12">05/03/2019</option><option value="13">06/03/2019</option><option value="14">07/03/2019</option></select>
+              </div>
+            </td>
+            <td style="width: 15%;" valign="top">
+              <div class="form-group" style="margin-left: 10px;">
+                <label for="hipodromo_tipo">Carreras</label>
+                <select size="1" class="form-control" placeholder="Tipo" name="carreras" id="carreras" style="" onchange="verificar_caballos(this.value);">
+                <option value="0" style="color: white; font-weight: bold;">Seleccione Carrera</option><option value="86" style="background-color: green; color: white; font-weight: bold;">1</option><option value="87" style="background-color: red; color: white; font-weight: bold;">2</option></select>
+              </div>
+              <div id="c_ingresaas" style="margin-left: 10px;">
+                   <label style="color: #00a65a">Carreras Ingresadas</label>
+                   <p id="carreas_ingresadas_p">1</p>
+              </div>
+            </td>
+            <td style="width: 15%;" valign="top">
+              <div class="form-group" style="margin-left: 10px;">
+                <label for="hipodromo_tipo">Hora de carrera</label>
+                <input type="time" class="form-control" placeholder="Hora" required="true" id="hora_carrera" name="hora_carrera" style="width: 150px;">
+              </div>
+            </td>
+          </tr>
+        </tbody></table>
+
+
+        <div class="form-group">
+          <table border="0" style="width: 20%" id="tabla_crear">
+            <tbody><tr>
+              <td>
+              <label for="hipodromo_tipo" style="margin-left: 10px;">Cantidad de caballos</label>
+              <input type="text" value="0" class="form-control" placeholder="Cantidad" required="true" id="cantidad_caballos" name="cantidad_caballos" maxlength="2" style="margin-left: 10px;width: 150px;">
+              </td>
+              <td valign="top">
+                <input type="button" id="boton_crear" value="Crear caballos" onclick="crear_caballos()" class="btn btn-success" style="margin-left: 0px;margin-top: 25px">
+              </td>
+            </tr>
+          </tbody></table>
+           <div id="caballos_div"></div>
+        </div>
+
+        <div id="caballos" style="margin-left: 10px;">
+        </div>
+
+
+      </div>
+
+      <div class="box-footer">
+           <input type="button" value="Aceptar" class="btn btn-success" onclick="grabar()">
+      </div>
+
+    </div>
+  </div>
+</div>
+<input type="hidden" name="carrera_hidden" id="carrera_hidden">
+
+
+          </div></form></section>
+        </div>
+
+        <aside class="control-sidebar control-sidebar-dark">
+
+        </aside>
+      </div>
+
+    
+
+
+    <div id="myModal" class="modal fade" role="dialog" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-body">
+            <h3>Solicitudes Pendientes</h3>
+            <div id="cuerpo_solicitudes">
+
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_cuadro();">Salir</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    
+<div class="swal-overlay" tabindex="-1">
+  <div class="swal-modal" role="dialog" aria-modal="true"><div class="swal-icon swal-icon--success">
+    <span class="swal-icon--success__line swal-icon--success__line--long"></span>
+    <span class="swal-icon--success__line swal-icon--success__line--tip"></span>
+
+    <div class="swal-icon--success__ring"></div>
+    <div class="swal-icon--success__hide-corners"></div>
+  </div><div class="swal-title" style="">Completo</div><div class="swal-text" style="">Datos almacenados.</div><div class="swal-footer"><div class="swal-button-container">
+
+    <button class="swal-button swal-button--confirm">OK</button>
+
+    <div class="swal-button__loader">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+
+  </div></div></div></div></body></html>

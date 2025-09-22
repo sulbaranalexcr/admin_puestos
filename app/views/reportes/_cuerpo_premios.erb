@@ -1,0 +1,73 @@
+<div class="row">
+  <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Premios</h3>
+        </div>
+
+        <div class="box-body">
+          <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+
+            <div class="row">
+              <div class="col-sm-12">
+                <table id="user_index" class="table table-bordered table-striped dataTable" role="grid">
+                  <thead>
+                    <tr>
+                      <th>Usuario</th>
+                      <th>Fecha</th>
+                      <th>Hipodromo</th>
+                      <th>Carrera</th>
+                      <th>Detalle</th>
+                      <th>Acci&oacute;n</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @reporte.each do |repo| %>
+                      <tr>
+                        <td> <%= repo.nombre_usuario%> </td>
+                        <td> <%= repo.created_at.strftime('%d/%m/%Y %I:%M %p')%> </td>
+                        <td> <%= repo.nombre_hipodromo%> </td>
+                        <td> <%= repo.carrera  %> </td>
+                        <td>
+                          <div id="escondida<%=repo.id%>" style="display: none;">
+                            <table  class="table table-bordered table-striped dataTable" role="grid">
+                              <thead>
+                                <tr>
+                                  <th>Caballo</th>
+                                  <th>Llegada</th>
+                                  <th>Retirado</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <% for cab in JSON.parse(repo.caballos) %>
+                                  <tr>
+                                    <td> <%=cab['puesto'].to_s + "-" + CaballosCarrera.find(cab['id']).nombre %> </td>
+                                    <td> <%=cab['llegada'] %> </td>
+                                    <td> <%=cab['retirado'] ? "SI":"NO" %>
+                                    </td>
+                                  </tr>
+                                  <%end%>
+                              </tbody>
+                            </table>
+                        </div>
+                        </td>
+                        <td>
+                          <a id="abrir<%=repo.id%>" class="fa fa-caret-square-o-down" style="font-size:24px;cursor:zoom-in;" onclick="abrir('escondida<%=repo.id%>','abrir<%=repo.id%>','cerrar<%=repo.id%>')"></a>
+                          <a id="cerrar<%=repo.id%>" class="fa fa-caret-square-o-up" style="font-size:24px;display: none;cursor:zoom-out;" onclick="cerrar('escondida<%=repo.id%>','abrir<%=repo.id%>','cerrar<%=repo.id%>')"></a>
+                        </td>
+                       </tr>
+                    <% end %>
+                  </tbody>
+
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+    </div>
+  </div>
+</div>

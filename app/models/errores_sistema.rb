@@ -1,0 +1,2 @@
+class ErroresSistema < ApplicationRecord
+end

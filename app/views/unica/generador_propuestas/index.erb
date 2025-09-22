@@ -1,0 +1,48 @@
+  <%= javascript_include_tag "axios.js" %>
+
+<div class="form-group">
+  <label for="sports">Deporte</label>
+  <select size=1 class="form-control" name="deporte" id="deporte" style = 'width: 40%' onchange="search_sport(this.value)">
+    <option value="0">Seleccione deporte</option>
+  <%for deporte in @juegos%>
+     <option value="<%= deporte.juego_id %>"><%= deporte.nombre %></option>
+  <%end%>
+ </select>
+</div>
+
+
+<div class="form-group" id="data_vue_principal">
+  <contedor-parametros :data="data" :sport_id="sport_seleted"> </contedor-parametros>
+</div>
+
+<%= javascript_include_tag "vue.min.js" %>
+<%= javascript_include_tag "componente.js" %>
+<%= javascript_include_tag "datos_vue.js" %>
+
+<script>
+  function search_sport(id){
+   if ($('#deporte').val() != "0"){
+      axios({
+          method: 'get',
+            url: '/unica/generador_propuestas/' + id,
+          data: {
+                },
+        })
+        .then(function(response) {
+           console.log('alex', response.data.sport)
+             data_parameters.data = response.data.data
+             data_parameters.sport_seleted = response.data.sport
+
+          }
+
+      )
+      .catch(function (error) {
+          swal("Lo siento", "No hay datos.", "error");
+      });
+
+    }else{
+          swal("Lo siento", "Debe seleccionar un deporte.", "error");
+    }
+
+  }
+</script>

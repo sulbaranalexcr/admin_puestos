@@ -1,0 +1,48 @@
+<form>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+
+      <div class="box-header">
+        <h3 class="box-title">Estado de Juegos (Match)</h3>
+      </div>
+      <div class="form-group">
+        <div class="box-body">
+          <table boder=0 class="table table-striped">
+          <tr>
+            <td style="width: 20%" valign="top">
+            <label for="deporte_label">Deporte</label>
+            </td>
+            <td style="width: 20%" valign="top">
+            <label for="deporte_label">Liga</label>
+            </td>
+            <td style="width: 50%" valign="top">
+                <label for="match_label">Match</label>
+            </td>
+            <td style="width: 10%" valign="top">
+                <label for="hora_label">Fecha/Hora de juego</label>
+            </td>
+          </tr>
+          <%for match in @matchs%>
+          <% color = match.local.strftime('%d/%m/%Y') !=  Time.now.strftime('%d/%m/%Y') ? 'red' : ''%>
+          <tr >
+            <td style="width: 20%;color: <%= color %>" valign="top">
+              <%= match.juego.nombre %>
+            </td>
+            <td style="width: 20%;color: <%= color %>" valign="top">
+              <%= match.liga.nombre %>
+            </td>
+            <td style="width: 50%;color: <%= color %>" valign="top">
+               <a href="/unica/premiacion_deportes/?tipo=2&fecha=<%= match.local.strftime('%d/%m/%Y')%>&deporte_id=<%=match.juego_id%>&liga_id=<%=match.liga_id%>&match_id=<%=match.id%>"> <%= match.nombre%> </a>
+            </td>
+            <td style="width: 10%;color: <%= color %>" valign="top">
+                <%= match.local.strftime('%d/%m/%Y %I:%M %p')%>
+            </td>
+          </tr>
+          <%end%>   
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</form>

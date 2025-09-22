@@ -1,0 +1,97 @@
+<div class="row">
+  <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Listado de Jornadas</h3>
+        </div>
+
+        <div class="box-body">
+          <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+
+            <div class="row">
+              <div class="col-sm-12">
+                <table id="user_index" class="table table-bordered table-striped dataTable" role="grid">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Hipodromo</th>
+                      <th>Cantidad de careras</th>
+                      <th class="col-xs-1">Acci&oacute;n</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @jornadas.each do |jornada| %>
+                      <tr>
+                        <td> <%= jornada.fecha.strftime("%d/%m/%Y") %> </td>
+                        <td> <%= jornada.hipodromo.nombre %> </td>
+                        <td> <%= jornada.cantidad_carreras %> </td>
+                        <td>
+                          <div class="btn-row">
+                            <%= link_to raw('<i class="fa fa-cogs"></i>'), edit_jornada_url(jornada), class: 'btn btn-sm btn-warning' %>
+                            <a class="btn btn-sm btn-danger" onclick="borrar_jornada(<%= jornada.id%>)"><i class="fa fa-trash"></i></a>
+                          </div>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-2 col-md-offset-10">
+    <%= link_to 'Nueva Jornada', new_jornada_path, class: 'btn btn-success pull-right' %>
+  </div>
+</div>
+
+
+
+<script>
+
+
+  function borrar_jornada(id){
+        swal({
+         title: "ESTA SEGURO DE ELIMINAR ESTA JORNADA?",
+         text: "Desea continuar?",
+         icon: "warning",
+          dangerMode: true,
+         buttons: {
+         confirm: "Cancelar",
+          cancel: "Aceptar",
+          },
+        })
+        .then((willDelete) => {
+         if (willDelete) {
+         } else {
+             axios({
+                 method: 'POST',
+                   url: '/jornadas/eliminar_jornada',
+                 data: {
+                     id: id
+                 },
+               })
+               .then(function(response) {
+                 swal({title: "Jornada Eliminada", text: "Proceso completo", icon: "success",timer: 2000  }).then((aceptar) => {
+                 window.location.href = '/jornadas';
+               });
+
+               }
+
+             )
+             .catch(function (error) {
+               swal("Lo siento", "Ocurrio un error.", "error");
+             });
+         }
+        });
+    }
+</script>

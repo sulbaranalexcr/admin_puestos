@@ -1,0 +1,7 @@
+<label for="deporte_label">Deporte</label>
+<select size=1 class="form-control" placeholder="Tipo"  name="deportes" id="deportes"  style= '' onchange="verificar_deporte(this.value);">
+<option value="0" >Seleccione Deporte</option>
+<%for deporte in @deportes%>
+    <option value="<%= deporte.juego_id%>" ><%= deporte.nombre%> </option>
+<%end%>
+</select>

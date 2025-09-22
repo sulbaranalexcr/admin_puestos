@@ -1,0 +1,141 @@
+<%= javascript_include_tag "axios.js" %>
+<%= javascript_include_tag "swalert.js" %>
+<script>
+
+
+function ruta_invalida(){
+  if ($('#ruta_input').val()){
+    return false ;
+  }else{
+    return true ;
+  }
+}
+
+function visualizar(){
+  if (ruta_invalida()){
+    swal("Error", "Debe ingresar ruta.", "error") ;
+    return ;
+  }
+  axios({
+      method: 'POST',
+        url: '/unica/utilidades/preview_video',
+      data: {
+        "id": $('#video option:selected').val()
+      },
+    })
+    .then(function(response) {
+        $('#div_preview').html(response.data);
+    }
+  )
+  .catch(function (error) {
+    swal("Lo siento", "No hay ruta valida", "error");
+  });
+
+}
+
+function verificar_ruta(){
+  $('#ruta_input').val('');
+  $('#ruta_input').val($('#video option:selected').data('ruta') );
+  $('#nombre').val($('#video option:selected').data('nombre') );
+}
+
+
+function cambiar_ruta_func(){
+  if (ruta_invalida()){
+    swal("Error", "Debe ingresar ruta.", "error") ;
+    return ;
+  }
+   id = $('#video option:selected').val() ;
+   ruta = $('#ruta_input').val() ;
+   nombre = $('#nombre').val() ;
+   swal({
+    title: 'Advertencia' ,
+    text: "Esta seguro de asignar esta ruta?",
+    icon: "warning",
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    closeOnClickOutside: false,
+     dangerMode: true,
+    buttons: {
+    confirm: "Aceptar",
+     cancel: "Cancelar",
+     },
+  })
+  .then((willConfirm) => {
+    if (willConfirm) {
+        swalert_espera("Espere, realizando cambios...")
+        axios({
+            method: 'POST',
+              url: '/unica/utilidades/cambiar_ruta_video',
+            data: {
+              "id": id,
+              "ruta": ruta,
+              "nombre": nombre
+            },
+          })
+          .then(function(response) {
+            Swal.close();
+            swal("Completo", "Datos almacenados.", "success").then((aceptar) => {
+              location.reload(true); 
+            });
+          }
+
+        )
+        .catch(function (error) {
+            Swal.close();
+            swal("Lo siento", "Ocurrio un error. Verifique todos los datos", "error");
+        });
+    }
+  });
+
+
+  }
+
+</script>
+<form>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">Tasas de cambio API</h3>
+        </div>
+        <div class="form-group">
+          <div class="box-body">
+            <div class="form-group" style="margin-left: 10px;" id="div_deportes">
+              <h3>Ultima Actualizaci&oacute;n: <%= @data.created_at.strftime('%d/%m/%Y %I:%M %p')%></h3>
+              <table id="user_index" class="table table-bordered table-striped dataTable" role="grid">
+                <thead>
+                  <tr>
+                    <th>Simbolo</th>
+                    <th>Moneda</th>
+                    <th>Pais</th>
+                    <th>Tasa</th>
+                    <th>Accion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for moneda in @data.monedas%>
+                    <tr>
+                      <td> <%= moneda['abreviatura'] %></td>
+                      <td> <%= moneda['nombre'] %></td>
+                      <td> <%= moneda['pais'] %></td>
+                      <td style="font-weight: bold"> <%= number_with_precision( moneda['tasa'] , precision: 6, separator: '.', delimiter: ',') %></td>
+                      <td>
+                        <div class="btn-row">
+                          <%= link_to raw('<i class="fa fa-cogs"></i>'), '', class: 'btn btn-sm btn-warning' %>
+                        </div>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+

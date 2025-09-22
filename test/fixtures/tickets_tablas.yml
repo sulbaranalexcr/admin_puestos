@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  usuarios_taquilla: one
+  tablas_detalle: one
+  cantidad_tablas: 1
+  valor: 1.5
+  total: 1.5
+  detalle: MyString
+  ststus: 1
+
+two:
+  usuarios_taquilla: two
+  tablas_detalle: two
+  cantidad_tablas: 1
+  valor: 1.5
+  total: 1.5
+  detalle: MyString
+  ststus: 1

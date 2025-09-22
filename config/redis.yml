@@ -1,0 +1,10 @@
+default: &default#  url: "redis://#{Figaro.env.REDIS_HOST}:6379/1"
+  db: 1
+
+development:
+  <<: *default
+test:
+  <<: *default
+production:
+  <<: *default
+  url: "redis://#{Figaro.env.REDIS_HOST}:6379/1"

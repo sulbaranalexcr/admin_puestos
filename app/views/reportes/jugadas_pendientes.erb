@@ -1,0 +1,95 @@
+<%= javascript_include_tag "axios.js" %>
+<script>
+
+
+
+
+
+function consultar_caballos(){
+  swalert_espera("Espere, generando reporte...")
+  axios({
+    method: 'POST',
+    url: '/reportes/buscar_jugadas_pendientes',
+    data: {
+           "producto": $("#tipo_reporte").val()
+          },
+  })
+  .then(function(response) {
+       $('#cuerpo_div').html(response.data);
+       Swal.close();
+    }
+
+)
+.catch(function (error) {
+    Swal.close();
+    swal("Lo siento", "No hay datos.", "error");
+});
+
+}
+
+
+
+    function filterTable() {
+        const input = document.getElementById("searchInput");
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById("user_index");
+        const rows = table.getElementsByTagName("tr");
+
+        // Itera por las filas de la tabla (excepto la primera fila de encabezado)
+        for (let i = 1; i < rows.length; i++) {
+            const row = rows[i];
+            const nameCell = row.getElementsByTagName("td")[0]; // Selecciona solo la primera columna (nombre)
+
+            if (nameCell) {
+                const nameText = nameCell.textContent.toLowerCase();
+
+                // Filtra solo las filas donde el texto del nombre incluye el filtro
+                if (nameText.includes(filter)) {
+                    row.style.display = ""; // Muestra la fila
+                } else {
+                    row.style.display = "none"; // Oculta la fila
+                }
+            }
+        }
+    }
+
+
+</script>
+
+<form>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">Jugadas Pendiente</h3>
+        </div>
+        <div class="form-group">
+          <div class="container" style="width: 100%;">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="box">
+                  <div class="form-group">
+                    <label for="hasta_fecha">Producto</label>
+                    <select class="form-control" size=1 id="tipo_reporte"> 
+                      <option value="puestos">Puestos</option>
+                      <option value="tablas">Tablas</option>
+                      <option value="rojonegro">Rojo y Negro</option>
+                      <option value="piramide">Piramide</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="box-footer" style="margin-top: 45px">
+                <input type="button" value="Aceptar" class="btn btn-success" onclick="consultar_caballos()">
+              </div>
+              <div class="form-group">
+                <div id='cuerpo_div'>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

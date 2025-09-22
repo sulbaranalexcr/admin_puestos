@@ -1,0 +1,21 @@
+<div class="form-group">
+  <%= f.label 'Deporte ID' %>
+  <%= f.text_field :juego_id, class: "form-control", style: 'width: 20%', required: true %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+
+<div class="form-group">
+  <%= f.label 'Nombre' %>
+  <%= f.text_field :nombre, class: "form-control", placeholder: "Ingrese nombre del deporte", required: true %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+
+
+
+<%  if flash[:notice] %>
+    <script>
+    swal({title: "Lo siento", text: "Ya existe un deporte con esos dstos !",icon: "error", button: "Aceptar"});
+    </script>
+<% end %>

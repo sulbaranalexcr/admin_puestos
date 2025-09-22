@@ -1,0 +1,45 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <%@reportes.each do |reporte| %>
+        <%next if reporte[:paginas].blank? %>
+        <label> <%= reporte[:nombre] %> </label>
+        <%reporte[:paginas].each do |pagina| %>
+          <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+            <table id="user_index" class="table table-bordered table-striped dataTable" role="grid" style="margin-top: 5px !important;">
+              <thead>
+              <tr style="background-color:rgb(177, 169, 169);">
+                <th style="text-align: left;width: 10%">Cliente</th>
+                <th style="text-align: right;width: 20%">Enviado</th>
+                <th style="text-align: right;width: 20%">Recibido</th>
+                <th style="text-align: right;width: 20%">Comisión</th>
+                <th style="text-align: right;width: 20%">Balance</th>
+              </tr>
+              </thead>
+              <tbody>
+                <tr>
+                <td style="text-align: left;width: 10%">
+                  <%= pagina[:id] %>
+                </td>
+                <td style="text-align: right;width: 20%">
+                <%= number_with_precision(pagina[:enviado], precision: 2, separator: '.', delimiter: ',') %>
+                </td>
+                <td style="text-align: right;width: 20%">
+                    <%= number_with_precision(pagina[:recibido], precision: 2, separator: '.', delimiter: ',') %>
+                </td>
+                <td style="text-align: right;width: 20%">
+                    <%= number_with_precision(pagina[:comision], precision: 2, separator: '.', delimiter: ',') %>
+                </td>
+                <td style="text-align: right;width: 20%">
+                    <%= number_with_precision((pagina[:recibido].to_f - pagina[:enviado].to_f) + pagina[:comision].to_f, precision: 2, separator: '.', delimiter: ',') %>
+                </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        <%end%>
+        <hr>
+      <%end%>
+    </div>
+  </div>
+</div>

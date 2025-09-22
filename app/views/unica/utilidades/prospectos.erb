@@ -1,0 +1,86 @@
+<%= javascript_include_tag "axios.js" %>
+<%= javascript_include_tag "swalert.js" %>
+<script>
+
+function actualizar(){
+  if (ruta_invalida()){
+    swal("Error", "Debe ingresar ruta.", "error") ;
+    return ;
+  }
+   id = $('#video option:selected').val() ;
+   ruta = $('#ruta_input').val() ;
+   nombre = $('#nombre').val() ;
+   swal({
+    title: 'Advertencia' ,
+    text: "Esta seguro de asignar esta ruta?",
+    icon: "warning",
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    closeOnClickOutside: false,
+     dangerMode: true,
+    buttons: {
+    confirm: "Aceptar",
+     cancel: "Cancelar",
+     },
+  })
+  .then((willConfirm) => {
+    if (willConfirm) {
+        swalert_espera("Espere, realizando cambios...")
+        axios({
+            method: 'POST',
+              url: '/unica/utilidades/cambiar_ruta_prospectos',
+            data: {
+              "id": id,
+              "ruta": ruta,
+              "nombre": nombre
+            },
+          })
+          .then(function(response) {
+            Swal.close();
+            swal("Completo", "Datos almacenados.", "success").then((aceptar) => {
+              location.reload(true); 
+            });
+          }
+
+        )
+        .catch(function (error) {
+            Swal.close();
+            swal("Lo siento", "Ocurrio un error. Verifique todos los datos", "error");
+        });
+    }
+  });
+
+
+  }
+
+</script>
+<form>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">Asignar Ruta de Retrospectos</h3>
+        </div>
+        <div class="form-group">
+          <div class="box-body">
+            <label style="margin-left: 10px">Deporte</label>
+            <div class="form-group" style="margin-left: 10px;" id="div_deportes">
+              <label style="margin-left: 10px">Ruta</label><br>
+              <input type="url" value="<%= @prospecto.url%>" name="ruta_input" id="ruta_input" class="form-control">
+            </div>
+
+            <div class="form-group" style="margin-left: 10px;" >
+              <a id="boton_procesar" class='btn btn-sm btn-success' onclick="actualizar();">Actualizar <i class="fa fa-refresh"></i></a>
+            </div>
+
+            <div id="div_preview" class="form-group">
+           </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+

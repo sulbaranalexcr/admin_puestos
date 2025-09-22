@@ -1,0 +1,100 @@
+<div class="row">
+  <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Listado de carreras con llaves</h3>
+        </div>
+
+        <div class="box-body">
+          <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+
+            <div class="row">
+              <div class="col-sm-12">
+                <table id="user_index" class="table table-bordered table-striped dataTable" role="grid">
+                  <thead>
+                    <tr>
+                      <th>Hipodromo</th>
+                      <th>No.Carrera</th>
+                      <th>Horar Carrera</th>
+                      <th>Detalle</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @carreras.each do |carrera| %>
+                      <tr>
+                        <td> <%= carrera.jornada.hipodromo.nombre%> </td>
+                        <td> <%= carrera.numero_carrera %> </td>
+                        <td> <%= carrera.hora_carrera[0,5] %> </td>
+                        <td>
+                          <div class="btn-row">
+                            <a class="btn btn-sm btn-success" onclick="mostrar_detalle(<%= carrera.id %>)"  data-toggle="modal" data-target="#modal_detalle" ><i class="fa fa-eye"></i></a>
+                          </div>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  <div id="modal_detalle" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-body">
+        <div class="card" style="width: 57rem;">
+          <div class="card-header">
+            &nbsp;<font style="font-weight: bold;">Detalle de carrera</font>
+          </div>
+                <table id="user_index" class="table table-bordered table-striped dataTable" role="grid">
+                  <thead>
+                    <tr>
+                      <th>Puesto</th>
+                      <th>Ejemplar</th>
+                      <th>Retirado</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo_detalle">
+                  </tbody>
+
+                </table>
+        </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="$('#modal_detalle').modal('toggle');">Salir</button>
+        </div>
+
+      </div>
+     </div>
+  </div>   
+
+<script>
+    function mostrar_detalle(id){
+        $('#cuerpo_detalle').html('');
+        axios({
+            method: 'POST',
+            url: '/carreras/detalle',
+            data: {"id": id},
+        })
+        .then(function(response) {
+            $('#cuerpo_detalle').html(response.data);
+            }
+        )
+
+   }
+</script>

@@ -1,0 +1,14 @@
+<label>Debitar Saldo</label>
+<div style="display: inline-flex;width: 100%;">
+  <select name="withdraw[metodo]" class="form-control" style="width: 12%;">
+    <option value="POST" <%= datos_cajero['debitar_saldo']['metodo'][/post/i].present? ? 'seleted' : ''%>>POST</option>
+    <option value="GET" <%= datos_cajero['debitar_saldo']['metodo'][/get/i].present? ? 'seleted' : ''%>>GET</option>
+  </select>
+  <input type="text", name="withdraw[url]"  style="width: 80%;" class="form-control" value="<%= datos_cajero['debitar_saldo']['url']%>" placeholder="Ingrese url del enpoint">
+</div>
+<label>Header</label>
+<input type="text", name="withdraw[parametros_header]" style="width: 92%;"class="form-control" value="<%= datos_cajero['debitar_saldo']['parametros_header']%>">
+<label>Body</label>
+<input type="text", name="withdraw[parametros_body]" style="width: 92%;"class="form-control" value="<%= datos_cajero['debitar_saldo']['parametros_body']%>">
+<label>Retorno</label>
+<input type="text", name="withdraw[retorno]" style="width: 92%;"class="form-control" value="<%= datos_cajero['debitar_saldo']['retorno']%>">

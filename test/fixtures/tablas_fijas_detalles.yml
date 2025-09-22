@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tablas_fija: one
+  caballo_id: 1
+  costo: 1.5
+  status: 1
+  activo: false
+
+two:
+  tablas_fija: two
+  caballo_id: 1
+  costo: 1.5
+  status: 1
+  activo: false

@@ -1,0 +1,80 @@
+<%# app/views/reportes/_detalle_ganancias.html.erb %>
+<div class="reporte-ganancias">
+  <% total_gral = 0 %>
+  <% total_premios = 0 %>
+  <% @reporte.each do |grupo| %>
+    <% grupo_obj = Grupo.find_by(id: grupo[:grupo_id]) %>
+    <div class="grupo-card card mb-4">
+      <div class="card-header" style=" display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+        <div>
+          <span class="badge fs-6" style="font-size: 14px;text-align: left;">
+            <i class="bi bi-currency-exchange"></i>
+            <h5 class="mb-0 text-bold text-capitalize" style="font-size: 14px;">
+              <%= grupo_obj&.nombre || "Grupo ##{grupo[:grupo_id]}" %>
+            </h5>
+            <label style="color: white;font-size: 14px;">Ganancia Total:</label> <%= number_to_currency(grupo[:total], unit: "", precision: 2, delimiter: ".") %>
+            <button class="btn btn-sm btn-outline-primary toggle-detalle" style="margin: 2px 5px; border-radius: 5px; padding: 0.25rem 0.5rem;"
+                    type="button"
+                    data-grupo="<%= grupo[:grupo_id] %>">
+              Ver Detalle
+            </button>
+          </span>
+        </div>
+      </div>
+
+      <div id="detalle-<%= grupo[:grupo_id] %>" class="detalle-container" style="display: none; margin-top: 1rem">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover table-sm">
+              <thead class="table-light">
+                <tr>
+                  <th>Fecha</th>
+                  <th class="text-end">Ganancia Diaria</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% grupo[:dias].each do |dia| %>
+                  <%next unless dia[:ganancia].positive? %>
+                  <tr>
+                    <td><%= dia[:fecha] %></td>
+                    <td class="text-end">
+                      <%= number_to_currency(dia[:ganancia], unit: "", precision: 2, delimiter: ".") %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% total_gral += grupo[:total] %>
+    <% total_premios += grupo[:total_premios] %>
+  <% end %>
+  <div class="total-general" style="margin-left: 1rem">
+    <h5 style="font-size: 15px;font-weight: bold; line-height: 0.7;">Total Premios:
+      <%= number_to_currency(total_premios, unit: "", precision: 2, delimiter: ".") %>
+    </h5>
+    <h5 style="font-size: 15px;font-weight: bold; line-height: 0.7;">Total General:
+      <%= number_to_currency(total_gral, unit: "", precision: 2, delimiter: ".") %>
+    </h5>
+    <h5 style="font-size: 15px;font-weight: bold;line-height: 0.7;">Comisión <%= ENV['comision_admin'].to_f * 100 %>%:
+      <%= number_to_currency(total_gral * ENV['comision_admin'].to_f, unit: "", precision: 2, delimiter: ".") %>
+    </h5>
+  </div>
+</div>
+
+<script>
+   $(document).ready(function() {
+    $('.toggle-detalle').click(function() {
+      const grupoId = $(this).data('grupo');
+      const $detalle = $('#detalle-' + grupoId);
+      const isVisible = $detalle.is(':visible');
+      console.log('aaaa')
+      $detalle.toggle(!isVisible);
+      $(this).html(isVisible ? 
+        '<i class="bi bi-chevron-down"></i> Ver Detalle' : 
+        '<i class="bi bi-chevron-up"></i> Ocultar Detalle');
+    });
+  });
+</script>

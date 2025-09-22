@@ -1,0 +1,2 @@
+class RutaVideo < ApplicationRecord
+end

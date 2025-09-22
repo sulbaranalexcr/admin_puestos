@@ -1,0 +1,2 @@
+class CierresApi < ApplicationRecord
+end

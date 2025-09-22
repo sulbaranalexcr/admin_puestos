@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Puestos Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link href="/assets/admin.ico" rel="shortcut icon" type="image/x-icon" />
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+ 
+    <script>
+      function select_con_busqueda(params, data) {
+          // If there are no search terms, return all of the data
+          if ($.trim(params.term) === '') {
+            return data;
+          }
+
+          // Do not display the item if there is no 'text' property
+          if (typeof data.text === 'undefined') {
+            return null;
+          }
+
+          // `params.term` should be the term that is used for searching
+          // `data.text` is the text that is displayed for the data object
+          if (data.text.toLowerCase().indexOf(params.term.toLowerCase()) > -1) {
+            var modifiedData = $.extend({}, data, true);
+            //modifiedData.text += ' (Encontrado)';
+
+            // You can return modified objects from here
+            // This includes matching the `children` how you want in nested data sets
+            return modifiedData;
+          }
+
+          // Return `null` if the term should not be displayed
+          return null;
+      }
+
+
+      function swalert_espera(mensaje){
+          let inputOptions = new Promise((resolve) => {
+            setTimeout(() => {
+            }, 1000)
+          });
+          Swal.fire({
+              title: mensaje,
+              input: 'radio',
+              inputOptions: inputOptions,
+              inputValidator: (value) => {
+              }
+          })
+      }
+
+
+      window.usuario_id = <%= session[:usuario_actual]['id']%> ;
+      window.user_id = 0 ;
+      window.tipo_user = "<%= session[:usuario_actual]['tipo']%>" ;
+      <% javascript_include_tag "cable.js" %>
+
+
+    
+      function taquilla_desconectada(){
+         swal("Advertencia", "No puedo conectarme con la taquilla, verifique que todo este bien.", "warning");
+      }
+
+
+      function get_solicitudes(){
+        $('#cuerpo_solicitudes').html('');
+        $.ajax({
+          type : "POST",
+          url : '/solicitudes/get_solicitudes_pendientes',
+          data : {
+          },
+          success : function(request) {
+            $('#cuerpo_solicitudes').html(request);
+          },
+          error : function(request) {
+          }
+        });
+      }
+
+
+      function reset_session(id){
+         if (window.user_id == id){
+            $.ajax({
+              type : "GET",
+              url : '/login/destroy',
+              data : {
+              },
+              success : function(request) {
+              },
+              error : function(request) {
+              }
+            });
+         }
+      }
+
+
+
+
+      function activar_notificacion(cantidad){
+          var el = document.querySelector('.notification');
+          // var count = Number(el.getAttribute('data-count')) || 0;
+          el.setAttribute('data-count', (cantidad));
+          el.classList.remove('notify');
+          el.offsetWidth = el.offsetWidth;
+          el.classList.add('notify');
+          if(cantidad > 0){
+              el.classList.add('show-count');
+          }
+       }
+
+       function activar_notificacion2(cantidad){
+           var el = document.querySelector('.notification');
+           // var count = Number(el.getAttribute('data-count')) || 0;
+           el.setAttribute('data-count', (cantidad));
+           el.offsetWidth = el.offsetWidth;
+           if (cantidad == 0){
+              el.classList.remove('notify');
+              el.classList.remove('show-count');
+           }
+        }
+
+
+        function revisar_solicitudes(){
+              $.ajax({
+                type : "POST",
+                url : '/solicitudes/revisar_solicitudes_pendientes',
+                data : {
+                },
+                success : function(request) {
+                  if (request.hay){
+                    activar_notificacion(request.cantidad);
+                  }else{
+                    activar_notificacion2(request.cantidad);
+                  }
+                },
+                error : function(request) {
+                }
+              });
+
+
+
+        }
+
+    </script>
+    <style>
+      .container_campana {
+        position: absolute;
+        top: 50%;
+        left: 86%;
+        margin-right: -0%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        text-align: center;
+        z-index: 1;
+      }
+
+      button {
+        display: block;
+        padding: 1em 2em;
+        outline: none;
+        font-weight: 600;
+        border: none;
+        color: #fff;
+        background-color: #3498db;
+        border: 1px solid #1f74ac;
+        border-radius: 0.3em;
+        margin-top: 4em;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #2487c9;
+      }
+
+      /* Notifications */
+
+      .notification {
+        display: inline-block;
+        position: relative;
+        padding: 0.6em;
+        background: #222d32;
+        border-radius: 0.2em;
+        font-size: 1em;
+        box-shadow: 0 0 10px white;
+      }
+
+      .notification::before,
+      .notification::after {
+        color: #fff;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      }
+
+      .notification::before {
+        display: block;
+        content: "\f0f3";
+        font-family: "FontAwesome";
+        transform-origin: top center;
+      }
+
+      .notification::after {
+        font-family: Arial;
+        font-size: 0.8em;
+        font-weight: 600;
+        position: absolute;
+        top: -5px;
+        right: -15px;
+        padding: 4px 7px;
+        line-height: 100%;
+        border: 2px #fff solid;
+        border-radius: 60px;
+        background: red;
+        opacity: 0;
+        content: attr(data-count);
+        opacity: 0;
+        -webkit-transform: scale(0.5);
+        transform: scale(0.5);
+        transition: transform, opacity;
+        transition-duration: 0.3s;
+        transition-timing-function: ease-out;
+      }
+
+      .notification.notify::before {
+        -webkit-animation: ring 1.5s ease;
+        animation: ring 1.5s ease;
+      }
+
+      .notification.show-count::after {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      @-webkit-keyframes ring {
+        0% {
+            -webkit-transform: rotate(35deg);
+        }
+        12.5% {
+            -webkit-transform: rotate(-30deg);
+        }
+        25% {
+            -webkit-transform: rotate(25deg);
+        }
+        37.5% {
+            -webkit-transform: rotate(-20deg);
+        }
+        50% {
+            -webkit-transform: rotate(15deg);
+        }
+        62.5% {
+            -webkit-transform: rotate(-10deg);
+        }
+        75% {
+            -webkit-transform: rotate(5deg);
+        }
+        100% {
+            -webkit-transform: rotate(0deg);
+        }
+      }
+
+      @keyframes ring {
+        0% {
+            -webkit-transform: rotate(35deg);
+            transform: rotate(35deg);
+        }
+        12.5% {
+            -webkit-transform: rotate(-30deg);
+            transform: rotate(-30deg);
+        }
+        25% {
+            -webkit-transform: rotate(25deg);
+            transform: rotate(25deg);
+        }
+        37.5% {
+            -webkit-transform: rotate(-20deg);
+            transform: rotate(-20deg);
+        }
+        50% {
+            -webkit-transform: rotate(15deg);
+            transform: rotate(15deg);
+        }
+        62.5% {
+            -webkit-transform: rotate(-10deg);
+            transform: rotate(-10deg);
+        }
+        75% {
+            -webkit-transform: rotate(5deg);
+            transform: rotate(5deg);
+        }
+        100% {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+      }
+
+
+
+      .blink {
+      animation: blink-animation 1s steps(7, start) infinite;
+      -webkit-animation: blink-animation 1s steps(7, start) infinite;
+      }
+      @keyframes blink-animation {
+      to {
+        visibility: hidden;
+      }
+      }
+      @-webkit-keyframes blink-animation {
+      to {
+        visibility: hidden;
+      }
+      }
+    </style>
+  </head>
+  <body>
+    <%if session[:usuario_actual]['tipo'] == "GRP"%>
+      <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/5d78146377aa790be3336b28/default';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+        })();
+      </script>
+    <%end%>
+    <body class="hold-transition skin-blue-light sidebar-mini">
+      <div class="wrapper">
+        <header class="main-header">
+          <a href="/home" class="logo" style="border-right: 1px solid black ;background-color:<%=@color_admin%>">
+            <%if session[:usuario_actual]['tipo'] == "ADM"%>
+              <span class="logo-mini"><b>P</b>A</span>
+              <span class="logo-lg"><b>Puestos Admin</b></span>
+            <%elsif session[:usuario_actual]['tipo'] == "INT"%>
+              <span class="logo-mini"><b>I</b>A</span>
+              <span class="logo-lg"><b>Inter Puestos Admin</b></span>
+            <%elsif session[:usuario_actual]['tipo'] == "GRP"%>
+              <span class="logo-mini"><b>G</b>A</span>
+              <span class="logo-lg"><b>Grupo Puestos Admin</b></span>
+            <%elsif session[:usuario_actual]['tipo'] == "COB"%>
+              <span class="logo-mini"><b>C</b>A</span>
+              <span class="logo-lg"><b>Agente Puestos Admin</b></span>
+            <%end%>
+          </a>
+          <nav class="navbar navbar-static-top" role="navigation" style="background-color:<%=@color_admin%>">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+              <span class="sr-only">Toggle navigation</span>
+            </a>
+            <div class="navbar-custom-menu">
+              <ul class="nav navbar-nav">
+                <li class="">
+                  <%=link_to "/login/#{current_user.username}", method: :DELETE do %>
+                    <i class="fa fa-sign-out"></i>
+                  <%end%>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </header>
+        <!-- aqui el menu nuevo -->
+        <aside class="main-sidebar">
+          <section class="sidebar" id="sideBarMenu">
+            <div class="user-panel">
+              <div class="pull-left image">
+                <%= image_tag("user.png", class: "img-circle img-responsive") %>
+              </div>
+              <%if session[:usuario_actual]['tipo'] == 'COB' %>
+                <div class="container_campana" onclick="get_solicitudes();">
+                  <div class="notification" style="cursor: pointer;"  data-toggle="modal" data-target="#myModal" ></div>
+                </div>
+              <%end%>
+              <div class="pull-left info">
+                <br>
+                <%if session[:usuario_actual]['tipo'] == "ADM"%>
+                  <i class="fa fa-circle text-success"></i> <%= session[:usuario_actual]['username'].upcase%>
+                <%elsif session[:usuario_actual]['tipo'] == "INT"%>
+                  <i class="fa fa-circle text-success"></i> <%= Intermediario.find(session[:usuario_actual]['intermediario_id']).nombre.upcase%>
+                <%elsif session[:usuario_actual]['tipo'] == "GRP"%>
+                  <i class="fa fa-circle text-success"></i> <%= Grupo.find(session[:usuario_actual]['grupo_id']).nombre.upcase%>
+                <%elsif session[:usuario_actual]['tipo'] == "COB"%>
+                  <i class="fa fa-circle text-success"></i> <%= Cobradore.find(session[:usuario_actual]['cobrador_id']).nombre.upcase%>
+                  <%end%>
+              </div>
+            </div>
+            <ul class="sidebar-menu">
+              <li class="header">MENU DE OPCIONES</li>
+              <li class="<%= current_page?('/home') ? 'active' : '' %>">
+                <%= link_to '/home' do %>
+                  <i class="fa fa-dashboard"></i> <span>Inicio</span>
+                <%end%>
+              </li>
+              <% @menu_creado_completo = MenuUsuario.find_by(user_id: session[:usuario_actual]['id'])%>
+              <% if @menu_creado_completo.present?%>
+                <% JSON.parse(@menu_creado_completo.menu).each do |men,value|%>
+                  <%if value['id']['tipo'].include?(session[:usuario_actual]['tipo']) and value['id']['activo'] and value['id']['visible']%>
+                    <li class="treeview"> <a href="#"> <i class="fa fa-sitemap"></i> <span><%= men%> </span> </a>
+                      <ul class="treeview-menu">
+                        <%value['menu'].each do |men2|%>
+                          <%if men2['tipo'].include?(session[:usuario_actual]['tipo'])  and men2['activo'] and men2['visible']%>
+                            <li class=""> <a href="<%=men2['path']%>"> - <%=men2['nombre']%></a> </li>
+                          <%end%>
+                        <%end%>
+                      </ul>
+                    </li>
+                  <%end%>
+                <%end%>
+              <%else%>
+                <label class="header" style="color: red;">  &nbsp;&nbsp;&nbsp;Usuario no tiene</label><br>
+                <label class="header" style="color: red;">  &nbsp;&nbsp;&nbsp;Menu configurado</label>
+              <%end%>
+            </ul>
+          </section>
+        </aside>
+        <div class="content-wrapper">
+          <%if session[:usuario_actual]['tipo'] == "ADM"%>
+            <marquee style="display: none;cursor: pointer;" onclick="window.location.href='/unica/configuracion/posttime'" class="btn-danger" id="marquesina_superior">Tiene carreras pendiente por premiar, pulse click aqui para revisar ...</marquee>
+            <marquee style="display: none;cursor: pointer;" onclick="window.location.href='/unica/retirados/retirados_pendiente'" class="btn-danger" id="marquesina_superior2">Tiene caballos pendiente por retirar, pulse click aqui para revisar ...</marquee>
+          <%end%>
+          <section class="content" style="min-height: 93.5vh;">
+            <%=yield%>
+          </section>
+        </div>
+        <aside class="control-sidebar control-sidebar-dark"> </aside>
+      </div>
+    </body>
+    <div id="myModal" class="modal fade" role="dialog"  tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-body">
+            <h3>Solicitudes Pendientes</h3>
+            <div id="cuerpo_solicitudes">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_cuadro();">Salir</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </html>
+  <script>
+    var url_actual = "<%= request.url.split('/').last.to_s.strip%>"
+    if (url_actual != 'home'){
+      clearInterval(window.reloj_refresca);
+      clearInterval(window.reloj_barra);
+      console.log("quitando, reloj");
+    }
+
+  </script>
+

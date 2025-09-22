@@ -1,0 +1,46 @@
+<%if users.present?%>
+  <label style="
+      display: inline-block;
+      margin-left: 1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      background-color: #d3d3d3;
+      color: #333;
+      font-weight: bold;
+  ">
+      Alias: <%= users[0][3] %>
+  </label>
+  <label style="
+      display: inline-block;
+      margin-left: 1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      background-color: #d3d3d3;
+      border: 1px solid #b3b3b3; 
+      color: #333;
+      font-weight: bold;
+  ">
+      Correo: <%= users[0][4] %>
+  </label>
+
+  <div class="form-group" style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; width: 100%; max-width: 365px;">
+    <select size="1" class="form-control" placeholder="Tipo" name="moneda" id="moneda" 
+      style="flex: 1; min-width: 100px;border-radius: 8px;">
+      <option value="0">Seleccione Moneda</option>
+        <% for user in users %>
+          <option value="<%= user[2] %>"><%= user[2] %></option>
+        <% end %>
+    </select>
+    
+    <select size="1" class="form-control" placeholder="Tipo" name="dias" id="dias" 
+      style="flex: 1; min-width: 100px;border-radius: 8px;">
+      <option value="7">Últimos 7 días</option>
+      <option value="15">Últimos 15 días</option>
+      <option value="30">Últimos 30 días</option>
+    </select>
+  </div>
+
+  <input type="button" value="Buscar" class="btn btn-success" style="border-radius: 8px;" onclick="auditoria();">
+<%else%>
+  <label style="margin-left: 1rem">No se encontro usuario con ese codigo</label>
+<%end%>

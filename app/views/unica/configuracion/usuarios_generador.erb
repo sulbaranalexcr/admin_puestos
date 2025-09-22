@@ -1,0 +1,21 @@
+<%= javascript_include_tag "axios.js" %>
+
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <h4>Usuarios para el generador de propuestas</h4>
+        <div style="width: 100%;">
+          <div class="col-sm-8 text-right">
+            <div class="form-group" id="data_vue_usuarios">
+              <contenedor-users-parametros :data="users"> </contenedor-users-parametros>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= javascript_include_tag "vue.min.js" %>
+<%= javascript_include_tag "componente_usuarios.js" %>

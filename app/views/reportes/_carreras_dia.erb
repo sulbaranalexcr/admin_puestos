@@ -1,0 +1,8 @@
+<label for="hasta_fecha">Carrera</label>
+<select class="form-control" size=1 id="carreras">
+  <%for carrera in @carreras%>
+     <option value="<%= carrera.id%>"><%= carrera.numero_carrera%></option>
+  <%end%>
+</select>
+
+

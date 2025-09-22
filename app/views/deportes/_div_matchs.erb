@@ -1,0 +1,7 @@
+<label for="deporte_label">Match</label>
+<select size=1 class="form-control" placeholder="Tipo"  name="matchs" id="matchs"  style= '' onchange="verificar_match(this.value);">
+  <option value="0" >Seleccione Match </option>
+  <%for match in @matchs%>
+  <option value="<%= match.id%>" data-match_id="<%= match.id%>">(<%= match.id_base%>)<%= match.nombre%> </option>
+  <%end%>
+</select>

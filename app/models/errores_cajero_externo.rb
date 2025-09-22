@@ -1,0 +1,2 @@
+class ErroresCajeroExterno < ApplicationRecord
+end

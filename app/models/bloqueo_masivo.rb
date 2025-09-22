@@ -1,0 +1,2 @@
+class BloqueoMasivo < ApplicationRecord
+end

@@ -1,0 +1,18 @@
+<% @hipodromos.each do |hipodromo| %>
+    <tr>
+    <td> <%= hipodromo.nombre_largo.to_s.strip %> </td>
+    <td>
+        <div class="btn-row">
+        <%= link_to raw('<i class="fa fa-cogs"></i>'), edit_hipodromo_url(hipodromo), class: "btn btn-sm btn-warning" %>
+        <!--%= link_to raw('<i class="fa fa-trash"></i>'), hipodromo_url(hipodromo), class: "btn btn-sm btn-danger", method: :delete,
+                                                                                    data: { confirm: "Esta seguro de eliminar este hipodromo?" } %-->
+        </div>
+    </td>
+    <td> <%= hipodromo.tipo.to_i == 1 ? "Nacional" : "Internacional" %> </td>
+    <td> <%= hipodromo.pais %> </td>
+    <td> <%= hipodromo.cierre_api ? "Si" : "No" %> </td>
+    <td> <%= hipodromo.activo ? "Si" : "No" %> </td>
+    <td> <%= hipodromo.abreviatura %> </td>
+    <td> <%= hipodromo.codigo_nyra %> </td>
+    </tr>
+<% end %>

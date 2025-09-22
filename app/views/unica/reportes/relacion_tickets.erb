@@ -1,0 +1,134 @@
+<%= javascript_include_tag "axios.js" %>
+<script>
+function consultar(){
+   if ($('#taquilla').val() == "0" && $("input[name='tipo_busqueda']:checked").val() == "1"){
+          swal("Lo siento", "Debe seleccionar una taquilla.", "error");
+          return ;
+   }
+      axios({
+          method: 'POST',
+            url: '/unica/reportes/relacion_tickets_detalle',
+          data: {
+                 "desde": $('#desde').val(),
+                 "hasta": $('#hasta').val(),
+                 "taquilla_id": $('#taquilla').val(),
+                 "tipo": $("input[name='tipo_busqueda']:checked").val(),
+                 "t_id": $('#buscar_ticket').val()
+                },
+        })
+        .then(function(response) {
+          $('#cuerpo_div').html(response.data);
+         }
+
+      )
+      .catch(function (error) {
+          swal("Lo siento", error.response.data.mensaje, "error");
+      });
+
+
+}
+
+
+
+
+
+</script>
+
+<form>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">Relacion de Tickets</h3>
+      </div>
+      <div class="form-group">
+        <div>
+          <div id="td_busqueda" class="box">
+            <div class="form-group">
+              <label>
+              <input type="radio" checked name="tipo_busqueda"  value="2" onchange="cambiar_busqueda(2);"> Por ticket
+              <input type="radio" name="tipo_busqueda"  value="3" onchange="cambiar_busqueda(3);"> GTicket</label><br>
+              <input type="number" style="width: 188px" id="buscar_ticket"  name="buscar_ticket" class="form-control">
+            </div>
+            <div class="box-footer">
+              <input type="button" value="Aceptar" class="btn btn-success" onclick="consultar()">
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div id='cuerpo_div'>
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="box">
+                  <div class="box-header">
+                    <div style="float: left;width: 20%">
+                    </div>
+                    <div style="float: left;width: 70%;margin-left: 2%;text-align: center">
+                      <p style="font-weight: bold">Detalle de ticket</p>
+                      <div id="detalle_individual" style="margin-left: 2%;text-align: left;padding-top: 10px">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</form>
+<script>
+   window.boton_check() ;
+   $('#desde').val("<%= Time.now.strftime('%Y-%m-%d')%>");
+   $('#hasta').val("<%= Time.now.strftime('%Y-%m-%d')%>");
+   $("#taquilla").select2({
+     matcher: select_con_busqueda
+   });
+
+   function cambiar_busqueda(tipo){
+     if (tipo == 2){
+       $('#buscar_ticket').attr('placeholder','Ingrese ticket');
+       $('#buscar_ticket').attr('type','number');
+     }else if (tipo == 3){
+       $('#buscar_ticket').attr('placeholder','Ingrese Gticket');
+       $('#buscar_ticket').attr('type','text');
+     }
+     $('#select_busqueda').html("");
+     $('#detalle_individual').html("");
+     if (tipo == 1){
+       $('#td_busqueda').css({"margin-left":"", "padding-top":""});
+       $('#buscar_ticket').hide();
+       $('#div_busca').show();
+       $('.tr_fechas').attr("disabled", false);
+     }else{
+       $('.tr_fechas').attr("disabled", true);
+       $('#td_busqueda').css({"margin-left":"10px", "padding-top":"0px"});
+       $('#buscar_ticket').show();
+       $('#buscar_ticket').css({"margin-left":"10px", "padding-top":"0px","margin-bottom":"17px"});
+       $('#div_busca').hide()
+     }
+   }
+
+
+  function mostrar_ticket(id){
+    axios({
+    method: 'POST',
+      url: '/unica/reportes/buscar_tickets_detalle',
+    data: {
+            "desde": $('#desde').val(),
+            "hasta": $('#hasta').val(),
+            "t_id": id
+          },
+      })
+      .then(function(response) {
+        $('#detalle_individual').html(response.data);
+      }
+
+    )
+    .catch(function (error) {
+        swal("Lo siento", error.response.data.mensaje, "error");
+    });
+}
+</script>

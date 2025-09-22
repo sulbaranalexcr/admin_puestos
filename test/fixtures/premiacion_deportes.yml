@@ -1,0 +1,39 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  juego_id: 1
+  liga_id: 1
+  match_id: 
+  tipo_apuesta: 
+  id_quien_juega: 
+  id_quien_banquea: 
+  monto_quien_juega: 
+  monto_quien_banquea: 
+  usuario_premia_id: 
+  id_equipo_gana: 
+  repremiado: 
+  monto_pagado: 
+  monto_pagado_completo: 
+  moneda: 
+  id_gana: 
+  porcentaje_gt: 
+  porcentaje_bg: 9.99
+
+two:
+  juego_id: 1
+  liga_id: 1
+  match_id: 
+  tipo_apuesta: 
+  id_quien_juega: 
+  id_quien_banquea: 
+  monto_quien_juega: 
+  monto_quien_banquea: 
+  usuario_premia_id: 
+  id_equipo_gana: 
+  repremiado: 
+  monto_pagado: 
+  monto_pagado_completo: 
+  moneda: 
+  id_gana: 
+  porcentaje_gt: 
+  porcentaje_bg: 9.99

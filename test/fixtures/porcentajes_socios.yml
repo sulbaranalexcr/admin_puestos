@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  socio: one
+  app: 
+  porcentaje: 1.5
+
+two:
+  socio: two
+  app: 
+  porcentaje: 1.5

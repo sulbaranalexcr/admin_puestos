@@ -1,0 +1,107 @@
+
+
+
+<%= form_for @usuario, url: @url, role: :form, html: { multipart: true } do |f| %>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Editando Usuario</h3>
+        </div>
+
+
+        <table border=0 style="width: 100%;">
+          <tr>
+            <td style="width: 50%;" valign="top">
+                <div class="box-body">
+                  <div class="form-group">
+                    <%= f.label 'Nombre' %>
+                    <%= f.text_field :username, class: "form-control", style: 'width: 90%'  %>
+                  </div>
+
+
+                  <div class="form-group">
+                    <%= f.label 'Clave' %>
+                    <%= f.text_field :password, class: "form-control", style: 'width: 90%' %>
+                  </div>
+
+
+                  <div class="form-group">
+                    <%= f.label 'Activo' %>
+                    <%= f.check_box :activo, {}%>
+                  </div>
+              </div>
+          </td>
+          <td style="width: 50%;" valign="top">
+            <div class="form-group"  id="div_menu">
+                <label>MENU DE OPCIONES</label><br>
+                  <% @menu_completo.each{|men,value|%>
+                    <%if value['id']['tipo'].include?(@usuario.tipo) %>
+                            <input type="checkbox" <%= value['id']['activo'] ? "checked":""%> id="p<%= value['id']['id']%>" name="usuarios_check_p<%= value['id']['id']%>" onclick="verificar_principal(this.id,this.checked);"> <span style="font-weight: bold;" ><%= men%> </span><br>
+                          <%value['menu'].each{|men2|%>
+                              <%if men2['tipo'].include?(@usuario.tipo) %>
+                                  &nbsp;&nbsp; <input type="checkbox" class="subp<%= value['id']['id']%>"  <%= men2['activo'] ? "checked":""%> id="s<%= men2['id']%>" name="usuarios_check_s<%= men2['id']%>" onclick="verificar_sub('p<%= value['id']['id']%>',this.checked);"> <%=men2['nombre']%><br>
+                              <%end%>
+                           <%}%>
+                    <%end%>
+                  <%}%>
+
+            </div>
+
+          </td>
+        </tr>
+      </table>
+
+        <div class="box-footer">
+          <%= link_to 'Cancelar', usuarios_path, class: 'btn btn-danger' %>
+          <%= f.submit 'Enviar', class: "btn btn-success" %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+<% end %>
+<script>
+   if ("<%= @usuario.tipo%>" == "GRP"){
+     $('#grupo_select').show();
+   }
+
+
+   function verificar_principal(id,sel){
+     if (!sel){
+       $('.sub'+id).prop("checked", false);
+     }
+   }
+   function verificar_sub(id,sel){
+     if (sel){
+       $('#'+id).prop("checked", true);
+     }
+   }
+
+function prueba(){
+  arreglo_menu = [] ;
+  $("input[name*='check_p']").each(function(){
+    prin = this ;
+    sub = [] ;
+    $("input[name*='check_s" + prin.id.substring(1,2) +"']").each(function(){
+      sub.push({ sub: this.id.substring(1,4), check: this.checked});
+    });
+    arreglo_menu.push({principal: prin.id.substring(1,2), check: prin.checked, subs: sub}) ;
+  });
+  return arreglo_menu;
+}
+
+
+</script>
+
+
+
+<script>
+$(document).ready(function() {
+   $("form").submit(function(evento) {
+     $(this).append('<input type="hidden" name="datos_menu" value=' + JSON.stringify(prueba()) +' /> ');
+       return true;
+     });
+   });
+</script>

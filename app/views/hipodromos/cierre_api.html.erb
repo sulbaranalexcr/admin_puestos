@@ -1,0 +1,93 @@
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Cierres Api por Hipodromos</h3>
+        </div>
+
+        <div class="box-body">
+          <div class="box-body">
+            <div class="col-sm-12">
+              <table id="user_index" class="table table-bordered table-striped dataTable" role="grid">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Cierre/Api</th>
+                  </tr>
+                </thead>
+
+                <tbody id="cuerpo_hipodromos">
+                  <% @hipodromos.each do |hipodromo| %>
+                    <tr>
+                      <td> <%= hipodromo.nombre_largo.to_s.strip %> </td>
+                      <td>
+                        <input type="checkbox" id="activo_<%= hipodromo.id %>" <%= hipodromo.cierre_api? ? 'checked' : '' %> />
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+
+              </table>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="box-footer">
+          <input type="button" class="btn btn-danger" value="Quitar Todo" onclick="cambiar_todo(false)">
+          <input type="button" class="btn btn-warning" value="Seleccionar Todo" onclick="cambiar_todo(true)">
+          <input type="button" class="btn btn-success" value="Aceptar Cambios" onclick="send_data()">
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+<script>
+function cambiar_todo(valor){
+  $( "input[id*='activo_']" ).each(function() {
+    this.checked = valor
+  });
+  send_data()
+}
+function send_data(){
+    datos = [] ;
+  $( "input[id*='activo_']" ).each(function() {
+    datos.push({ id: this.id.split('_')[1], cierre: this.checked });
+  });
+  const inputOptions = new Promise((resolve) => {
+    setTimeout(() => {
+      }, 1000)
+  })
+  Swal.fire({ title: 'Espere, enviando datos...',
+    input: 'radio',
+    inputOptions: inputOptions,
+    inputValidator: (value) => {
+    }
+  })
+    axios({
+        method: 'POST',
+        url: '/hipodromos/update_cierres',
+        data: { data: datos },
+    })
+    .then(function (response) {
+        if (response.status == 200){
+          Swal.close()
+          Swal.fire('Completado', 'Datos almacenado.', 'success' )
+        }else{
+            Swal.close();
+            Swal.fire(
+                'Error',
+                'Error del sistema',
+                'error'
+            )
+
+        }
+    })
+    .catch(function (error) {
+        swal.close();
+    });
+  }
+</script>

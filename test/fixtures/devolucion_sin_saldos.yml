@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  usuarios_taquilla: one
+  carrera: one
+  monto: 9.99
+
+two:
+  usuarios_taquilla: two
+  carrera: two
+  monto: 9.99

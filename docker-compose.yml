@@ -1,0 +1,53 @@
+version: "2"
+
+volumes:
+  db_prod: {}
+services:
+  sidekiq:
+    build:
+      context: .
+    command: bundle exec sidekiq
+    environment:
+      TZ: "America/Caracas"
+      redis_host:  '10.0.4.2'
+      postgres_host: '10.0.4.1'
+    container_name: puestos_sidekiq
+  reloj:
+    build:
+      context: .
+    command: ruby reloj.rb
+    environment:
+      TZ: "America/Caracas"
+      redis_host:  '10.0.4.2'
+      postgres_host: '10.0.4.1'
+    container_name: puestos_reloj
+  cargaapi:
+    build:
+      context: .
+    command: ruby apijson_caballos_royal.rb
+    environment:
+      TZ: "America/Caracas"
+      redis_host:  '10.0.4.2'
+      postgres_host: '10.0.4.1'
+    container_name: puestos_carga_api
+  premiar:
+    build:
+      context: .
+    command: ruby premiacion.rb
+    environment:
+      TZ: "America/Caracas"
+      redis_host:  '10.0.4.2'
+      postgres_host: '10.0.4.1'
+    container_name: puestos_premiacion
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      TZ: "America/Caracas"
+      RAILS_ENV: development
+      redis_host:  '10.0.4.2'
+      postgres_host: '10.0.4.1'
+    ports:
+      - "4000:4000"
+    container_name: puestos_admin

@@ -1,0 +1,6 @@
+<label for="hipodromo_tipo">Liga</label>
+<select size=1 class="form-control" placeholder="Tipo"  name="liga_id" id="liga_id" >
+<%for liga in @ligas%>
+  <option value="<%= liga.liga_id %>"  <%= @match.liga_id == liga.liga_id ? "selected":"" %>><%= liga.nombre %></option>
+<%end%>
+</select>

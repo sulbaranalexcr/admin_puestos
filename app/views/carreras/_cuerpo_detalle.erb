@@ -1,0 +1,7 @@
+<% @caballos.each do |cab| %>
+    <tr>
+    <td> <%= cab.numero_puesto%> </td>
+    <td> <%= cab.nombre %> </td>
+    <td> <%= cab.retirado ? "SI":"NO" %> </td>
+    </tr>
+<% end %>

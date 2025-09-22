@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  usuario_premia: 1
+  hipodromo_id: 1
+  jornada_id: 1
+  carrera_id: 1
+  caballos: MyText
+  repremio: false
+
+two:
+  usuario_premia: 1
+  hipodromo_id: 1
+  jornada_id: 1
+  carrera_id: 1
+  caballos: MyText
+  repremio: false

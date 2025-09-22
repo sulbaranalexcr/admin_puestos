@@ -1,0 +1,40 @@
+<div class="form-group">
+  <label for="hipodromo_tipo">Deporte</label>
+  <select size=1 class="form-control" name="liga[juego_id]" id="liga_juego_id" style = 'width: 40%'/>
+  <%for deporte in Juego.all.order(:juego_id)%>
+     <option value="<%= deporte.juego_id %>"><%= deporte.juego_id %>-<%= deporte.nombre %></option>
+  <%end%>
+ </select>
+</div>
+
+
+
+<div class="form-group">
+  <%= f.label 'Liga ID' %>
+  <%= f.text_field :liga_id, class: "form-control", style: 'width: 20%', required: true%>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+
+<div class="form-group">
+  <%= f.label 'Nombre' %>
+  <%= f.text_field :nombre, class: "form-control", placeholder: "Ingrese nombre de liga", required: true %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+
+<div class="card col-xs-2" style="margin-left: -10px;">
+   <ul class="list-group list-group-flush">
+     <li class="list-group-item" style="height: 40px;" >
+         <label style="color: black;font-family: 'Arial', Gadget, sans-serif;font-size: 11px;">Activo</label>
+         <label class="switch ">  <input type="checkbox" id="radio" name="radio_activo" <%= @liga.activo ? 'checked': ''%> class="success hipos btn-sm"> <span class="slider round"></span> </label>
+     </li>
+   </ul>
+ </div>
+
+
+<%  if flash[:notice] %>
+    <script>
+    swal({title: "Lo siento", text: "Ya existe una liga con esos dstos !",icon: "error", button: "Aceptar"});
+    </script>
+<% end %>

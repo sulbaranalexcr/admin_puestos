@@ -1,0 +1,11 @@
+<select size=1 class="form-control" placeholder="Tipo"  name="ligas" id="ligas"  onchange="verificar_liga(this.value);">
+  <option value="0" >Seleccione Liga </option>
+  <%for liga in @ligas%>
+      <option value="<%= liga.liga_id%>" ><%= liga.nombre%> </option>
+  <%end%>
+</select>
+<div id="div_ligas_sin">
+  <%for lig in @ligas_sin%>
+    <p><%= lig %></p>
+  <%end%>
+</div>

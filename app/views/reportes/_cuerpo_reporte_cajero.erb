@@ -1,0 +1,111 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body">
+        <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+          <div class="row">
+            <div class="col-sm-12">
+              <table id="user_index" class="table table-bordered table-striped dataTable" role="grid">
+                <thead>
+                  <tr>
+                    <th>Usuario</th>
+                    <th>Transaction ID</th>
+                    <th>Reference ID</th>
+                    <th>Amount</th>
+                    <th>Pay Amount</th>
+                    <th>Win/Loser</th>
+                    <th>Details</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <% @datos.each do |repo| %>
+                  <tr>
+                    <td colspan="12">
+                      <label style="font-weight: bold;"> Tipo:  <%= tipo_reporte_cajero(repo.tipo) %> (<%= repo.created_at.strftime("%I:%M %p") %> )</label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="12">
+                      <label style="font-weight: bold;"> Enviado Ganadores</label>
+                    </td>
+                  </tr>
+                  <% for rep in JSON.parse(repo.data_enviada)['users'] %>
+                    <tr>
+                      <td> <%= rep['id']%> </td>
+                      <td> <%= rep['transaction_id']%> </td>
+                      <td> <%= rep['reference_id']%> </td>
+                      <td> <%= rep['amount'].to_f.round(2)  %> </td>
+                      <td> <%= rep['pay_amount'].to_f.round(2)  %> </td>
+                      <td> <%= rep['loser'] %> </td>
+                      <td> <%= rep['details']  %> </td>
+                      <td> Enviado </td>
+                    </tr>
+                  <% end %>
+                  <tr>
+                    <td colspan="12">
+                      <label style="font-weight: bold;"> Enviado Perdedores</label>
+                    </td>
+                  </tr>
+                  <% for rep in JSON.parse(repo.data_enviada)['losers'] %>
+                    <tr>
+                      <td> <%= rep['id']%> </td>
+                      <td> <%= rep['transaction_id']%> </td>
+                      <td> <%= rep['reference_id']%> </td>
+                      <td> <%= rep['amount'].to_f.round(2)  %> </td>
+                      <td> <%= rep['pay_amount'].to_f.round(2)  %> </td>
+                      <td> <%= rep['winner'] %> </td>
+                      <td> <%= rep['details']  %> </td>
+                      <td> Enviado </td>
+                    </tr>
+                  <% end %>
+                  <tr>
+                    <td colspan="12">
+                      <label style="font-weight: bold;"> Recibido Ganadores</label>
+                    </td>
+                  </tr>
+                  <% data_recibida = JSON.parse(repo.data_recibida)['users']%>
+                  <% for rep in data_recibida %>
+                    <%if rep['status'].to_i == 400 || rep['status'].to_s.upcase.include?("FAIL")%>
+                    <%color = "red"%>
+                    <%else%>
+                    <%color = "black"%>
+                    <%end%>
+                    <tr>
+                      <td style="color: <%=color%>"> <%= rep['id']%> </td>
+                      <td style="color: <%=color%>"> <%= rep['transaction_id']%> </td>
+                      <td style="color: <%=color%>"> <%= rep['reference_id']%> </td>
+                      <td style="color: <%=color%>"> <%= rep['amount'].to_f.round(2)  %> </td>
+                      <td style="color: <%=color%>"> <%= rep['play_amount'].to_f.round(2)  %> </td>
+                      <td style="color: <%=color%>"> <%= rep['loser'] %> </td>
+                      <td style="color: <%=color%>"> <%= rep['details']  %> </td>
+                      <td style="color: <%=color%>"> <%= rep['status']  %> </td>
+                    </tr>
+                  <% end %>
+                  <tr>
+                    <td colspan="12">
+                      <label style="font-weight: bold;"> Recibido Perdedores</label>
+                    </td>
+                  </tr>
+                  <%if JSON.parse(repo.data_recibida).key?('losers')%>
+                    <% for rep in JSON.parse(repo.data_recibida)['losers'] %>
+                      <tr>
+                        <td style="color: <%=color%>"> <%= rep['id']%> </td>
+                        <td style="color: <%=color%>"> <%= rep['transaction_id']%> </td>
+                        <td style="color: <%=color%>"> <%= rep['reference_id']%> </td>
+                        <td style="color: <%=color%>"> <%= rep['amount'].to_f.round(2)  %> </td>
+                        <td style="color: <%=color%>"> <%= rep['play_amount'].to_f.round(2)  %> </td>
+                        <td style="color: <%=color%>"> <%= rep['winner'] %> </td>
+                        <td style="color: <%=color%>"> <%= rep['details']  %> </td>
+                        <td style="color: <%=color%>"> <%= rep['status']  %> </td>
+                      </tr>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

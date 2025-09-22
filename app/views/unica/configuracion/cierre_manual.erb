@@ -1,0 +1,439 @@
+<%= javascript_include_tag "axios.js" %>
+<%= javascript_include_tag "swalert.js" %>
+
+<script>
+
+function remove_race_auto(id){
+  [1,2,3,4].forEach(function(tipo){ 
+    if ($("#proxima_carrera_hipodromo" + tipo + " option[value='" + id + "']").length > 0){
+      $("#boton_cerrar" + tipo).hide()
+      $("#boton_cuadrando" + tipo).hide()
+      $("#proxima_carrera_hipodromo1 option[value='" + id + "']").remove();
+    }
+  })
+}
+
+function buscar_proxima_por_hip(hip, tipo_vista){
+  axios({
+      method: 'POST',
+        url: '/unica/premiacion_puestos/buscar_proxima_hip',
+      data: {"id": hip},
+    })
+    .then(function(response) {
+      $('#proxima_carrera_hipodromo'+tipo_vista).find('option').remove().end()
+      response.data.carreras.forEach(function(carrera){
+        optionText = `Carrera ${carrera.numero_carrera.length == 1 ? '&nbsp;&nbsp;' : '' }${carrera.numero_carrera} - ${carrera.hora_carrera.substring(0, 5)}`
+        optionValue = carrera.id;
+        $('#proxima_carrera_hipodromo'+tipo_vista).append(`<option value="${optionValue}"> ${optionText} </option>`);
+      })
+      change_select(tipo_vista)
+    }
+
+  )
+  .catch(function (error) {
+      swal("Lo siento", "No hay jornadas para este hipodromo.", "error");
+  });
+
+}
+
+
+function cuadrando(tipo_vista){
+  if (Number($('#proxima_carrera_hipodromo' + tipo_vista).val()) > 0){
+      swal({
+        title: "Esta seguro de colocar en cuadrando?",
+        text: "Desea continuar?",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        closeOnClickOutside: false,
+        icon: "warning",
+         dangerMode: true,
+        buttons: {
+        confirm: "Cancelar",
+         cancel: "Aceptar",
+         },
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+        } else {
+            axios({
+                method: 'POST',
+                  url: '/unica/configuracion/cuadrar_carrera',
+                data: {
+                  "id": $('#proxima_carrera_hipodromo' + tipo_vista).val()
+                },
+              })
+              .then(function(response) {
+                swal("Listo", "Cuadrando carrera.", "success") ;
+              }
+
+            )
+            .catch(function (error) {
+              swal("Lo siento", "Ocurrio un error.", "error");
+            });
+        }
+      });
+
+  }else{
+    swal("Lo siento", "Debe seleccionar carrera.", "error");
+  }
+}
+
+
+
+function verificar_carreras(carid,car = '0'){
+  $('#caballos_div').html("");
+  $('#cantidad_caballos').val(0);
+  $('#hora_carrera').val("");
+  $('#carreras option').remove();
+  $('#boton_cerrar').show();
+  $('#boton_cuadrando').show();
+
+}
+
+
+function verificar_hora(cabid, tipo_vista){
+  $('#hora_carrera' + tipo_vista).val("");
+  $('#hora_carrera2' + tipo_vista).attr("disabled", true);
+  $('#minutos' + tipo_vista).attr("disabled", true);
+  $('#codigo_carrera' + tipo_vista).val(cabid) ;
+
+  axios({
+      method: 'POST',
+        url: '/unica/configuracion/buscar_carrera2',
+      data: {"id": cabid},
+    })
+    .then(function(response) {
+        if (response.data.status == "OK"){
+          $('#hora_carrera' + tipo_vista).val(response.data.hora)
+          $('#hora_carrera2' + tipo_vista).attr("disabled", false);
+          $('#hora_carrera2' + tipo_vista).val(response.data.hora);
+          $('#minutos' + tipo_vista).attr("disabled", false);
+
+          $("#hora_carrera2" + tipo_vista).attr({"min" :  response.data.hora});
+        }else{
+          console.log("faild");
+        }
+    }
+
+  )
+  .catch(function (error) {
+      swal("Lo siento", "Carrera no configurada.", "error");
+  });
+
+}
+
+
+function sumar(min, tipo_vista, tipo){
+  time = $('#hora_carrera' + tipo_vista).val();
+  time = time.split(/:/);
+  hora = Number(time[0]);
+  minuto = Number(time[1]);
+  minuto_nuevo = minuto + Number(min) ;
+  if (minuto_nuevo >= 60){
+    hora += 1 ;
+    minuto_nuevo -= 60;
+  }
+  if (minuto_nuevo <  10 ){
+    minuto_nuevo = "0" + minuto_nuevo ;
+  }
+  if (hora < 10){
+    hora = "0" + hora ;
+  }
+  if (Number(hora) > 24){
+      swal("Lo siento", "Hora invalida.", "error");
+  }else{
+    $('#hora_carrera2' + tipo_vista).val(hora + ":" + minuto_nuevo);
+  }
+  if (tipo == 2){
+    update_time(tipo_vista);
+  }
+}
+
+
+
+function grabar_unica(tipo_vista){
+  if ($("#hora_carrera2" + tipo_vista).val() > $("#hora_carrera" + tipo_vista).val()){
+      swal({
+        title: "Esta seguro de cambiar la hora?",
+        text: "Desea continuar?",
+        icon: "warning",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        closeOnClickOutside: false,
+         dangerMode: true,
+        buttons: {
+        confirm: "Cancelar",
+         cancel: "Aceptar",
+         },
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+        } else {
+          let id_enviar = $('#proxima_carrera_hipodromo' + tipo_vista).val()
+            axios({
+                method: 'POST',
+                  url: '/unica/configuracion/cambiar_hora',
+                data: {
+                  "id": id_enviar,
+                  "hora": $('#hora_carrera2' + tipo_vista).val(),
+                  "tipo": 'manual'
+                },
+              })
+              .then(function(response) {
+                $('#hora_carrera' + tipo_vista).val($('#hora_carrera2' + tipo_vista).val() ) ;
+                $('#minutos' + tipo_vista).val(0);
+                swal("Completo", "Datos almacenados.", "success") ;
+                $('#proxima_carrera_hipodromo'+tipo_vista).find('option').remove().end()
+                response.data.carreras.forEach(function(carrera){
+                  optionText = `Carrera ${carrera.numero_carrera.length == 1 ? '&nbsp;&nbsp;' : '' }${carrera.numero_carrera} - ${carrera.hora_carrera.substring(0, 5)}`
+                  optionValue = carrera.id;
+                  $('#proxima_carrera_hipodromo'+tipo_vista).append(`<option value="${optionValue}"> ${optionText} </option>`);
+                })
+                $('#proxima_carrera_hipodromo'+tipo_vista).val(id_enviar)
+                $('#minutos' + tipo_vista).val(0);
+                change_select(tipo_vista)
+              }
+
+            )
+            .catch(function (error) {
+              swal("Lo siento", "La nueva hora debe ser mayor a la actual.", "error");
+            });
+        }
+      });
+
+  }else{
+      swal("Lo siento", "La nueva hora debe ser mayor a la actual.", "error");
+  }
+
+
+
+}
+
+
+function update_time(tipo_vista){
+  if ($("#hora_carrera2" + tipo_vista).val() > $("#hora_carrera" + tipo_vista).val()){
+    let id_enviar = $('#proxima_carrera_hipodromo' + tipo_vista).val()
+      axios({
+          method: 'POST',
+            url: '/unica/configuracion/cambiar_hora',
+          data: {
+            "id": id_enviar,
+            "hora": $('#hora_carrera2' + tipo_vista).val(),
+            "tipo": 'manual'
+          },
+        })
+        .then(function(response) {
+          $('#hora_carrera' + tipo_vista).val($('#hora_carrera2' + tipo_vista).val() ) ;
+          $('#minutos' + tipo_vista).val(0);
+          swal("Completo", "Datos almacenados.", "success") ;
+          $('#proxima_carrera_hipodromo'+tipo_vista).find('option').remove().end()
+          response.data.carreras.forEach(function(carrera){
+            optionText = `Carrera ${carrera.numero_carrera.length == 1 ? '&nbsp;&nbsp;' : '' }${carrera.numero_carrera} - ${carrera.hora_carrera.substring(0, 5)}`
+            optionValue = carrera.id;
+            $('#proxima_carrera_hipodromo'+tipo_vista).append(`<option value="${optionValue}"> ${optionText} </option>`);
+          })
+          $('#proxima_carrera_hipodromo'+tipo_vista).val(id_enviar)
+          $('#minutos' + tipo_vista).val(0);
+          change_select(tipo_vista)
+        }
+
+      )
+      .catch(function (error) {
+        swal("Lo siento", "La nueva hora debe ser mayor a la actual.", "error");
+      });
+  }else{
+      swal("Lo siento", "La nueva hora debe ser mayor a la actual.", "error");
+  }
+}
+
+
+function cerrar_carrera_unica(tipo_vista){
+  if (Number($('#proxima_carrera_hipodromo' + tipo_vista).val()) > 0){
+      swal({
+        title: "Esta seguro de cerrar la carrera?",
+        text: "Desea continuar?",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        closeOnClickOutside: false,
+        icon: "warning",
+         dangerMode: true,
+        buttons: {
+        confirm: "Cancelar",
+         cancel: "Aceptar",
+         },
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+        } else {
+            let id_vista = $('#proxima_carrera_hipodromo' + tipo_vista).val()
+            axios({
+                method: 'POST',
+                  url: '/unica/configuracion/cerrar_carrera_manual',
+                data: {
+                  "id": id_vista
+                },
+              })
+              .then(function(response) {
+                // $('#boton_cerrar' + tipo_vista).hide();
+                // $('#boton_cuadrando' + tipo_vista).hide();
+                swal("Listo", "Carrera cerrada.", "success") ;
+                // $(`#proxima_carrera_hipodromo${tipo_vista} option[value='${id_vista}']`).remove();
+                // $('#hora_carrera' + tipo_vista).val('')
+                // $('#hora_carrera2' + tipo_vista).val('')
+                // $('#minutos' + tipo_vista).val('')
+              }
+
+            )
+            .catch(function (error) {
+              swal("Lo siento", "Ocurrio un error.", "error");
+            });
+        }
+      });
+
+  }else{
+    swal("Lo siento", "Debe seleccionar carrera.", "error");
+  }
+}
+
+
+function buscar_proxima(id, tipo_vista){
+  $('#codigo_carrera').val(id);
+  car = $('#proxima_carrera_hipodromo' + tipo_vista).val()
+  verificar_hora(car, tipo_vista);
+  $("#boton_cerrar" + tipo_vista).show()
+  $("#boton_cuadrando" + tipo_vista).show()
+}
+
+function buscar_proxima_sin_cerrar(id){
+  $('#codigo_carrera').val(id);
+  car = $('#cerradas_pendiente').val()
+  hip = $('#cerradas_pendiente option:selected').attr('data-hip')
+  jor = $('#cerradas_pendiente option:selected').attr('data-jor')
+  $('#hipodromos').val(hip);
+  activa = $('#cerradas_pendiente option:selected').data('carrera_activa') ;
+  nombre = $('#cerradas_pendiente option:selected').text() ;
+  if (activa){
+    $('#boton_cerrar_2').show() ;
+  }else{
+    $('#boton_cerrar_2').hide() ;
+  }
+}
+
+</script>
+
+<form>
+<div class="row">
+<div class="col-xs-12">
+  <div class="box">
+
+    <div class="box-header">
+      <h3 class="box-title">Cierre Manual de Carreras</h3>
+    </div>
+    <div class="form-group" style="display: flex; flex-wrap: wrap; width: 100%; margin-left: 5px">
+      <div class="module-container">
+        <%= render partial: 'module', locals: { tipo_vista: 1 }%>
+      </div>
+      <div class="module-container">
+        <%= render partial: 'module', locals: { tipo_vista: 2 }%>
+      </div>
+      <div class="module-container">
+        <%= render partial: 'module', locals: { tipo_vista: 3 }%>
+      </div>
+      <div class="module-container">
+        <%= render partial: 'module', locals: { tipo_vista: 4 }%>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<input type="hidden" name="carrera_hidden" id="carrera_hidden" />
+</form>
+<script>
+  window.boton_check() ;
+  $('#fecha').val("<%= Time.now.strftime('%Y-%m-%d')%>");
+
+  // Mapa para almacenar intervalos por cada tipo_vista
+  const carreraTimers = {};
+
+  function change_select(tipo_vista) {
+    const selectId = 'proxima_carrera_hipodromo' + tipo_vista;
+    const select = document.getElementById(selectId);
+    const options = select.options;
+
+    // Si ya había un timer para este select, lo limpiamos
+    if (carreraTimers[tipo_vista]) {
+      clearInterval(carreraTimers[tipo_vista]);
+    }
+
+    // Guardar texto original (si no está ya guardado)
+    for (let i = 0; i < options.length; i++) {
+      const option = options[i];
+      if (!option.dataset.original) {
+        option.dataset.original = option.textContent;
+      }
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+
+      for (let i = 0; i < options.length; i++) {
+        const option = options[i];
+        const original = option.dataset.original;
+
+        const match = original.match(/(\d{2}):(\d{2})/);
+        if (!match) continue;
+
+        const hour = parseInt(match[1], 10);
+        const minute = parseInt(match[2], 10);
+
+        const carreraTime = new Date(now);
+        carreraTime.setHours(hour, minute, 0, 0);
+
+        if (carreraTime < now) {
+          carreraTime.setDate(carreraTime.getDate() + 1);
+        }
+
+        const diffMs = carreraTime - now;
+
+        if (diffMs > 0) {
+          const diffMin = Math.floor(diffMs / 60000);
+          const diffSec = Math.floor((diffMs % 60000) / 1000);
+          option.textContent = `${original} - ${diffMin} min ${diffSec} seg`;
+        } else {
+          option.textContent = `${original} - cerrada`;
+        }
+      }
+    }
+
+    updateCountdown();
+
+    // Guardamos el nuevo intervalo solo para este tipo_vista
+    carreraTimers[tipo_vista] = setInterval(updateCountdown, 1000);
+  }
+
+
+  function eliminarOptionPorValor(valor) {
+    for (let x = 1; x < 5; x++) {
+
+      let select = document.getElementById('proxima_carrera_hipodromo' + x);
+      let options = select.options;
+
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].value === valor) {
+          select.remove(i);
+          $('#boton_cerrar' + x).hide();
+          $('#boton_cuadrando' + x).hide();
+          $('#hora_carrera' + x).val('')
+          $('#hora_carrera2' + x).val('')
+          $('#minutos' + x).val('')
+          break; // Salimos porque ya lo eliminamos
+        }
+      }
+    }
+  }
+  window.boton_check() ;
+  $(".hip_bus").select2({
+    matcher: select_con_busqueda
+  });
+
+</script>

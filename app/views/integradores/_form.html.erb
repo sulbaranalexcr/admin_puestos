@@ -1,0 +1,46 @@
+
+
+<div class="form-group">
+  <%= f.label 'Nombre' %>
+  <%= f.text_field :nombre, class: "form-control", style: 'width: 50%' %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+
+</div>
+
+
+<div class="form-group">
+  <%= f.label 'Representante' %>
+  <%= f.text_field :representante, class: "form-control", style: 'width: 50%' %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+<div class="form-group">
+  <%= f.label 'Telefono' %>
+  <%= f.text_field :telefono, class: "form-control", style: 'width: 50%' %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+
+<div class="form-group">
+  <label for="grupo_id">Grupo</label>
+  <select size=1 class="form-control" placeholder="Grupo"  name="integrador[grupo_id]" id="integrador_grupo_id" style="width: 50%;"/>
+    <%for grupo in Grupo.all.order(:nombre)%>
+    <option value="<%= grupo.id %>"><%= grupo.nombre %></option>
+  <%end%>
+</select>
+</div>
+
+
+<div class="form-group">
+  <%= f.label 'Activo' %>
+  <%= f.check_box :activo, {}%>
+</div>
+
+<div class="form-group">
+  <%= f.label 'Usa Cajero Propio?' %>
+  <%= f.check_box :usa_cajero_externo, {}%>
+</div>
+
+
+
+

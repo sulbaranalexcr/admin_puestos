@@ -1,0 +1,69 @@
+<div class="row">
+  <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Listado de Tasas</h3>
+        </div>
+
+        <div class="box-body">
+          <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+            <div class="row">
+              <div class="col-sm-12">
+                <form accept-charset="UTF-8" id="form" action="/tasas_cambio" method="get">
+                  <select class="form-control"  name="tipo" style="font-weight: bold;" onChange="cambiar_moneda(this.value)">
+                    <option value="1" <%= @tipo == "1" ? 'selected' : ''%>> Invidual por Agente/Moneda</option>
+                    <option value="2" <%= @tipo == "2" ? 'selected' : ''%>> General por Moneda</option>
+                  </select>
+                </form>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <table id="user_index" class="table table-bordered table-striped dataTable" role="grid">
+                  <thead>
+                    <tr>
+                      <th>Moneda</th>
+                      <th>Factor Cambio</th>
+                      <th>Accion</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @monedas.each do |moneda| %>
+                      <tr>
+                        <td> <strong><%= moneda.abreviatura %></strong> <%= " (" + moneda.nombre + ")" %> </td>
+                        <td> <strong><%= moneda.ultimo_cambio %></strong> <%= " (" + moneda.nombre + ")" %> </td>
+                        <td>
+                          <div class="btn-row">
+                            <%= link_to raw('<i class="fa fa-cogs"></i>'), tasas_cambio_edit_by_group_url(moneda.id), class: 'btn btn-sm btn-warning' %>
+                          </div>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+    </div>
+  </div>
+</div>
+<%if FactorCambio.where(cobrador_id: session[:usuario_actual]['cobrador_id']).length == 0%>
+  <div class="row">
+    <div class="col-md-2 col-md-offset-10">
+      <%= link_to 'Nueva Tasa', new_factor_cambio_path, class: 'btn btn-success pull-right' %>
+    </div>
+  </div>
+<%end%>
+
+<script>
+  function cambiar_moneda(tipo){
+    console.log('si');
+    document.getElementById("form").submit();
+  }
+</script>

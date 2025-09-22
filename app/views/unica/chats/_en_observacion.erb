@@ -1,0 +1,24 @@
+<table id="recargas_index" class="table table-bordered table-striped dataTable" role="grid">
+  <thead>
+    <tr>
+      <th style="text-align: left;width: 20%;background-color: #D5DBDB"> Usuario </th>
+      <th style="text-align: left;width: 10%;background-color: #D5DBDB"> Hora </th>
+      <th style="text-align: left;width: 50%;background-color: #D5DBDB"> Mensaje </th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @chats.each do |chat| %>
+    <tr>
+      <td style="cursor: zoom-in;font-weight: bold;line-height:20pt;font-size: 14px;">
+        <%= chat['message']['data']['user'] %> - <%= chat['message']['data']['internal_id'] ? chat['message']['data']['internal_id'] : '' %>
+      </td>
+      <td style="cursor: zoom-in;font-weight: bold;line-height:20pt;font-size: 14px;">
+        <%= chat['message']['data']['time'] %>
+      </td>
+      <td style="cursor: zoom-in;font-weight: bold;line-height:20pt;font-size: 14px;">
+        <%= chat['message']['data']['msg'] %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

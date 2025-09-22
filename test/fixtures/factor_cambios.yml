@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  moneda_id: 1
+  grupo_id: 1
+  valor_dolar: 1.5
+
+two:
+  moneda_id: 1
+  grupo_id: 1
+  valor_dolar: 1.5

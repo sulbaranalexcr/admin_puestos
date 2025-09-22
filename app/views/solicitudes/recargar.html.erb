@@ -1,0 +1,140 @@
+<script>
+
+function mostrar_imagen(id){
+    if (Number(id) > 0){
+      $.ajax({
+        type : "POST",
+        url : '/solicitudes/mostrar_imagen',
+        data : {
+          id: id
+        },
+        success : function(request) {
+          window.tasa_cambio =  request.tasa;
+          window.monto_cambio =  request.monto_cambio;
+          window.simbolo_original =  request.simbolo;
+          window.monto_original =  numeral(request.monto_original).format("0,0.00") ;
+          $('#img_prev').show();
+          $('#img_prev').attr('src',"http://unpuesto.com"+request.archivo);
+          $('#detalle').val(window.simbolo_original + " " + window.monto_original + " Tasa de cambio: (" + window.tasa_cambio + " " + window.simbolo_original + " x 1 USD) Total Recarga: USD "  + numeral(window.monto_cambio).format("0,0.00") );
+        },
+        error : function(request) {
+          $('#img_prev').hide();
+          window.tasa_cambio =  request.responseJSON.tasa;
+          window.monto_cambio =  request.responseJSON.monto_cambio;
+          window.simbolo_original =  request.responseJSON.simbolo;
+          window.monto_original =  numeral(request.responseJSON.monto_original).format("0,0.00") ;
+          $('#detalle').val(window.simbolo_original + " " + window.monto_original + " Tasa de cambio: (" + window.tasa_cambio + " " + window.simbolo_original + " x 1 USD) Total Recarga: USD "  + numeral(window.monto_cambio).format("0,0.00") );
+        }
+      });
+    }else{
+       $('#img_prev').hide();
+    }
+
+}
+
+function procesar(){
+  detalle = $('#detalle').val();
+  id_solicitud = $('#solicitud').val();
+  if (Number(id_solicitud > 0)){
+      swal({
+           title: "Se recargaran: " + numeral(window.monto_cambio).format("0.00") + " USD, a una tasa de: " + numeral(window.tasa_cambio).format("0.00") ,
+           text:   $('#solicitud Option:selected').text() + ", Verifique y pulse 'Aceptar' para confirmar.",
+           icon: "warning",
+           buttons: {
+             confirm: "Aceptar",
+              cancel: "Cancelar",
+            },
+         }).then((aceptar) => {
+           if (aceptar || aceptar == ""){
+             $.ajax({
+               type : "POST",
+               url : '/solicitudes/procesar_recarga',
+               data : {
+                 id: id_solicitud,
+                 detalle: detalle,
+                 status: $('#estado_proceso').val()
+               },
+               success : function(request) {
+                  swal("Procesada", "Recarga procesada con exito.", "success").then((aceptar) => {
+                    window.location.href = "/solicitudes/recargas?id=" + request.id
+                  });
+               },
+               error : function(request) {
+                  swal("No Procesada", request.responseJSON.msg, "error").then((aceptar) => {
+
+                  });
+               }
+
+             });
+
+         }else{
+           }
+
+         });
+  }else{
+    swal("Error", "Debe seleccionar una recarga.", "error");
+  }
+
+
+}
+
+</script>
+<form>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Recargando Saldo</h3>
+        </div>
+
+        <div class="box-body">
+          <div class="form-group">
+            <label> Nombre </label>
+            <input type="text" name="nombre" value="<%= @usuario.nombre %>" class="form-control"  style='width: 50%' readonly/>
+          </div>
+
+
+          <div class="form-group">
+            <label> Alias </label>
+            <input type="text" name="alias"  value="<%= @usuario.alias %>" class="form-control"  style='width: 50%' readonly/>
+          </div>
+
+
+          <div class="form-group">
+            <label for="grupo_id">Solicitud</label>
+            <select size=1 class="form-control" placeholder="Solicitud"  name="solicitud" id="solicitud" style="width: 50%;" onchange="mostrar_imagen(this.value);">
+              <option value="0">Seleccion Recarga</option>
+              <%for solicitud in @solicitudes%>
+              <option value="<%= solicitud.id %>" > <%= (solicitud.cuentas_banca.moneda_banco ) %> <%=  number_with_precision(solicitud.monto, precision: 2, separator: '.', delimiter: ',') %>  Cuenta: <%= solicitud.cuentas_banca.nombre_banco %> <%= solicitud.cuentas_banca.numero_cuenta %> Referencia: <%= solicitud.numero_operacion%>  Solicitado: (<%= solicitud.fecha_deposito.strftime('%d/%m/%Y %I:%M %p') %>)</option>
+            <%end%>
+          </select>
+          </div>
+
+          <div class="form-group">
+            <label for="grupo_id">Imagen</label>
+            <img src="#" id="img_prev" style="width: 50%;height: 50%;display: none;"/>
+          </div>
+
+          <div class="form-group">
+            <label for="grupo_id">Estatus</label>
+            <select size=1 class="form-control" name="estado_proceso" id="estado_proceso" style="width: 50%;" />
+              <option value="2">Procesado</option>
+              <option value="3">Rechazado</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label> Detalle</label>
+            <input type="text" name="detalle" id="detalle" class="form-control"  style='width: 50%' readonly>
+          </div>
+
+        <div class="box-footer">
+          <a href="/taquillas" class='btn btn-danger' />Cancelar</a>
+          <input type="button" value='Enviar' class="btn btn-success" onclick="procesar();"/>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</form>

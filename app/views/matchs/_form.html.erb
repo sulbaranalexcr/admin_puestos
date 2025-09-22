@@ -1,0 +1,242 @@
+<%= form_for @match, url: @url, role: :form, html: { multipart: true } do |f| %>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-body">
+          <table border=0>
+            <tr>
+              <td style="width: 20%">
+                <div class="form-group">
+                  <label for="hipodromo_tipo">Deporte</label>
+                  <select size=1 class="form-control" placeholder="Tipo"  name="juego_id" id="juego_id" onchange="busca_ligas(this.value);" required>
+                    <option value="0" >Seleccione deporte</option>
+                    <%for deporte in Juego.all.order(:juego_id)%>
+                      <option value="<%= deporte.juego_id %>" ><%= deporte.nombre %></option>
+                    <%end%>
+                  </select>
+                </div>
+              </td>
+              <td style="width: 20%;">
+                <div class="form-group" id="cuerpo_liga" style="margin-left: 5%;">
+                  <label for="hipodromo_tipo">Liga</label>
+                  <select size=1 class="form-control" placeholder="Tipo"  name="liga_id" id="liga_id" />
+                </select>
+              </div>
+            </td>
+            <td style="width: 20%;">
+              <div class="form-group" style="margin-left: 5%;">
+                <label for="hipodromo_tipo">Usa Empate</label>
+                <select size=1 class="form-control" placeholder="Empate"  name="empate" id="empate" onchange="empates(this.value);"/>
+                <option value="0">No</option>
+                <option value="1">SI</option>
+              </select>
+            </div>
+          </td>
+          <td style="width: 20%;">
+            <div class="form-group" style="margin-left: 5%;">
+              <label for="alta">Usa ALta/Baja</label>
+              <select size=1 class="form-control"  name="usa_altabaja" id="usa_altabaja" onchange="usa_altaba(this.value);"/>
+              <option value="1">SI</option>
+              <option value="2">No</option>
+            </select>
+          </div>
+        </td>
+        <td style="width: 20%;">
+          <div class="form-group" style="margin-left: 5%;">
+            <%= f.label 'Hora que juega' %>
+            <input type="datetime-local" value="<%= Time.now.strftime('%Y-%m-%dT23:59')%>" id="hora" name="hora" class="form-control"  required>
+          </div>
+        </td>
+        <td style="width: 20%;">
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <div class="form-group" >
+            <%= f.label 'Equipo 1' %>
+            <input type="text" id="equipo1" name="equipo1" class="form-control" required>
+          </div>
+        </td>
+        <td>
+          <div class="form-group" style="margin-left: 5%;">
+            <%= f.label 'Equipo 2' %>
+            <input type="text" id="equipo2" name="equipo2" class="form-control" required>
+          </div>
+        </td>
+        <td>
+          <div class="form-group empate" style="margin-left: 5%;display: none;">
+            <%= f.label 'Empate' %>
+            <input type="text" readonly value="DRAW">
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width: 20%;display: none;" class="td_match">
+        </td>
+        <td style="width: 20%;display: none;" class="td_match">
+          <div class="form-group" class="match_manual">
+            <label for="match">Id Equipo 1</label>
+            <input type="number" id="match_manual1" name="match_manual1" class="form-control"  required value="<%= @match_nuevo1%>">
+            <input type="hidden" id="match_manual" name="match_manual" class="form-control"  required value="<%= @match_nuevo%>">
+          </div>
+        </td>
+        <td style="width: 20%;display: none;" class="td_match">
+          <div class="form-group" style="margin-left: 5%; class="match_manual">
+            <label for="match">Id Equipo 2</label>
+            <input type="number" id="match_manual2" name="match_manual2" class="form-control"  required value="<%= @match_nuevo2%>">
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <%= f.label 'Money Line' %>
+        </td>
+        <td>
+          <div class="form-group" >
+            <%= f.label 'Logro us' %>
+            <input type="number" id="moneyline3" name="moneyline3" class="form-control"  required>
+          </div>
+        </td>
+        <td>
+          <div class="form-group" style="margin-left: 5%;">
+            <%= f.label 'Logro us' %>
+            <input type="number" id="moneyline3" name="moneyline23" class="form-control"  required>
+          </div>
+        </td>
+        <td>
+          <div class="form-group empate" style="margin-left: 5%;display: none;">
+            <%= f.label 'Logro us' %>
+            <input type="number" id="emoneyline3" name="emoneyline3" class="form-control" >
+          </div>
+        </td>
+      </tr>
+      <tr class="empate2">
+        <td>
+          <%= f.label 'Run Line/Spread' %>
+        </td>
+        <td>
+          <div class="form-group" >
+            <%= f.label 'Logro us' %>
+            <input type="number"  id="runline3" name="runline3" class="form-control"  >
+          </div>
+        </td>
+        <td>
+          <div class="form-group" style="margin-left: 5%;">
+            <%= f.label 'Logro us' %>
+            <input type="number" id="runline23" name="runline23" class="form-control"  >
+          </div>
+        </td>
+      </tr>
+      <tr class="empate2">
+        <td>
+        </td>
+        <td>
+          <div class="form-group" >
+            <%= f.label 'Dadas' %>
+            <input type="number" step="0.01" id="dadas1" name="dadas1" class="form-control" onkeyup="mostrar_runline(this.value);" >
+          </div>
+        </td>
+        <td>
+          <div class="form-group" style="margin-left: 5%;">
+            <%= f.label 'Dadas' %>
+            <input type="number" step="0.01" id="dadas2" name="dadas2" class="form-control" readonly="true" >
+          </div>
+        </td>
+      </tr>
+      <tr class="usar_altabaja">
+        <td>
+          <%= f.label 'Alta/Baja' %>
+        </td>
+        <td>
+          <div class="form-group" >
+            <%= f.label 'Alta/Logro' %>
+            <input type="number" id="altabaja3" name="altabaja3" class="form-control"  >
+          </div>
+        </td>
+        <td>
+          <div class="form-group" style="margin-left: 5%;">
+            <%= f.label 'Baja/Logro' %>
+            <input type="number" id="altabaja23" name="altabaja23" class="form-control"  >
+          </div>
+        </td>
+      </tr>
+      <tr class="usar_altabaja">
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+          <div class="form-group" style="margin-left: 5%;">
+            <%= f.label 'Total' %>
+            <input type="number" min="2" step="0.50" id="dadas21" name="dadas21" class="form-control" >
+          </div>
+        </td>
+        <td>
+          <div class="form-group" style="margin-left: 5%;">
+            <%= f.label 'Se muestra en proximos?' %>
+            <input type="checkbox" id="show_next" name="show_next">
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+</div>
+</div>
+<% end %>
+<script>
+  function busca_ligas(equipo){
+    $('.td_match').hide();
+    if (equipo != "0"){
+        axios({
+          method: 'POST',
+          url: '/matchs/buscar_liga',
+          data: {"id": equipo},
+        })
+        .then(function(response) {
+          $('#cuerpo_liga').html(response.data);
+          if (equipo == "12"){
+            $('.td_match').hide();
+            $('#empate').val("1");
+              $('#empate').change();
+            }else{
+              $('.td_match').show();
+              $('#empate').val("0");
+              $('#empate').change();
+          }
+        }
+
+      )
+    }
+
+
+
+  }
+
+
+  function empates(id){
+    if (id == "1"){
+      $(".empate").show();
+      $(".empate2").hide();
+    }else{
+      $(".empate").hide();
+      $(".empate2").show();
+    }
+  }
+
+
+  function usa_altaba(id){
+    if (id == "1"){
+      $(".usar_altabaja").show();
+    }else{
+      $(".usar_altabaja").hide();
+    }
+  }
+
+
+  function mostrar_runline(num){
+     $('#dadas2').val($('#dadas1').val() * -1 ) ;
+  }
+</script>

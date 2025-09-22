@@ -1,0 +1,2 @@
+class CarrerasIdsNyra < ApplicationRecord
+end

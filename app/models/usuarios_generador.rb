@@ -1,0 +1,2 @@
+class UsuariosGenerador < ApplicationRecord
+end

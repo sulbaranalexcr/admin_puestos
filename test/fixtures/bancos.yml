@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  banco_id: MyString
+  nombre: MyString
+  moneda: 1
+
+two:
+  banco_id: MyString
+  nombre: MyString
+  moneda: 1

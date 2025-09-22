@@ -1,0 +1,107 @@
+<%= form_for @taquilla, url: @url, role: :form, html: { multipart: true } do |f| %>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Editando Usuario Taquilla</h3>
+        </div>
+
+        <div class="box-body">
+          <div class="form-group">
+            <%= f.label 'Nombre' %>
+            <%= f.text_field :nombre, class: "form-control", style: 'width: 50%' %>
+          </div>
+
+
+          <div class="form-group">
+            <%= f.label 'Alias' %>
+            <%= f.text_field :alias, class: "form-control", style: 'width: 50%' %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label 'Clave' %>
+            <%= f.text_field :clave, class: "form-control", style: 'width: 200%' %>
+            <span class="help-block"><i>* Este campo es requerido</i><span>
+          </div>
+
+          <div class="form-group">
+            <%= f.label 'Telefono' %>
+            <%= f.text_field :telefono, class: "form-control", style: 'width: 50%' %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label 'E-mail' %>
+            <%= f.email_field :correo, class: "form-control", style: 'width: 50%' %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label 'Saldo Bolivares' %>
+            <%= f.number_field :saldo_bs, class: "form-control", style: 'width: 50%',  disabled: true%>
+          </div>
+
+          <div class="form-group">
+            <%= f.label 'Saldo Dolares' %>
+            <%= f.number_field :saldo_usd, class: "form-control", style: 'width: 50%', disabled: true %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label 'Comision' %>
+            <%= f.number_field :comision, class: "form-control", style: 'width: 50%' %>
+          </div>
+
+          <div class="form-group">
+            <label for="grupo_id">Grupo</label>
+            <select size=1 class="form-control" placeholder="Grupo"  name="usuarios_taquilla[grupo_id]" id="usuarios_taquilla_grupo_id" style="width: 50%;" readonly/>
+              <%for grupo in Grupo.where(id: session[:usuario_actual]['grupo_id'])%>
+              <option value="<%= grupo.id %>" <%= grupo.id.to_i == @taquilla.grupo_id.to_i ? "selected":""%>><%= grupo.nombre %></option>
+            <%end%>
+          </select>
+          </div>
+
+          <div class="form-group">
+            <label for="grupo_id">Moneda Preferida</label>
+            <select size=1 class="form-control" placeholder="Grupo"  name="usuarios_taquilla[moneda_default]" id="usuarios_taquilla_moneda_default" style="width: 50%;"/>
+            <option value="1" <%= @taquilla.moneda_default.to_i == 1 ? "selected":""%>>BsS.</option>
+            <option value="2" <%= @taquilla.moneda_default.to_i == 2 ? "selected":""%>>USD</option>
+          </select>
+          </div>
+
+
+                    <div class="form-group">
+                      <%= f.label 'Monto minimo de jugada BsS.' %>
+                      <%= f.number_field :jugada_minima_bs, class: "form-control", style: 'width: 50%' %>
+                    </div>
+
+                    <div class="form-group">
+                      <%= f.label 'Monto miaximo de jugada BsS.' %>
+                      <%= f.number_field :jugada_maxima_bs, class: "form-control", style: 'width: 50%' %>
+                    </div>
+                    <div class="form-group">
+                      <%= f.label 'Monto minimo de jugada USD' %>
+                      <%= f.number_field :jugada_minima_usd, class: "form-control", style: 'width: 50%' %>
+                    </div>
+
+                    <div class="form-group">
+                      <%= f.label 'Monto miaximo de jugada USD' %>
+                      <%= f.number_field :jugada_maxima_usd, class: "form-control", style: 'width: 50%' %>
+                    </div>
+
+
+          <div class="form-group">
+            <%= f.label 'Activo' %>
+            <%= f.check_box :activo, {}%>
+          </div>
+
+
+        </div>
+
+        <div class="box-footer">
+          <%= link_to 'Cancelar', '/taquilla_grupos', class: 'btn btn-danger' %>
+          <%= f.submit 'Enviar', class: "btn btn-success" %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+<% end %>

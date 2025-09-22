@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  grupo: one
+  moneda_id: 1
+  tasa_unidad: 1.5
+  activa: false
+
+two:
+  grupo: two
+  moneda_id: 1
+  tasa_unidad: 1.5
+  activa: false

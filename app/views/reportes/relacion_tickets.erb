@@ -1,0 +1,200 @@
+<%= javascript_include_tag "axios.js" %>
+<script>
+function consultar(){
+   if ($('#taquilla').val() == "0" && $("input[name='tipo_busqueda']:checked").val() == "1"){
+          swal("Lo siento", "Debe seleccionar una taquilla.", "error");
+          return ;
+   }
+      axios({
+          method: 'POST',
+            url: '/reportes/relacion_tickets_detalle',
+          data: {
+                 "desde": $('#desde').val(),
+                 "hasta": $('#hasta').val(),
+                 "taquilla_id": $('#taquilla').val(),
+                 "tipo": $("input[name='tipo_busqueda']:checked").val(),
+                 "t_id": $('#buscar_ticket').val()
+                },
+        })
+        .then(function(response) {
+            if ($("input[name='tipo_busqueda']:checked").val() == "1" ){
+              $('#cuerpo_div').html(response.data);
+            }else{
+              mostrar(2, response.data.data, response.data.hora, response.data.nombre);
+            }
+         }
+
+      )
+      .catch(function (error) {
+          swal("Lo siento", error.response.data.mensaje, "error");
+      });
+
+   
+}
+
+
+
+
+
+</script>
+
+<form>
+<div class="row">
+<div class="col-xs-12">
+  <div class="box">
+
+    <div class="box-header">
+      <h3 class="box-title">Relacion de Tickets</h3>
+    </div>
+    <div class="form-group">
+      <div class="container">
+        <div class="box">
+            <div class="form-group">
+                <label for="desde_fecha">Desde</label>
+                <input type="date" class="form-control" id="desde" name="desde" required="true" value="<%= Time.now.strftime('%Y/%m/%d') %>">
+            </div>
+            <div class="form-group">
+                <label for="hasta_fecha">Hasta</label>
+                <input type="date" class="form-control" id="hasta" name="hasta" required="true" value="<%= Time.now.strftime('%Y/%m/%d') %>">
+            </div>
+        </div>
+        <div id="td_busqueda" class="box">
+            <div class="form-group">
+              <label  style="margin-left: 10px;">
+                <input type="radio" checked name="tipo_busqueda" value="1" onchange="cambiar_busqueda(1);"> Por taquilla
+                <input type="radio" name="tipo_busqueda"  value="2" onchange="cambiar_busqueda(2);"> Por ticket</label><br>
+              <div class="form-group" style="margin-left: 10px;" id="div_busca">
+                <select class="form-control" size=1 id="taquilla">
+                  <option value="0" >Seleccione Taquilla</option>
+                  <%for taq in @taquillas%>
+                    <option data-tokens="<%=taq.id%>" value="<%=taq.id%>"><%= taq.alias%> (<%= taq.nombre%>) </option>
+                  <%end%>
+                </select>
+              </div>
+              <input type="number" style="display: none;width: 188px" id="buscar_ticket"  name="buscar_ticket" placeholder="Ingrese ticket" class="form-control">
+            </div>
+        </div>
+        <div class="box-footer">
+            <input type="button" value="Aceptar" class="btn btn-success" onclick="consultar()">
+        </div>
+      </div>
+
+      <div class="form-group">
+         <div id='cuerpo_div'>
+         </div>
+      </div>
+    </div>
+
+
+
+
+
+
+      <div class="form-group">
+         <div id='cuerpo_div'>
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="box">
+                  <div class="box-header">
+                      <div style="float: left;width: 20%">
+                      </div>
+                      <div style="float: left;width: 70%;margin-left: 2%;text-align: center">
+                          <p style="font-weight: bold">Detalle de ticket</p>
+                          <div id="detalle_individual" style="margin-left: 2%;text-align: left;padding-top: 10px">
+                          
+                          </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+         </div>
+      </div>
+
+
+
+    </div>
+
+
+
+  </div>
+</div>
+</div>
+</form>
+<script>
+   window.boton_check() ;
+   $('#desde').val("<%= Time.now.strftime('%Y-%m-%d')%>");
+   $('#hasta').val("<%= Time.now.strftime('%Y-%m-%d')%>");
+   $("#taquilla").select2({
+     matcher: select_con_busqueda
+   });
+
+   function cambiar_busqueda(tipo){
+
+     $('#select_busqueda').html("");
+     $('#detalle_individual').html("");
+     if (tipo == 1){
+       $('#td_busqueda').css({"margin-left":"", "padding-top":""});
+       $('#buscar_ticket').hide();
+       $('#div_busca').show();
+       $('.tr_fechas').attr("disabled", false);
+     }else{
+       $('.tr_fechas').attr("disabled", true);
+       $('#td_busqueda').css({"margin-left":"10px", "padding-top":"0px"});
+       $('#buscar_ticket').show();
+       $('#buscar_ticket').css({"margin-left":"10px", "padding-top":"0px","margin-bottom":"17px"});
+       $('#div_busca').hide()
+     }
+   }
+
+
+   function mostrar(id, data, hora, nombre){
+     tabla = '' ;
+     if (id == Number(1)){
+        let nombre2 = $("#taquilla option:selected").text() ;
+            nombre = nombre2.substring(
+            nombre2.lastIndexOf("(") + 1, 
+            nombre2.lastIndexOf(")")
+        );
+       dat = $('#numero_tickets option:selected').data("datos") ;
+       hora = $('#numero_tickets option:selected').data("hora") ;
+     }else{
+       dat = data ;
+       hora = hora ;
+     }
+     tabla +='<table id="recargas_index" class="table table-bordered table-striped dataTable" role="grid">'
+     tabla +='<thead>' ;
+     tabla +='<tr>' ;
+     tabla +='<th style="text-align: left;width: 60%;background-color: #D5DBDB">Cliente: <label style="font-weight: normal">' + nombre + '</label></th>' ;
+     tabla +='<th style="text-align: left;width: 30%;background-color: #D5DBDB">Fecha/Hora: <label style="font-weight: normal">' + hora + '</label></th>';
+     tabla +='<th style="text-align: left;width: 10%;background-color: #D5DBDB"></th>';
+     tabla +='</tr>';
+     tabla +='<tr>' ;
+     tabla +='<th style="text-align: left;width: 60%">Descripcion</th>' ;
+     tabla +='<th style="text-align: right;width: 30%">UND </th>';
+     tabla +='<th style="text-align: center;width: 10%">Estado </th>';
+     tabla +='</tr>';
+     tabla +='</thead>';
+     tabla +='<tbody>' ;
+     console.log(dat);
+     dat.forEach(element => {
+        tabla += '<tr>';
+        tabla +='<td class="titulo" style="cursor: zoom-in;font-weight: bold;line-height:20pt;font-size: 14px;">';
+        tabla += element[0];
+        tabla +='</td>';
+        tabla +='<td class="titulo" style="cursor: zoom-in;font-weight: bold;line-height:20pt;font-size: 14px;text-align: right">';
+        tabla += numeral(element[1]).format('0,0.00') ;
+        tabla +='</td>';
+        tabla +='<td class="titulo" style="cursor: zoom-in;font-weight: bold;line-height:20pt;font-size: 14px;text-align: center">';
+        tabla += element[2] ;
+        tabla +='</td>';
+        tabla +='</tr>';
+     });
+     tabla +='</tbody>';
+     tabla +='</table>' ;
+       $('#detalle_individual').html(tabla);
+   }
+
+</script>

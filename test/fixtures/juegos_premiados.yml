@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  match: one
+  usuarios_taquilla: one
+  propuestas_deporte: one
+  operaciones_cajero: one
+  activo: false
+  status: false
+
+two:
+  match: two
+  usuarios_taquilla: two
+  propuestas_deporte: two
+  operaciones_cajero: two
+  activo: false
+  status: false

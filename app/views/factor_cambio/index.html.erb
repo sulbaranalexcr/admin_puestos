@@ -1,0 +1,53 @@
+<div class="row">
+  <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Listado de Tasas</h3>
+        </div>
+
+        <div class="box-body">
+          <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+
+            <div class="row">
+              <div class="col-sm-12">
+                <table id="user_index" class="table table-bordered table-striped dataTable" role="grid">
+                  <thead>
+                    <tr>
+                      <th>Moneda</th>
+                      <th>Factor Cambio</th>
+                      <th>Accion</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @factor.each do |factor| %>
+                      <tr>
+                        <td> <%= factor.moneda[0] + " (" + factor.moneda[1] +")" %> </td>
+                        <td> <%= factor.valor_dolar %> </td>
+                        <td>
+                          <div class="btn-row">
+                            <%= link_to raw('<i class="fa fa-cogs"></i>'), edit_factor_cambio_url(factor.id), class: 'btn btn-sm btn-warning' %>
+                          </div>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+    </div>
+  </div>
+</div>
+<%if FactorCambio.where(cobrador_id: session[:usuario_actual]['cobrador_id']).length == 0%>
+  <div class="row">
+    <div class="col-md-2 col-md-offset-10">
+      <%= link_to 'Nueva Tasa', new_factor_cambio_path, class: 'btn btn-success pull-right' %>
+    </div>
+  </div>
+<%end%>

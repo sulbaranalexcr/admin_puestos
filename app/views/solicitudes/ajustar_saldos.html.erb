@@ -1,0 +1,104 @@
+<script>
+
+
+function procesar(id, type){
+  detalle = $('#detalle').val();
+  if (Number($('#monto').val()) > 0){
+      swal({
+           title: `Estan correctos los datos de el ${type == 1 ? "Deposito" : "Retiro"}?` ,
+           text:   "Aceptar para para confirmar.",
+           icon: "warning",
+           buttons: {
+             confirm: "Aceptar",
+              cancel: "Cancelar",
+            },
+         }).then((aceptar) => {
+           if (aceptar || aceptar == ""){
+             $.ajax({
+               type : "POST",
+               url : '/solicitudes/ajustar_monto',
+               data : {
+                 id: id,
+                 detalle: detalle,
+                 monto: $('#monto').val(),
+                 moneda: $('#moneda').val(),
+                 tipo: type
+               },
+               success : function(request) {
+                  swal("Procesada", "Ajuste procesado con exito.", "success").then((aceptar) => {
+                    window.location.href = "/cajero_taquilla"
+                  });
+               }
+             });
+
+         }else{
+           }
+
+         });
+  }else{
+    swal("Error", "Debe ingresar monto.", "error");
+  }
+
+
+}
+
+</script>
+
+
+<form>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">Ajustar Saldos</h3>
+        </div>
+        
+        <div class="box-body">
+          <div class="row">
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label> Nombre </label>
+                      <input type="text" name="nombre" value="<%= @usuario.nombre %>" class="form-control" readonly/>
+                  </div>
+              </div>
+
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label> Alias </label>
+                      <input type="text" name="alias" value="<%= @usuario.alias %>" class="form-control" readonly/>
+                  </div>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label> Monto </label>
+                      <input type="text" name="monto" id="monto" value="0" class="form-control" />
+                  </div>
+              </div>
+
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label> Detalle</label>
+                      <input type="text" name="detalle" id="detalle" class="form-control" />
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-4">
+                  <div style="font-size:1.7rem;<%= @type_operation == 1 ? 'color: #00a65a;' : 'color: #dd4b39;' %> font-weight: bold;">
+                      <label for="grupo_id">Tipo:</label>
+                      <%= @type_operation == 1 ? 'Deposito' : 'Retiro'%>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <div class="box-footer-report">
+            <a href="/cajero_taquilla" class='btn btn-danger  btn-small' >Cancelar</a>
+            <input type="button" value='Procesar' class="btn btn-success  btn-small" onclick="procesar(<%= @usuario.id %>, <%= @type_operation %>);">
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

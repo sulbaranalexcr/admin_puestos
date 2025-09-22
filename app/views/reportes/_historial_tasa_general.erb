@@ -1,0 +1,46 @@
+<table id="recargas_index" class="table table-bordered table-striped dataTable" role="grid" >
+  <thead>
+    <tr>
+      <th style="text-align: left;">Usuario</th>
+      <th style="text-align: left;">Agente</th>
+      <th style="text-align: left;">Moneda</th>
+      <th style="text-align: right;">Tasa Anterior</th>
+      <th style="text-align: right;">Tasa Actual</th>
+      <th style="text-align: center;">Fecha Proceso</th>
+      <th style="text-align: center;">Direccion IP</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%for historial in @historial%>
+      <%geo = JSON.parse(historial.geo)%>
+      <tr>
+        <td class="titulo" style="cursor: zoom-in;font-weight: bold;line-height:20pt;font-size: 11px;" data-title="<%= historial['numero_cuenta'] %> (<%= historial['tipo2'] %>)">
+          <%= historial.user.username %>
+        </td>
+
+        <td class="titulo" style="cursor: zoom-in;font-weight: bold;line-height:20pt;font-size: 11px;" data-title="<%= historial['numero_cuenta'] %> (<%= historial['tipo2'] %>)">
+          <%= historial.nombre_agente %>
+        </td>
+        
+        <td class="titulo" style="cursor: zoom-in;font-weight: bold;line-height:20pt;font-size: 11px;" data-title="<%= historial['numero_cuenta'] %> (<%= historial['tipo2'] %>)">
+          <%= historial.moneda.abreviatura %> (<%= historial.moneda.pais %>)
+        </td>
+        <td  class="titulo" style="font-weight: bold;line-height:20pt;font-size: 11px;text-align: right" data-title="<%= number_with_precision(historial['monto'], precision: 2, separator: '.', delimiter: ',') %>">
+          <%= number_with_precision(historial.tasa_anterior, precision: 2, separator: '.', delimiter: ',') %>
+        </td>
+        <td style="font-weight: bold;text-align: right;font-size: 12px;text-align: right">
+          <%= number_with_precision(historial.tasa_nueva, precision: 2, separator: '.', delimiter: ',') %>
+        </td>
+        <td style="font-weight: bold;text-align: right;font-size: 12px;text-align: center">
+          <%= historial.created_at.strftime('%d/%m/%Y %I:%M %p')%>
+        </td>
+        <td style="font-weight: bold;text-align: right;font-size: 12px;text-align: center">
+          <%= historial.ip_remota%></br>
+          <%= geo['city']%>, <%= geo['region']%>, <%= geo['country']%> <img src="https://www.countryflags.io/<%= geo['country']%>/flat/32.png">
+        </td>
+      </tr>
+      <%end%>
+  </tbody>
+
+</table>

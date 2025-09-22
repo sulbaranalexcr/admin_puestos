@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  structure: one
+  draw_type_id: 1
+  limite_terminal: 1.5
+  limite_triple: 1.5
+
+two:
+  structure: two
+  draw_type_id: 1
+  limite_terminal: 1.5
+  limite_triple: 1.5

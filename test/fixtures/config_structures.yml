@@ -1,0 +1,35 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  structure: one
+  mensaje_ticket1: MyString
+  mensaje_ticket2: MyString
+  mensaje_ticket3: MyString
+  caduca: 
+  borra_ticket: 
+  tiempo_borrar: 1
+  paga_premio: false
+  minimo_ticket: 9.99
+  borrar_sin_validar: false
+  maximo_por_ticket: 1
+  reponer_anterior: false
+  ticket_ganadores: false
+  verifica_ultimo: false
+  reimprimir_ticket: false
+
+two:
+  structure: two
+  mensaje_ticket1: MyString
+  mensaje_ticket2: MyString
+  mensaje_ticket3: MyString
+  caduca: 
+  borra_ticket: 
+  tiempo_borrar: 1
+  paga_premio: false
+  minimo_ticket: 9.99
+  borrar_sin_validar: false
+  maximo_por_ticket: 1
+  reponer_anterior: false
+  ticket_ganadores: false
+  verifica_ultimo: false
+  reimprimir_ticket: false

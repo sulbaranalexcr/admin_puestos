@@ -1,0 +1,60 @@
+<div class="row">
+  <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Listado de Equipos</h3>
+        </div>
+
+        <div class="box-body">
+          <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+
+            <div class="row">
+              <div class="col-sm-12">
+                <table id="user_index" class="table table-bordered table-striped dataTable" role="grid">
+                  <thead>
+                    <tr>
+                      <th>Equipo ID</th>
+                      <th>Liga</th>
+                      <th>Tipo Juego</th>
+                      <th>Nombre</th>
+                      <th>Nombre Largo</th>
+                      <th class="col-xs-1">Acci&oacute;n</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @equipos.each do |equipo| %>
+                      <tr>
+                        <td> <%= equipo.equipo_id %> </td>
+                        <td> <%= equipo.nombre_liga %> </td>
+                        <td> <%= equipo.nombre_deporte %> </td>
+                        <td> <%= equipo.nombre %> </td>
+                        <td> <%= equipo.nombre_largo %> </td>
+                        <td>
+                          <div class="btn-row">
+                            <%= link_to raw('<i class="fa fa-cogs"></i>'), edit_equipo_url(equipo), class: 'btn btn-sm btn-warning' %>
+                            <%= link_to raw('<i class="fa fa-trash"></i>'), equipo_url(equipo), class: 'btn btn-sm btn-danger', method: :delete,
+                                            data: { confirm: 'Esta seguro de eliminar este equipo?' } %>
+                          </div>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-2 col-md-offset-10">
+    <%= link_to 'Nueva Jornada', new_equipo_path, class: 'btn btn-success pull-right' %>
+  </div>
+</div>

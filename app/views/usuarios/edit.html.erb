@@ -1,0 +1,5 @@
+<%if session[:usuario_actual]['tipo'] == "GRP"%>
+   <%= render partial: 'usuarios/form_edit_cob'%>
+<%else%>
+   <%= render partial: 'usuarios/form_edit'%>
+<%end%>

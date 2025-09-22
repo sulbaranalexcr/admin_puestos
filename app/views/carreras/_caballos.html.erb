@@ -1,0 +1,87 @@
+
+
+
+
+
+          <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+
+            <div class="row">
+              <div class="col-sm-8 text-right">
+                <table class="table table-bordered table-striped dataTable" role="grid">
+                  <thead>
+                    <tr>
+                      <th class="col-sm-1 text-right">Nombre de Carrera</th>
+                      <th class="col-sm-2 text-left">Distancia</th>
+                      <th class="col-sm-2 text-right">Purse</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="col-sm-2 text-left"><input type="text" id="nombre_carrera" value="" class="form-control" /> </td>
+                      <td class="col-sm-2 text-left"><input type="text" id="distancia" value="" class="form-control" /> </td>
+                      <td class="col-sm-2 text-left"><input type="text" id="purse" value="" class="form-control" /> </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-sm-8 text-right">
+                <table id="caballos_enter" class="table table-bordered table-striped dataTable" role="grid">
+                  <thead>
+                    <tr>
+                      <th class="col-sm-1 text-right">Numero</th>
+                      <th class="col-sm-2 text-left">Nombre</th>
+                      <th class="col-sm-2 text-right">Retirado</th>
+                      <th class="col-sm-2 text-left">Jinete</th>
+                      <th class="col-sm-2 text-left">Entrenador</th>
+
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @caballos_array.each do |caba| %>
+                      <tr>
+                        <td class="col-sm-1 text-right"> <%= caba['numero_puesto'] %> </td>
+                        <td class="col-sm-2 text-left"><input type="text" id="numcab<%= caba['numero_puesto'] %>" value="<%= caba['nombre'] %>" class="form-control" /> </td>
+                        <td class="col-sm-1 text-right"><input type="checkbox" <%= @esupdate ? "disabled" : ""%> tabindex="-1" title="Esta opcion es delicada, usela con cuidado." data-group-cls="btn-group-sm" id="checab<%= caba['numero_puesto'] %>" <%= caba['retirado']  ? "" : "checked" %> /> </td>
+                        <td class="col-sm-2 text-left"><input type="text" id="jin<%= caba['numero_puesto'] %>" value="<%= caba['jinete'] %>" class="form-control" /> </td>
+                        <td class="col-sm-2 text-left"><input type="text" id="entre<%= caba['numero_puesto'] %>" value="<%= caba['entrenador'] %>" class="form-control" /> </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+
+          </div>
+          <div class="box-footer">
+               <input type="button" value="Aceptar" class="btn btn-success" onclick="grabar()" />
+          </div>
+
+<script>
+// $(':checkbox').checkboxpicker();
+$(':checkbox').checkboxpicker({
+  html: true,
+  offLabel: "SI",
+  onLabel: "NO"
+});
+
+
+
+if ("<%=@esupdate%>" == "true"){
+  $('#cuerpo_crear_caballos').show();
+  $('#boton_crear').hide();
+  $('#boton_modificar_caballos').show();
+  window.es_modifica = true ;
+}
+
+
+
+
+
+
+</script>

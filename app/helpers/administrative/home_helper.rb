@@ -1,0 +1,2 @@
+module Administrative::HomeHelper
+end

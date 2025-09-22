@@ -1,0 +1,114 @@
+<%= javascript_include_tag "axios.js" %>
+<style>
+  /* Para mantener la alineación en pantallas pequeñas */
+  @media (max-width: 768px) {
+    .card-header {
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .card-header > div:first-child {
+      flex-basis: 100%;
+    }
+    
+    .toggle-detalle {
+      margin-left: auto;
+    }
+  }
+
+  /* Mejor contraste para el badge */
+  .badge.bg-success {
+    background-color: #198754 !important;
+    color: white;
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+  }
+
+  /* Espaciado interno más compacto para la tarjeta */
+  .grupo-card {
+    border-radius: 0.5rem;
+  }
+  .grupo-card .card-header {
+    padding: 0.5rem 1rem;
+  }
+</style>
+<script>
+
+
+
+
+
+function consultar_reporte(){
+  swalert_espera("Espere, generando reporte...")
+  axios({
+    method: 'POST',
+    url: '/unica/reportes/cuadre_mensual_grupo',
+    data: {
+           "desde": $('#desde').val(),
+           "hasta": $('#hasta').val()
+          },
+  })
+  .then(function(response) {
+       $('#cuerpo_div').html(response.data);
+       Swal.close();
+    }
+
+)
+.catch(function (error) {
+    Swal.close();
+    swal("Lo siento", "No hay datos.", "error");
+});
+
+}
+
+</script>
+
+<form>
+<div class="row">
+<div class="col-xs-12">
+  <div class="box">
+
+    <div class="box-header">
+      <h3 class="box-title">Cuadre Mensual Clientes</h3>
+    </div>
+
+
+    <div class="form-group">
+      <table border=0>
+        <tr>
+          <td>
+            <div class="box-body">
+              <div class="form-group" style="margin-left: 10px;">
+                <label for="desde_fecha">Mes</label>
+                <input type="month" max="<%= Time.now.strftime('%Y-%m')%>" class="form-control"  id='desde' name='desde'  style= 'width: 150px;' required="true" value="<%= Time.now.strftime('%Y-%m')%>">
+              </div>
+            </div>
+          <td>
+          </td>
+          <td>
+            <div class="box-footer">
+                 <input type="button" value="Aceptar" class="btn btn-success" onclick="consultar_reporte()"/>
+            </div>
+          </td>
+        </tr>
+      </table>
+      <div class="form-group">
+         <div id='cuerpo_div'>
+         </div>
+      </div>
+
+
+
+    </div>
+
+
+
+  </div>
+</div>
+</div>
+</form>
+<script>
+   window.boton_check() ;
+   $('#desde').val("<%= Time.now.strftime('%Y-%m-%d')%>");
+   $('#hasta').val("<%= Time.now.strftime('%Y-%m-%d')%>");
+</script>

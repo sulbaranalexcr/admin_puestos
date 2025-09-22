@@ -1,0 +1,48 @@
+<%= javascript_include_tag "vue.min.js" %>
+<%= javascript_include_tag "axios.js" %>
+<%= javascript_include_tag "swalert.js" %>
+
+<script>
+
+function visualizar(){
+  axios({
+      method: 'POST',
+        url: '/unica/utilidades/preview_video',
+      data: {
+        "id": $('#video option:selected').val()
+      },
+    })
+    .then(function(response) {
+        $('#div_preview').html(response.data);
+    }
+  )
+  .catch(function (error) {
+    swal("Lo siento", "No hay ruta valida", "error");
+  });
+
+}
+
+
+</script>
+
+<form>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">Administrar mensajes del Chat</h3>
+        </div>
+        <div class="form-group">
+          <div class="box-body">
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+<%= javascript_include_tag "componente_chats.js" %>
+<%= javascript_include_tag "datos_vue_chats.js" %>

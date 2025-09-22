@@ -1,0 +1,102 @@
+<%= javascript_include_tag "axios.js" %>
+<script>
+function consultar(){
+axios({
+    method: 'POST',
+      url: '/reportes/premios_ingresados',
+    data: {
+           "desde": $('#desde').val(),
+           "hasta": $('#hasta').val(),
+           "hip_id": $('#hipodromos').val()
+          },
+  })
+  .then(function(response) {
+       $('#cuerpo_div').html(response.data);
+    }
+
+)
+.catch(function (error) {
+    swal("Lo siento", "No hay datos.", "error");
+});
+
+}
+
+
+
+function abrir(id,abrir,cerrar){
+  $('#'+id).show();
+  $('#'+abrir).hide();
+  $('#'+cerrar).show();
+}
+
+function cerrar(id,abrir,cerrar){
+  $('#'+id).hide();
+  $('#'+abrir).show();
+  $('#'+cerrar).hide();
+}
+
+
+</script>
+
+<form>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">Premios Ingresados</h3>
+        </div>
+        <div class="form-group">
+          <div class="container" style="width: 100%;">
+            <div class="row">
+              <div class="col-md-2">
+                <div class="box">
+                  <div class="form-group">
+                    <label for="desde_fecha">Desde</label>
+                    <input type="date" class="form-control" id="desde" name="desde" required="true" value="<%= Time.now.strftime('%Y/%m/%d') %>">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="box">
+                  <div class="form-group">
+                    <label for="hasta_fecha">Hasta</label>
+                    <input type="date" class="form-control" id="hasta" name="hasta" required="true" value="<%= Time.now.strftime('%Y/%m/%d') %>">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="box">
+                  <div class="form-group">
+                    <label for="hasta_fecha">Hipodromo</label><br>
+                    <select class="form-control" size=1 id="hipodromos">
+                      <option value="0">Todos los Hipodromos</option>
+                      <%for hipodromo in Hipodromo.all.order(:nombre)%>
+                        <option value="<%=hipodromo.id%>"><%=hipodromo.nombre_largo%></option>
+                      <%end%>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="box-footer" style="margin-top: 45px">
+                <input type="button" value="Aceptar" class="btn btn-success" onclick="consultar()">
+              </div>
+              <div class="form-group">
+                <div id='cuerpo_div'>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<script>
+  window.boton_check() ;
+  $('#desde').val("<%= Time.now.strftime('%Y-%m-%d')%>");
+  $('#hasta').val("<%= Time.now.strftime('%Y-%m-%d')%>");
+  $("#hipodromos").select2({
+    matcher: select_con_busqueda
+  });
+
+</script>

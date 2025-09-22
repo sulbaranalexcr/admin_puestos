@@ -1,0 +1,58 @@
+<form>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+          <h4>Configuracion Generador de Propuestas Deportes</h4>
+          <div style="width: 100%;">
+            <div class="col-sm-5 text-right">
+              <table id="caballos_enter" class="table table-bordered table-striped dataTable" role="grid">
+                <thead>
+                  <tr>
+                    <th class="col-sm-4 text-left">Deporte</th>
+                    <th class="col-sm-1 text-right">Monto</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @deportes.each do |deporte| %>
+                    <tr>
+                      <td class="col-sm-4 text-left"> <%= deporte[:nombre] %> - <%= deporte[:tipo_nombre] %> </td>
+                      <td class="col-sm-1 text-right"><input type="text" id="monto_<%= deporte[:deporte_id]%>_<%= deporte[:tipo] %>" value="<%= deporte[:monto] %>" class="form-control" /> </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <br>
+          <input type="button" value="Aceptar" class="btn btn-success" onclick="grabar();">
+          <input type="button" value="Salir" class="btn btn-danger" onclick="window.location = '/home'">
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+</style>
+
+
+<!-- Initialize Quill editor -->
+<script>
+
+  function grabar(){
+      datos = [] ;
+      $( "input[id*='monto_']" ).each(function() {
+        datos.push({"deporte_id": this.id.split('_')[1],"tipo": this.id.split('_')[2], monto: this.value });
+      });
+
+      $.ajax({
+        type : "POST",
+        url : '/unica/configuracion/grabar_montos_propuestas_deportes',
+        data : { datos: JSON.stringify(datos) },
+        success : function(request) {
+          swal("Completado", "Montos almacenados", "success");
+        }
+      });
+  }
+
+</script>

@@ -1,0 +1,15 @@
+<div class="form-group">
+  <label for="hipodromo_tipo">Pendientes x Premiar</label>
+  <select size=10 class="form-control" placeholder="Tipo"  name="cerradas_pendiente" id="cerradas_pendiente" onchange="buscar_proxima_sin_cerrar(this.value);">  
+    <%for carr in @sin_premiar%>
+      <% hora_carrera = carr.hora_carrera[0,5] %>
+      <% actual = Time.now.strftime('%H:%M') %>
+      <% time_difference_in_sec = ((hora_carrera.to_time.to_i - Time.now.to_time.to_i).abs / 60).round() %>
+      <option value="<%= carr.id%>" class="carrera_<%= carr.id %> <%= 'blink bg-red' if carr.activo %>" data-carrera_activa="<%= carr.activo%>" data-hip="<%= carr.jornada.hipodromo.id %>" data-jor="<%= carr.jornada.id %>" ><%= carr.numero_carrera%> - <%= carr.jornada.hipodromo.nombre_largo %> </option>
+     <%end%>
+  </select>
+  <br>
+  <label class="bg-red">[ Si Titila ]</label> No fué Cerrada
+</div>
+
+

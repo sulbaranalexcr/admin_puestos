@@ -1,0 +1,53 @@
+  <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+    <div class="row">
+      <div class="col-sm-7 text-right">
+        <table id="caballos_enter" class="table table-bordered table-striped dataTable" role="grid">
+          <thead>
+            <tr>
+              <th class="col-sm-1 text-right">Numero</th>
+              <th class="col-sm-2 text-left">Nombre</th>
+              <th class="col-sm-3 text-center">Retirado</th>
+              <th class="col-sm-3 text-center">ML</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% @caballos_array.each do |caballo| %>
+              <tr>
+                 <td class="col-sm-1 text-right">
+                   <%= caballo[:numero_puesto] %>
+                </td>
+                <td class="col-sm-2 text-left" style="color: <%= caballo[:retirado]  ? 'red; font-weight: bold;' : 'black' %>">
+                  <%= caballo[:nombre] %>
+                </td>
+                <td class="col-sm-1 text-center">
+                  <%= caballo[:retirado]  ? "SI" : "No" %>
+                </td>
+                <td class="col-sm-1 text-right">
+                  <%unless caballo[:retirado] %>
+                    <input type="number" value="0" id="ml_<%= caballo[:id]%>" name="ml_<%= caballo[:id]%>" onblur="change_color(this.id)" onfocus="set_to_blank(this.id)">
+                  <%end%>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+
+<script>
+  function change_color(id){
+    if ($('#'+id).val() != '0'){
+      $('#'+id).css('background', '#38DB03');
+      $('#'+id).css('color', 'black');
+    }else{
+      $('#'+id).css('background', 'white');
+    }
+  }
+
+  function set_to_blank(id){
+    $('#'+id).css('background', 'white');
+  }
+</script>

@@ -1,0 +1,27 @@
+<%= form_for @usuario, url: @url, role: :form, html: { multipart: true } do |f| %>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Nuevo Usuario</h3>
+        </div>
+
+        <div class="box-body">
+          <%if session[:usuario_actual]['tipo'] == "GRP"%>
+             <%= render partial: 'usuarios/form_cob', locals: { f: f } %>
+          <%else%>
+             <%= render partial: 'usuarios/form', locals: { f: f } %>
+          <%end%>
+
+        </div>
+
+        <div class="box-footer">
+          <%= link_to 'Cancelar', usuarios_path, class: 'btn btn-danger' %>
+          <%= f.submit 'Enviar', class: "btn btn-success" %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,3 @@
+class DatosCajeroIntegrador < ApplicationRecord
+    
+end

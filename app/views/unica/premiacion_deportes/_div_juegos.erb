@@ -1,0 +1,38 @@
+<table border=0 >
+  <tr>
+    <td>
+      <label><%= @equipo1['nom']%></label>
+    </td>
+    <td>
+      <input type="number" id="resultado_equipo1" data-idequi="<%= @equipo1['id']%>" class="form-control" min="0"  step="1" style="margin-left: 10px;" required>
+      <input type="hidden" id="resultado_equipo1_nombre" value="<%= @equipo1['nom']%>" >
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <label><%= @equipo2['nom']%></label>
+    </td>
+    <td>
+      <input type="number" id="resultado_equipo2" data-idequi="<%= @equipo2['id']%>" class="form-control" min="0" step="1" style="margin-left: 10px;" required>
+      <input type="hidden" id="resultado_equipo2_nombre" value="<%= @equipo2['nom']%>"  >
+    </td>
+  </tr>
+</table>
+<script>
+  $('#finalizado').find('option').remove();
+
+
+  var tipo_finalizado = <%= @tipo_fin %> ;
+  options = {1:"Completo", 2:"Incompleto Valido", 3:"No Valido"};
+  $.each(tipo_finalizado, function( index, value ) {
+      $('#finalizado').append('<option value="' + value + '">' + options[value] + ' </option>');
+  });
+  var premios_ing = <%== @premio_ingresado.to_json %>;
+  if ( Object.keys(premios_ing).length > 0 ){
+     swal("Advertencia", "Juego ya fue premiado y los datos seran colocados.\nVerifique antes de continuar.", "info").then((aceptar) => {
+        $("#finalizado").val(premios_ing.finalizado);
+        $("#resultado_equipo1").val(premios_ing.resultado.eq1.resultado);
+        $("#resultado_equipo2").val(premios_ing.resultado.eq2.resultado);
+     });
+  }
+  </script>

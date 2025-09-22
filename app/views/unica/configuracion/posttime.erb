@@ -1,0 +1,379 @@
+<%= javascript_include_tag "axios.js" %>
+<%= javascript_include_tag "swalert.js" %>
+
+<script>
+
+
+function verificar_jornadas(hip, jor = '0'){
+  $('#jornadas option').remove();
+  $('#carreras option').remove();
+  $('#caballos_div').html("");
+  axios({
+      method: 'POST',
+        url: '/unica/premiacion_puestos/buscar_jornadas',
+      data: {"id": hip},
+    })
+    .then(function(response) {
+      $('#jornadas').append(new Option("Seleccione Jornada", 0 ));
+        $.each(response.data.jornadas, function( index, value ) {
+          $('#jornadas').append(new Option(value.fecha_bonita, value.id ));
+        });
+        $('#jornadas').val(jor);
+
+      }
+
+  )
+  .catch(function (error) {
+      swal("Lo siento", "No hay jornadas para este hipodromo.", "error");
+  });
+
+}
+
+
+function cuadrando(){
+  if (Number($('#carreras').val()) > 0){
+      swal({
+        title: "Esta seguro de colocar en cuadrando?",
+        text: "Desea continuar?",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        closeOnClickOutside: false,
+        icon: "warning",
+         dangerMode: true,
+        buttons: {
+        confirm: "Cancelar",
+         cancel: "Aceptar",
+         },
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+        } else {
+            axios({
+                method: 'POST',
+                  url: '/unica/configuracion/cuadrar_carrera',
+                data: {
+                  "id": $('#carreras').val()
+                },
+              })
+              .then(function(response) {
+                swal("Listo", "Cuadrando carrera.", "success") ;
+              }
+
+            )
+            .catch(function (error) {
+              swal("Lo siento", "Ocurrio un error.", "error");
+            });
+        }
+      });
+
+  }else{
+    swal("Lo siento", "Debe seleccionar carrera.", "error");
+  }
+}
+
+
+
+function verificar_carreras(carid,car = '0'){
+$('#caballos_div').html("");
+$('#cantidad_caballos').val(0);
+$('#hora_carrera').val("");
+$('#carreras option').remove();
+axios({
+    method: 'POST',
+      url: '/unica/configuracion/buscar_carrera',
+    data: {"id": carid},
+  })
+  .then(function(response) {
+    $('#carreras').append(new Option("Seleccione Carrera", 0 ));
+     select = document.getElementById('carreras');
+     response.data.carreras.forEach(function(entry) {
+       var opt = document.createElement('option');
+       opt.value = entry.id;
+       opt.innerHTML = entry.numero_carrera;
+       select.appendChild(opt);
+
+     });
+     $('#carreras option').css("color","black");
+     $('#carreras option').css("font-weight","bold");
+     $('#boton_cerrar').show();
+     $('#boton_cuadrando').show();
+     $('#carreras').val(car);
+    }
+
+)
+.catch(function (error) {
+    swal("Lo siento", "No hay carrerras para esta jornada.", "error");
+});
+
+}
+
+
+function verificar_hora(cabid){
+  $('#caballos_div').html("");
+  $('#hora_carrera').val("");
+  $('#hora_carrera2').attr("disabled", true);
+  $('#minutos').attr("disabled", true);
+  $('#codigo_carrera').val(cabid) ;
+  
+  axios({
+      method: 'POST',
+        url: '/unica/configuracion/buscar_carrera2',
+      data: {"id": cabid},
+    })
+    .then(function(response) {
+        if (response.data.status == "OK"){
+          $('#hora_carrera').val(response.data.hora)
+          $('#hora_carrera2').attr("disabled", false);
+          $('#hora_carrera2').val(response.data.hora);
+          $('#minutos').attr("disabled", false);
+
+          $("#hora_carrera2").attr({"min" :  response.data.hora});
+        }else{
+          console.log("faild");
+        }
+    }
+
+  )
+  .catch(function (error) {
+      swal("Lo siento", "Carrera no configurada.", "error");
+  });
+
+}
+
+
+function sumar(min){
+  time = $('#hora_carrera').val();
+  time = time.split(/:/);
+  hora = Number(time[0]);
+  minuto = Number(time[1]);
+  minuto_nuevo = minuto + Number(min) ;
+  if (minuto_nuevo >= 60){
+    hora += 1 ;
+    minuto_nuevo -= 60;
+  }
+  if (minuto_nuevo <  10 ){
+    minuto_nuevo = "0" + minuto_nuevo ;
+  }
+  if (hora < 10){
+    hora = "0" + hora ;
+  }
+  if (Number(hora) > 24){
+      swal("Lo siento", "Hora invalida.", "error");
+  }else{
+    $('#hora_carrera2').val(hora + ":" + minuto_nuevo);
+  }
+
+}
+
+
+
+function grabar_unica(){
+
+  if ($("#hora_carrera2").val() > $("#hora_carrera").val()){
+      swal({
+        title: "Esta seguro de cambiar la hora?",
+        text: "Desea continuar?",
+        icon: "warning",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        closeOnClickOutside: false,
+         dangerMode: true,
+        buttons: {
+        confirm: "Cancelar",
+         cancel: "Aceptar",
+         },
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+        } else {
+            axios({
+                method: 'POST',
+                  url: '/unica/configuracion/cambiar_hora',
+                data: {
+                  "id": $('#carreras').val(),
+                  "hora": $('#hora_carrera2').val()
+                },
+              })
+              .then(function(response) {
+                $('#hora_carrera').val($('#hora_carrera2').val() ) ;
+                $('#minutos').val(0);
+                $('#div_proximas').html(response.data);
+                swal("Completo", "Datos almacenados.", "success") ;
+
+              }
+
+            )
+            .catch(function (error) {
+              swal("Lo siento", "La nueva hora debe ser mayor a la actual.", "error");
+            });
+        }
+      });
+
+  }else{
+      swal("Lo siento", "La nueva hora debe ser mayor a la actual.", "error");
+  }
+
+
+
+}
+
+
+function cerrar_carrera_unica(){
+  if (Number($('#codigo_carrera').val()) > 0){
+      swal({
+        title: "Esta seguro de cerrar la carrera?",
+        text: "Desea continuar?",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        closeOnClickOutside: false,
+        icon: "warning",
+         dangerMode: true,
+        buttons: {
+        confirm: "Cancelar",
+         cancel: "Aceptar",
+         },
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+        } else {
+          $('#div_proximas').html('');
+            axios({
+                method: 'POST',
+                  url: '/unica/configuracion/cerrar_carrera',
+                data: {
+                  "id": $('#codigo_carrera').val()
+                },
+              })
+              .then(function(response) {
+                $('#cuerpo_selectores').html(response.data);
+                $('#boton_cerrar').hide();
+                $('#boton_cuadrando').hide();
+                swal("Listo", "Carrera cerrada.", "success") ;
+                window.location.reload();
+              }
+
+            )
+            .catch(function (error) {
+              swal("Lo siento", "Ocurrio un error.", "error");
+            });
+        }
+      });
+
+  }else{
+    swal("Lo siento", "Debe seleccionar carrera.", "error");
+  }
+}
+
+
+function buscar_proxima(id){
+  $('#codigo_carrera').val(id);
+  car = $('#carreras2').val()
+  hip = $('#carreras2 option:selected').attr('data-hip')
+  jor = $('#carreras2 option:selected').attr('data-jor')
+  $('#hipodromos').val(hip);
+  verificar_jornadas(hip, jor);
+  verificar_carreras(jor,car);
+  verificar_hora(car);
+}
+
+function buscar_proxima_sin_cerrar(id){
+  $('#codigo_carrera').val(id);
+  car = $('#cerradas_pendiente').val()
+  hip = $('#cerradas_pendiente option:selected').attr('data-hip')
+  jor = $('#cerradas_pendiente option:selected').attr('data-jor')
+  $('#hipodromos').val(hip);
+  // verificar_jornadas(hip, jor);
+  // verificar_carreras(jor,car);
+  // verificar_hora(car);
+  activa = $('#cerradas_pendiente option:selected').data('carrera_activa') ;
+  nombre = $('#cerradas_pendiente option:selected').text() ;
+  if (activa){
+    $('#boton_cerrar_2').show() ;
+  }else{
+    $('#boton_cerrar_2').hide() ;
+  }
+}
+
+</script>
+
+<form>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">Post Time (Unica)</h3>
+        </div>
+        <div class="form-group">
+          <div class="box-body">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="box">
+                  <div class="form-group">
+                    <label for="hipodromo_tipo">Hipodromo</label><br>
+                    <select size=1 class="form-control" placeholder="Tipo"  name="hipodromos" id="hipodromos"  style= '' onchange="verificar_jornadas(this.value);">
+                      <option value="0" >Seleccione </option>
+                      <%for hipo in @hipodromos%>
+                        <option value="<%= hipo.id%>" ><%= hipo.nombre_largo%> (<%= hipo.tipo == 1 ? "Nacional" : "Internacional"%>) </option>
+                      <%end%>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="box">
+                  <div class="form-group">
+                    <label for="hipodromo_tipo">Jornadas</label>
+                    <select size=1 class="form-control" placeholder="Tipo"  name="jornadas" id="jornadas"  style= '' onchange="verificar_carreras(this.value);">
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="box">
+                  <div class="form-group">
+                    <label for="hipodromo_tipo">Carreras</label>
+                    <select size=1 class="form-control" placeholder="Tipo"  name="carreras" id="carreras"  style= '' onchange="verificar_hora(this.value);">
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="box">
+                  <div class="form-group">
+                    <label for="hipodromo_tipo">Hora de carrera</label>
+                    <input type="time"  class= "form-control"  placeholder= "Hora" disabled required= true id ='hora_carrera' name= 'hora_carrera' required="true" >
+                  </div>
+                </div>
+              </div>
+            </div>
+          <div id="cuerpo_selectores">
+            <%= render partial: 'selectores'%>
+          </div>
+          <div class="form-group">
+            <label for="hipodromo_tipo">Nueva Hora de carrera</label>
+            <input type="time"  class= "form-control"  placeholder= "Hora" disabled required= true id='hora_carrera2' name='hora_carrera2'  style= 'width: 150px;' required="true" >
+          </div>
+          <div class="form-group">
+            <label for="hipodromo_tipo">Sumar Minuto(s)</label>
+            <input type="number"  class= "form-control" disabled required= true id='minutos' name='minutos'  style= 'width: 150px;' required="true" onkeyup="sumar(this.value);"  onchange="sumar(this.value);">
+          </div>
+          <div id="caballos"  style= 'margin-left: 10px;'>
+          </div>
+        </div>
+        <div class="box-footer" style="margin-right: 32%">
+          <input type="button" value="Aceptar" class="btn btn-success" onclick="grabar_unica()">
+          <input type="button" value="Cerrar Carrera" class="btn btn-danger pull-right" onclick="cerrar_carrera_unica()" style="display: none;margin-right: 50px;" id="boton_cerrar">
+          <input type="button" value="Cuadrando" class="btn btn-success pull-right" onclick="cuadrando()" style="display: none;margin-right: 50px;" id="boton_cuadrando">
+        </div>
+      </div>
+    </div>
+  </div>
+  <input type="hidden" name="carrera_hidden" id="carrera_hidden" >
+</form>
+<script>
+window.boton_check() ;
+
+$('#fecha').val("<%= Time.now.strftime('%Y-%m-%d')%>");
+
+
+</script>

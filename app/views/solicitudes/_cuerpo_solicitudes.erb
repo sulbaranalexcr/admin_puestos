@@ -1,0 +1,64 @@
+<div class="row">
+  <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-body">
+          <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+
+            <div class="row">
+              <div class="col-sm-12">
+            <table border=0  style="width: 100%">
+              <tr>
+                <td valign="top" style="width: 50%">
+                  <h3>Recargas</h3>
+                    <table id="user_index" class="table table-bordered table-striped dataTable" role="grid">
+                      <thead>
+                        <tr>
+                          <th>Usuario</th>
+                          <th>Solicitudes</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        <% @solicitudes.each do |repo| %>
+                          <tr>
+                            <td style="width: 70%"> <a style="cursor: pointer;" href="/solicitudes/recargas?id=<%= repo.usuarios_taquilla_id%>"><%= UsuariosTaquilla.find(repo.usuarios_taquilla_id).alias%></a> </td>
+                            <td style="width: 30%"> <%= repo.cantidad%> </td>
+                           </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                    <h3><center><%= @solicitudes.present?  ? "" : "   No tiene recargas pendientes"%></center></h3>
+                </td>
+                <td valign="top" style="width: 50%">
+                  <h3 style="color: red;">Retiros</h3>
+                  <table id="user_index" class="table table-bordered table-striped dataTable" role="grid">
+                    <thead>
+                      <tr>
+                        <th>Usuario</th>
+                        <th>Solicitudes</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <% @solicitudes2.each do |repo| %>
+                        <tr>
+                          <td style="width: 70%"> <a style="cursor: pointer;" href="/solicitudes/retiros?id=<%= repo.usuarios_taquilla_id%>"><%= UsuariosTaquilla.find(repo.usuarios_taquilla_id).alias%></a> </td>
+                          <td style="width: 30%"> <%= repo.cantidad%> </td>
+                         </tr>
+                      <% end %>
+                    </tbody>
+
+                  </table>
+                  <h3><center><%= @solicitudes2.present?  ? "" : "No tiene retiros pendientes" %></center></h3>
+                </td>
+              </tr>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+    </div>
+  </div>
+</div>

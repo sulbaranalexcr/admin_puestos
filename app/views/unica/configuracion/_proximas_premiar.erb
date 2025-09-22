@@ -1,0 +1,24 @@
+<div class="form-group">
+  <label for="hipodromo_tipo">Premios Pendientes</label>
+  <select size=10 class="form-control" placeholder="Tipo"  name="carreras_premiar" id="carreras_premiar" onchange="buscar_proxima_premiar(this.value);">
+     <%for carr_premio in PremioasIngresadosApi.where(hipodromo_id: Hipodromo.where(activo: true).ids, status: 1, created_at: Time.now.all_day).order(:id) %>
+      <option style="cursor: pointer;" value="<%= carr_premio.id%>" class=""> <%= carr_premio.numero_carrera%> (<%= carr_premio.nombre_hipodromo %> )  </option>
+     <%end%>
+  </select>
+</div>
+
+
+<script>
+
+
+
+function buscar_proxima_premiar(id){
+   window.location.href = '/unica/premiacion_puestos/' + id;
+}
+
+
+
+
+
+
+</script>

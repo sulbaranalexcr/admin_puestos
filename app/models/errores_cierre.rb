@@ -1,0 +1,2 @@
+class ErroresCierre < ApplicationRecord
+end

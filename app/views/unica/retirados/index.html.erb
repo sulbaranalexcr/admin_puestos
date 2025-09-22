@@ -1,0 +1,241 @@
+  <%= javascript_include_tag "axios.js" %>
+<script>
+function verificar_jornadas(hip){
+  $('#jornadas option').remove();
+  $('#carreras option').remove();
+  $('#caballos_div').html("");
+  if (hip != "0"){
+      axios({
+          method: 'POST',
+            url: '/carreras/buscar_jornadas',
+          data: {"id": hip},
+        })
+        .then(function(response) {
+          $('#jornadas').append(new Option("Seleccione Jornada", 0 ));
+            $.each(response.data.jornadas, function( index, value ) {
+              $('#jornadas').append(new Option(value.fecha_bonita, value.id ));
+            });
+          }
+
+      )
+      .catch(function (error) {
+          swal("Lo siento", "No hay jornadas para este hipodromo.", "error");
+      });
+  }
+
+}
+
+
+
+function verificar_carreras(carid){
+  $('#caballos_div').html("");
+  $('#cantidad_caballos').val(0);
+  $('#hora_carrera').val("");
+  $('#carreras option').remove();
+  axios({
+      method: 'POST',
+        url: '/unica/retirados/buscar_carreras',
+      data: {"id": carid},
+    })
+    .then(function(response) {
+      $('#carreras').append(new Option("Seleccione Carrera", 0 ));
+       select = document.getElementById('carreras');
+       response.data.carreras.forEach(function(entry) {
+         var opt = document.createElement('option');
+         opt.value = entry.id;
+         opt.innerHTML = entry.numero_carrera;
+         select.appendChild(opt);
+       });
+      }
+
+  )
+  .catch(function (error) {
+      swal("Lo siento", "No hay carrerras para esta jornada.", "error");
+  });
+
+}
+
+
+function verificar_caballos(cabid){
+  $('#caballos_div').html("");
+  $('#cantidad_caballos').val(0);
+  $('#hora_carrera').val("");
+  axios({
+      method: 'POST',
+        url: '/carreras/buscar_caballos',
+      data: {"id": cabid},
+    })
+    .then(function(response) {
+        if (response.data.status == "OK"){
+          $('#cantidad_caballos').val(response.data.cantidad);
+          $('#hora_carrera').val(response.data.hora)
+          crear_caballos(cabid);
+        }else{
+          console.log("faild");
+        }
+    }
+
+  )
+  .catch(function (error) {
+      swal("Lo siento", "Ocurrio un error.", "error");
+  });
+
+}
+
+
+function crear_caballos(cabid){
+  $('#caballos_div').html("");
+  axios({
+      method: 'POST',
+        url: '/unica/retirados/crear_caballos',
+      data: {
+        "id": $('#carreras').val(),
+        "cantidad": $('#cantidad_caballos').val()
+      },
+    })
+    .then(function(response) {
+      $('#caballos_div').html(response.data);
+    }
+
+  )
+  .catch(function (error) {
+      swal("Lo siento", "Ocurrio un error.", "error");
+  });
+
+}
+
+
+function grabar(){
+  swal({
+     title: "Esta seguro de retirar el(los) caballo(s)?",
+     text:  "Aceptar para confirmar retiro.",
+     icon: "warning",
+     allowOutsideClick: false,
+     allowEscapeKey: false,
+     closeOnClickOutside: false,
+     buttons: {
+       confirm: "Aceptar",
+        cancel: "Cancelar",
+      },
+   })
+   .then((aceptar) => {
+     if (aceptar) {
+       grabar_final();
+     } else {
+     }
+   });
+
+}
+
+function grabar_final(){
+  datos = [];
+  pase = 0 ;
+      $( "input[id*='numcab']" ).each(function() {
+        datos.push({"id": this.id.substring(6,8), "nombre": this.value, "retirado": !$('#checab'+this.id.substring(6,8)).prop("checked") });
+        if (this.value.length == 0){
+          pase += 1
+        }
+      });
+
+      if (pase > 0){
+          swal("Lo siento", "Debe ingresar todos los caballos.", "error");
+      }else{
+          axios({
+              method: 'POST',
+                url: '/unica/retirados/retirar_manual',
+              data: {
+                "id": $('#carreras').val(),
+                "caballos": datos,
+                "hora": $('#hora_carrera').val()
+              },
+            })
+            .then(function(response) {
+              swal("Completo", "Datos almacenados.", "success").then((aceptar) => {verificar_carreras($('#jornadas').val());});
+            }
+
+          )
+          .catch(function (error) {
+              swal("Lo siento", error.response.data.msg, "error");
+          });
+      }
+}
+
+
+</script>
+
+<form>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">Retirar Caballo (Unica)</h3>
+        </div>
+        <div class="form-group">
+          <div class="container" style="width: 100%;">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="box">
+                  <div class="form-group">
+                    <label for="hipodromo_tipo">Hipodromo</label><br>
+                    <select size=1 class="form-control" placeholder="Tipo"  name="hipodromos" id="hipodromos"  style= '' onchange="verificar_jornadas(this.value);">
+                      <option value="0" >Seleccione </option>
+                      <%for hipo in @hipodromos%>
+                          <option value="<%= hipo.id%>" ><%= hipo.nombre_largo%> (<%= hipo.tipo == 1 ? "Nacional" : "Internacional"%>) </option>
+                      <%end%>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="box">
+                  <div class="form-group">
+                    <label for="hipodromo_tipo">Jornadas</label>
+                    <select size=1 class="form-control" placeholder="Tipo"  name="jornadas" id="jornadas"  style= '' onchange="verificar_carreras(this.value);">
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="box">
+                  <div class="form-group">
+                    <label for="hipodromo_tipo">Carreras</label>
+                    <select size=1 class="form-control" placeholder="Tipo"  name="carreras" id="carreras"  style= '' onchange="verificar_caballos(this.value);">
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <!--div id="c_ingresaas"  style= 'margin-left: 10px;display: none;'>
+                <label style="color: #00a65a">Carreras Ingresadas</label>
+                <p id="carreas_ingresadas_p"></p>
+              </!--div-->
+              <div class="col-md-2">
+                <div class="box">
+                  <div class="form-group">
+                    <label for="hipodromo_tipo">Hora de carrera</label>
+                    <input type="time"  class= "form-control"  placeholder= "Hora" disabled required= true id ='hora_carrera' name= 'hora_carrera' required="true">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div id='caballos_div'>
+          </div>
+        </div>
+        <div id="caballos"  style= 'margin-left: 10px;'>
+        </div>
+        <div class="box-footer">
+            <input type="button" value="Aceptar" class="btn btn-success" onclick="grabar()">
+        </div>
+      </div>
+    </div>
+  </div>
+  <input type="hidden" name="carrera_hidden" id="carrera_hidden" >
+</form>
+<script>
+  window.boton_check() ;
+  $("#hipodromos").select2({
+    matcher: select_con_busqueda
+  });
+</script>

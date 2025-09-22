@@ -1,0 +1,44 @@
+
+<%= form_for @usuario, url: @url, role: :form, html: { multipart: true } do |f| %>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+
+
+        <div class="box-body">
+          <div class="form-group">
+            <%= f.label 'Nombre' %>
+            <%= f.text_field :username, class: "form-control", style: 'width: 50%' %>
+          </div>
+
+
+          <div class="form-group">
+            <%= f.label 'Clave' %>
+            <%= f.text_field :password, class: "form-control", style: 'width: 50%' %>
+          </div>
+
+          <input type="hidden" name="user[grupo_id]" id="user_grupo_id" value="<%= session[:usuario_actual]['grupo_id'].to_i%>" />
+          <input type="hidden" name="user[tipo]" id="user_tipo" value="COB" />
+
+          <div >
+            <label for="grupo_id">Agente</label>
+            <select size=1 class="form-control" name="user[cobrador_id]" id="user_cobrador_id" style="width: 50%;"/>
+              <%for cobrador in @cobradores%>
+                 <option value="<%= cobrador.id %>" ><%= cobrador.nombre  + " " + cobrador.apellido%></option>
+              <%end%>
+          </select>
+          </div>
+
+          <div class="form-group">
+            <%= f.label 'Activo' %>
+            <%= f.check_box :activo, {}%>
+          </div>
+
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+<% end %>

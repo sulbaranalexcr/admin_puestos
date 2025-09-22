@@ -1,0 +1,14 @@
+<label>Depositar Saldo por Bloque</label>
+<div style="display: inline-flex;width: 100%;">
+  <select name="deposit_block[metodo]" class="form-control" style="width: 12%;">
+    <option value="POST" <%= datos_cajero['acreditar_saldo_bloque']['metodo'][/post/i].present? ? 'seleted' : ''%>>POST</option>
+    <option value="GET" <%= datos_cajero['acreditar_saldo_bloque']['metodo'][/get/i].present? ? 'seleted' : ''%>>GET</option>
+  </select>
+  <input type="text", name="deposit_block[url]"  style="width: 80%;" class="form-control" value="<%= datos_cajero['acreditar_saldo_bloque']['url']%>" placeholder="Ingrese url del enpoint">
+</div>
+<label>Header</label>
+<input type="text", name="deposit_block[parametros_header]" style="width: 92%;"class="form-control" value="<%= datos_cajero['acreditar_saldo_bloque']['parametros_header']%>">
+<label>Body</label>
+<input type="text", name="deposit_block[parametros_body]" style="width: 92%;"class="form-control" value="<%= datos_cajero['acreditar_saldo_bloque']['parametros_body']%>">
+<label>Retorno</label>
+<input type="text", name="deposit_block[retorno]" style="width: 92%;"class="form-control" value="<%= datos_cajero['acreditar_saldo_bloque']['retorno']%>">

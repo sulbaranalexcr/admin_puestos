@@ -1,0 +1,402 @@
+  <%= javascript_include_tag "axios.js" %>
+  <%= javascript_include_tag "swalert.js" %>
+
+<script>
+window.cantidad_total = 0;
+window.proceso_empate = false ;
+window.cab_en_ju = 0 ;
+
+
+function notificar_premiacion(){
+      Swal.fire({
+      type: 'info',
+      title: 'Premiacion completada, espere mientras se generan reportes.',
+      text: 'Esta ventana se cerrara cuando finzalice el proceso',
+      showConfirmButton: false,
+      allowOutsideClick: false
+    })
+}
+
+function cerrar_notificar_premiacion(){
+  Swal.close();
+}
+
+
+function retirar_cab(id,val){
+  // if (window.proceso_empate){
+  //    window.cantidad_total += 1 ;
+  //    window.proceso_empate = false ;
+  // }
+
+  $('.premiados').val(0);
+  // if (Number(window.cantidad_total) >= Number(window.cab_en_ju)){
+      if (val){
+        $("#posici"+id).attr('readonly', false);
+          // window.cab_en_ju += 1 ;
+          window.cab_en_ju_total += 1 ;
+      }else{
+         $("#posici"+id).attr('readonly', true);
+           // window.cab_en_ju -= 1 ;
+           window.cab_en_ju_total -= 1 ;
+      }
+
+      $("#posici"+id).val(0);
+
+      if (window.cab_en_ju_total <= 5){
+        $(".premiados").attr({
+          "max" : window.cab_en_ju_total,
+          "min" : 0
+        });
+
+      }
+
+
+//   }else{
+//     if (val){
+//        window.cab_en_ju += 1 ;
+//     }else{
+//        window.cab_en_ju -= 1 ;
+//     }
+//
+//   }
+}
+
+
+
+
+function verificar(data,id){
+  if (Number(data) > window.cantidad_total){
+    $('#'+id).val(window.cantidad_total);
+  }
+  total = 0;
+  // $(".premiados").each(function(){
+  //    if ((this).val() == data){
+  //      total += 1;
+  //    }
+  // })
+}
+
+
+function validar_cantidad(){
+  if (window.proceso_empate){
+     window.cantidad_total += 1 ;
+     window.proceso_empate = false ;
+  }
+  if ( $('.premiados:input').filter(function(){return this.value=='1'}).length > 1){
+     window.cantidad_total -= 1 ;
+     window.proceso_empate = true ;
+  }
+  if ( $('.premiados:input').filter(function(){return this.value=='2'}).length > 1){
+     window.cantidad_total -= 1 ;
+     window.proceso_empate = true ;
+  }
+  if ( $('.premiados:input').filter(function(){return this.value=='3'}).length > 1){
+     window.cantidad_total -= 1 ;
+     window.proceso_empate = true ;
+  }
+  if ( $('.premiados:input').filter(function(){return this.value=='4'}).length > 1){
+     window.cantidad_total -= 1 ;
+     window.proceso_empate = true ;
+  }
+  if ( $('.premiados:input').filter(function(){return this.value=='5'}).length > 1){
+     window.cantidad_total -= 1 ;
+     window.proceso_empate = true ;
+  }
+
+
+}
+
+
+
+function verificar_jornadas(hip){
+  $('#jornadas option').remove();
+  $('#carreras option').remove();
+  $('#caballos_div').html("");
+  axios({
+      method: 'POST',
+        url: '/unica/premiacion_puestos/buscar_jornadas',
+      data: {"id": hip},
+    })
+    .then(function(response) {
+        $.each(response.data.jornadas, function( index, value ) {
+          $('#jornadas').append(new Option(value.fecha_bonita, value.id ));
+        });
+        verificar_carreras(<%= @carrera_id %>) ;
+      }
+
+  )
+  .catch(function (error) {
+      swal("Lo siento", "No hay jornadas para este hipodromo.", "error");
+  });
+
+}
+
+
+
+function verificar_carreras(carid){
+  
+  $('#caballos_div').html("");
+  $('#cantidad_caballos').val(0);
+  $('#hora_carrera').val("");
+  $('#carreras option').remove();
+  axios({
+      method: 'POST',
+        url: '/carreras/buscar_carreras',
+      data: {"id": carid},
+    })
+    .then(function(response) {
+      $('#carreas_ingresadas_p').text(response.data.cantidad_carreras);
+       window.premiadas = {};
+       select = document.getElementById('carreras');
+       response.data.carreras.forEach(function(entry) {
+         if (numero_c == entry.numero_carrera){
+          window.premiadas[entry.id] = entry.premiada;
+          var opt = document.createElement('option');
+          opt.value = entry.id;
+          opt.innerHTML = entry.numero_carrera;
+          select.appendChild(opt);
+         }
+
+       });
+       $('#carreras option').css("color","black");
+       $('#carreras option').css("font-weight","bold");
+       //verificar_caballos_2($('#carreras option:selected').value);
+       $('#carreras').change();
+      }
+
+  )
+  .catch(function (error) {
+      swal("Lo siento", "No hay carrerras para esta jornada.", "error");
+  });
+
+}
+
+
+
+function verificar_caballos_2(cabid){
+  $('#caballos_div').html("");
+  $('#cantidad_caballos').val(0);
+  $('#hora_carrera').val("");
+  axios({
+      method: 'POST',
+        url: '/unica/premiacion_puestos/buscar_caballos',
+      data: {"id": cabid},
+    })
+    .then(function(response) {
+        if (response.data.status == "OK"){
+          $('#cantidad_caballos').val(response.data.cantidad);
+          $('#hora_carrera').val(response.data.hora)
+          window.cantidad_total = response.data.cantidad_total;
+          crear_caballos(cabid);
+
+        }else{
+             $('#cantidad_caballos').val(response.data.cantidad);
+             $('#hora_carrera').val(response.data.hora)
+             window.cantidad_total = response.data.cantidad_total;
+             crear_caballos(cabid);
+        }
+    }
+
+  )
+  .catch(function (error) {
+      swal("Lo siento", "Ocurrio un error.", "error");
+  });
+
+}
+
+
+function crear_caballos(cabid){
+  $('#caballos_div').html("");
+  axios({
+      method: 'POST',
+        url: '/unica/premiacion_puestos/crear_caballos',
+      data: {
+        "id": $('#carreras').val(),
+        "cantidad": $('#cantidad_caballos').val()
+      },
+    })
+    .then(function(response) {
+      $('#caballos_div').html(response.data);
+    }
+
+  )
+  .catch(function (error) {
+      swal("Lo siento", "Ocurrio un error.", "error");
+  });
+
+}
+
+
+
+function grabar(){
+  if (window.premiadas[$('#carreras').val()]){
+        swal({
+          title: "Carrera ya fue premiada",
+          text: "Esta seguro que desea repremiarla?",
+          icon: "warning",
+           dangerMode: true,
+          buttons: {
+          confirm: "Cancelar",
+           cancel: "Aceptar",
+           },
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+          } else {
+            grabar2();
+          }
+        });
+  }else{
+    grabar2();
+  }
+
+}
+
+function grabar2(){
+  cantidad_ingresados = 0 ;
+  $("input[id^='posici']").each(function(){
+    if (this.value != "0"){
+      cantidad_ingresados += 1;
+    }
+  });
+  if (cantidad_ingresados == 0){
+      swal("Lo siento", "Debe ingresar resultado valido.", "error");
+      return ;
+  }
+
+
+  datos = [];
+  datos_llegada = [];
+  $( "input[id*='posici']" ).each(function() {
+    datos.push({"id": $(this).attr("data-id"), "puesto": this.id.substring(6,8),"llegada": this.value, "retirado": !$('#checab'+this.id.substring(6,8)).prop("checked") });
+    if (this.value != 0){
+      datos_llegada.push({"puesto": this.id.substring(6,8),"llegada": this.value });
+    }
+  });
+  orden_llegada = datos_llegada.sort((a, b) => a.llegada < b.llegada ? -1 : (a.llegada > b.llegada ? 1 : 0)).map(ele=>ele.puesto);
+
+  if (Number($('#carreras').val()) > 0 ){
+      titulo = 'Verifique los resultados antes de ingresarlos.' ;
+      swal({
+        title: titulo ,
+        text: "Esta seguro que todos los datos son correctos?\n Orden de llegada: " +  orden_llegada,
+        icon: "warning",
+         dangerMode: true,
+        buttons: {
+        confirm: "Cancelar",
+         cancel: "Aceptar",
+         },
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+        } else {
+            axios({
+                method: 'POST',
+                  url: '/unica/premiacion_puestos/premiar_puestos',
+                data: {
+                  "id": $('#carreras').val(),
+                  "caballos": datos,
+                  "hora": $('#hora_carrera').val(),
+                  "fecha": $('#jornadas option:selected').text()
+                },
+              })
+              .then(function(response) {
+                swal("Completo", "Datos almacenados.", "success").then((aceptar) => {verificar_carreras($('#jornadas').val());
+                window.location.href = "https://banca.unpuesto.com/unica/configuracion/posttime" ;
+                });
+              }
+
+            )
+            .catch(function (error) {
+                swal("Lo siento", "Ocurrio un error. Verifique todos los datos", "error");
+            });
+        }
+      });
+
+  }else{
+      swal({
+        title: "Lo siento",
+        text: "Faltan datos!",
+        icon: "error",
+        button: "Aceptar",
+      });
+  }
+
+
+}
+
+
+</script>
+
+<form>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+
+      <div class="box-header">
+        <h3 class="box-title">Premiar Carrera (Unica Ind)</h3>
+      </div>
+      <div class="form-group">
+        <div class="box-body">
+        <table boder=0>
+          <tr>
+            <td style="width: 40%" valign="top">
+                <div class="form-group">
+                  <label for="hipodromo_tipo">Hipodromo</label>
+                  <select size=1 readonly class="form-control" placeholder="Tipo"  name="hipodromos" id="hipodromos"  style= '' onchange="verificar_jornadas(this.value);"/>
+                  <%for hipo in @hipodromos%>
+                      <option value="<%= hipo.id%>" ><%= hipo.nombre_largo%> (<%= hipo.tipo == 1 ? "Nacional" : "Internacional"%>) </option>
+                  <%end%>
+                  </select>
+                </div>
+            </td>
+            <td style="width: 30%;" valign="top">
+              <div class="form-group" style="margin-left: 10px;">
+                <label for="hipodromo_tipo">Jornadas</label>
+                <select size=1  readonly class="form-control" placeholder="Tipo"  name="jornadas" id="jornadas"  style= '' onchange="verificar_carreras(this.value);"/>
+                </select>
+              </div>
+            </td>
+            <td style="width: 15%;" valign="top">
+              <div class="form-group" style="margin-left: 10px;">
+                <label for="hipodromo_tipo">Carreras</label>
+                <select size=1 readonly class="form-control" placeholder="Tipo"  name="carreras" id="carreras"  style= '' onchange="verificar_caballos_2(this.value);"/>
+                </select>
+              </div>
+            </td>
+            <td style="width: 15%;" valign="top">
+              <div class="form-group" style="margin-left: 10px;">
+                <label for="hipodromo_tipo">Hora de carrera</label>
+                <input type="time"  class= "form-control"  placeholder= "Hora" disabled required= true id ='hora_carrera' name= 'hora_carrera'  style= 'width: 150px;' required="true" >
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <div class="form-group">
+           <div id='caballos_div'>
+           </div>
+        </div>
+
+        <div id="caballos"  style= 'margin-left: 10px;'>
+        </div>
+
+
+      </div>
+
+      <div class="box-footer">
+           <input type="button" value="Premiar" class="btn btn-success" onclick="grabar()"/>
+      </div>
+
+    </div>
+  </div>
+</div>
+<input type="hidden" name="carrera_hidden" id="carrera_hidden" />
+</form>
+<script>
+   window.boton_check() ;
+   $('#fecha').val("<%= Time.now.strftime('%Y-%m-%d')%>");
+
+    verificar_jornadas(<%= @hipodromo_id %>) ;
+    var numero_c = <%= @numero_carrera %> ;    
+</script>

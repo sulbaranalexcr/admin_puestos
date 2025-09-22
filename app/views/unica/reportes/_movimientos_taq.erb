@@ -1,0 +1,40 @@
+
+          <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                <table id="user_index" class="table table-bordered table-striped dataTable" role="grid" >
+                  <thead>
+                    <tr>
+                      <th>Operacion</th>
+                      <th style="text-align: center;">Saldo/Ant</th>
+                      <th style="text-align: center;">Monto</th>
+                      <th style="text-align: center;">Saldo/Act</th>
+                      <th style="text-align: center;">Fecha/Hora</th>
+                      <th style="text-align: center;">Mon</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @movimientos.each do |movimiento| %>
+                      <tr>
+                        <td class="titulo" style="cursor: zoom-in;color: black;font-weight: bold;width: 40%;line-height:20pt;font-size: 11px;" data-title="<%= movimiento.descripcion.to_s.strip %>">
+                        <%= movimiento.descripcion.to_s.strip %>
+                        </td>
+                        <td  class="titulo" style="cursor: zoom-in;color: black;font-weight: bold;width: 12%;text-align: right;font-size: 12px;" data-title="<%= number_with_precision(movimiento.saldo_anterior, precision: 2, separator: '.', delimiter: ',') %>">
+                        <%= number_with_precision(movimiento.saldo_anterior, precision: 2, separator: '.', delimiter: ',') %>
+                        </td>
+                        <td   class="titulo" style="cursor: zoom-in;color: black;font-weight: bold;width: 12%;text-align: right;font-size: 12px;" data-title="<%= number_with_precision(movimiento.monto, precision: 2, separator: '.', delimiter: ',') %>">
+                          <%= number_with_precision(movimiento.monto, precision: 2, separator: '.', delimiter: ',') %>
+                        </td>
+                        <td  class="titulo"  style="cursor: zoom-in;color: black;font-weight: bold;width: 12%;text-align: right;font-size: 12px;" data-title="<%= number_with_precision(movimiento.saldo_actual, precision: 2, separator: '.', delimiter: ',') %>">
+                          <%= number_with_precision(movimiento.saldo_actual, precision: 2, separator: '.', delimiter: ',') %>
+                        </td>
+                        <td   class="titulo" style="cursor: zoom-in;color: black;font-weight: bold;text-align: center;width: 10%;font-size: 12px;" data-title="<%= movimiento.created_at.strftime('%I:%M %p')%>">
+                          <%= movimiento.created_at.strftime('%d/%m/%Y %I:%M %p')%>
+                        </td>
+                        <td style="color: black;font-weight: bold;text-align: center;width: 3%;font-size: 12px;">
+                         <%= movimiento.usuarios_taquilla.simbolo_moneda_default  %>      </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+
+                </table>
+            </div>

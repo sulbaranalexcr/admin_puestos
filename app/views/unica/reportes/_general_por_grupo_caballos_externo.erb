@@ -1,0 +1,226 @@
+<script>
+  function imprimir(tipo){
+    desde = $('#desde').val();
+    hasta = $('#hasta').val();
+    url = '/unica/reportes/cuadre_general_por_agentes_externo';
+    window.open ( url + ".pdf?desde=" +desde+"&hasta="+hasta, '_target' );
+  }
+
+  function exportar(tipo){
+    desde = $('#desde').val();
+    hasta = $('#hasta').val();
+      url = '/unica/reportes/cuadre_general_por_agentes_externo';
+    window.open ( url + ".xlsx?desde=" +desde+"&hasta="+hasta, '_target' );
+  }
+
+
+</script>
+<div class="box-footer">
+  <input type="button" value="Imprimir" class="btn btn-success" onclick="imprimir('<%=@tipo_reporte_url%>')"/>
+  <input type="button" value="Exportar Excel" class="btn btn-success" onclick="exportar('<%=@tipo_reporte_url_excel%>')"/>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">Listado</h3>
+      </div>
+      <div class="box-body">
+        <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+          <H4>General</H4>
+          <div class="row">
+            <div class="col-sm-12">
+              <table id="user_index" class="table table-bordered table-striped dataTable" role="grid" style="width: 100%;">
+                <thead>
+                  <tr>
+                    <th style="text-align: left;width: 10%">Nombre</th>
+                    <!--th style="text-align: right;width: 10%">Debitos</th>
+                    <th style="text-align: right;width: 10%">Creditos</th>
+                    <th style="text-align: right;width: 10%">Balance</th-->
+                    <th style="text-align: right;width: 10%">Total<br>Comisiones</th>
+                    <th style="text-align: right;width: 10%">Recibir <br>Otro Sitio</th>
+                    <th style="text-align: right;width: 10%">Pagar <br>Otro Sitio</th>
+                    <th style="text-align: right;width: 10%">Comisi&oacute;n<br> Sistema</th>
+                    <th style="text-align: right;width: 10%">Total a Recibir</th>
+                    <th style="text-align: right;width: 10%">Total a Pagar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <%total1 = 0%>
+                  <%total2 = 0%>
+                  <%total3 = 0%>
+                  <%total4 = 0%>
+                  <%total5 = 0%>
+                  <%total6 = 0%>
+                  <%total7 = 0%>
+                  <%total8 = 0%>
+                  <%total9 = 0%>
+                  <%total10 = 0%>
+                  <% @reporte.each do |repo| %>
+                  <%comision_sistema = ((repo['comision'].to_f + repo['comision_oc'].to_f) * repo['comision_banca'].to_f) / 100%>
+                  <%recibir_og = (repo['premios'].to_f - ((repo['premios'].to_f * 5 )/100))  + (repo['gano_oc'].to_f - ((repo['gano_oc'].to_f * 2.5)/100))%>
+                  <%pagar_og = repo['perdio_oc'].to_f - ((repo['perdio_oc'].to_f * 2.5)/100)%>
+
+                  <%recibir = (recibir_og - pagar_og - comision_sistema) > 0 ? (repo['monto_otro_grupo'].to_f - comision_sistema): 0 %>
+                  <%pagar = (recibir_og - pagar_og - comision_sistema) < 0 ? ((repo['monto_otro_grupo'].to_f - comision_sistema) * -1) : 0 %>
+                    <tr>
+                      <td> <%= repo['nombre'] %> </td>
+                      <!--td style="text-align: right;"> <%= number_with_precision( repo['venta'] , precision: 2, separator: '.', delimiter: ',')%> </td>
+                      <td style="text-align: right;"> <%= number_with_precision( repo['premio'].to_f, precision: 2, separator: '.', delimiter: ',') %> </td>
+                      <td style="text-align: right;"> <%= number_with_precision( (repo['venta'].to_f - repo['premio']) * -1 , precision: 2, separator: '.', delimiter: ',') %> </td-->
+                      <td style="text-align: right;"> <%= number_with_precision( repo['comision_oc'].to_f  + repo['comision'].to_f , precision: 2, separator: '.', delimiter: ',') %>  </td>
+                      <td style="text-align: right;"> <%= number_with_precision( recibir_og, precision: 2, separator: '.', delimiter: ',') %> </td>
+                      <td style="text-align: right;"> <%= number_with_precision( pagar_og, precision: 2, separator: '.', delimiter: ',') %> </td>
+                      <td style="text-align: right;"> <%= number_with_precision( comision_sistema , precision: 2, separator: '.', delimiter: ',') %> </td>
+                      <td style="text-align: right;"> <%= number_with_precision( recibir, precision: 2, separator: '.', delimiter: ',') %> </td>
+                      <td style="text-align: right;"> <%= number_with_precision( pagar, precision: 2, separator: '.', delimiter: ',') %> </td>
+                    </tr>
+                    <%total1 += repo['venta'].to_f%>
+                    <%total2 += repo['premio'].to_f %>
+                    <%total3 += (repo['venta'].to_f - repo['premio']) * -1 %>
+                    <%total4 += repo['comision_oc'].to_f + repo['comision'].to_f %>
+                    <%total5 += recibir_og %>
+                    <%total6 += pagar_og %>
+                    <%total7 += comision_sistema %>
+                    <%total8 += recibir %>
+                    <%total9 += pagar %>
+
+
+                  <% end %>
+                </tbody>
+                <tfoot style="background-color: #A4A4A4;">
+                  <tr>
+                    <td style="font-weight: bold;"> Totales </td>
+                    <!--td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total1 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                    <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total2 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                    <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total3 , precision: 2, separator: '.', delimiter: ',')%> </td-->
+                    <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total4 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                    <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total5 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                    <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total6 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                    <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total7 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                    <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total8 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                    <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total9 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+
+
+          <div class="box-body">
+            <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+              <H4>Cuadre de apuestas solo entre mis jugadores (5%).</H4>
+              <div class="row">
+                <div class="col-sm-12">
+                  <table id="user_index" class="table table-bordered table-striped dataTable" role="grid" style="width: 100%;">
+                    <thead>
+                      <tr>
+                        <th style="text-align: left;width: 10%">Nombre</th>
+                        <th style="text-align: right;width: 10%">Premios mis Jugadores</th>
+                        <th style="text-align: right;width: 10%"></th>
+                        <th style="text-align: right;width: 10%">Mi Comisión <br>5%</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <%total1 = 0%>
+                      <%total2 = 0%>
+                      <%total3 = 0%>
+                      <% @reporte.each do |repo| %>
+                        <tr>
+                          <td> <%= repo['nombre'] %> </td>
+                          <td style="text-align: right;"> <%= number_with_precision( repo['premio_solo'] , precision: 2, separator: '.', delimiter: ',')%> </td>
+                          <td style="text-align: right;"> </td>
+                          <td style="text-align: right;"> <%= number_with_precision( repo['comision'].to_f, precision: 2, separator: '.', delimiter: ',') %> </td>
+                        </tr>
+                        <%total1 += repo['premio_solo'].to_f%>
+                        <%total3 += repo['comision'].to_f %>
+
+
+                      <% end %>
+                    </tbody>
+                    <tfoot style="background-color: #A4A4A4;">
+                      <tr>
+                        <td style="font-weight: bold;"> Totales </td>
+                        <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total1 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                        <td style="text-align: right;font-weight: bold;">  </td>
+                        <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total3 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+
+
+          <div class="box-body">
+            <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+              <H4>Cuadre de apuestas solo de mis jugadores y jugadores de otro sitio (2.5%).</H4>
+              <div class="row">
+                <div class="col-sm-12">
+                  <table id="user_index" class="table table-bordered table-striped dataTable" role="grid" style="width: 100%;">
+                    <thead>
+                      <tr>
+                        <th style="text-align: left;width: 10%">Nombre</th>
+                        <th style="text-align: right;width: 10%">Recibir</th>
+                        <th style="text-align: right;width: 10%">Comision Recibir</th>
+                        <th style="text-align: right;width: 10%">Total Recibir</th>
+                        <th style="text-align: right;width: 10%">Pagar</th>
+                        <th style="text-align: right;width: 10%">Comision Pagar</th>
+                        <th style="text-align: right;width: 10%">Total Pagar</th>
+                        <th style="text-align: right;width: 10%">Total Comisión <br>2.5%</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <%total1 = 0%>
+                      <%total2 = 0%>
+                      <%total3 = 0%>
+                      <%total4 = 0%>
+                      <%total5 = 0%>
+                      <%total6 = 0%>
+                      <%total7 = 0%>
+
+                      <% @reporte.each do |repo| %>
+                        <tr>
+                          <td> <%= repo['nombre'] %> </td>
+                          <td style="text-align: right;"> <%= number_with_precision( repo['gano_oc'] , precision: 2, separator: '.', delimiter: ',')%> </td>
+                          <td style="text-align: right;"> <%= number_with_precision( (repo['gano_oc'] * 2.5) /100, precision: 2, separator: '.', delimiter: ',')%> </td>
+                          <td style="text-align: right;"> <%= number_with_precision( repo['gano_oc'] - ((repo['gano_oc'] * 2.5) /100), precision: 2, separator: '.', delimiter: ',')%> </td>
+                          <td style="text-align: right;"> <%= number_with_precision( repo['perdio_oc'].to_f, precision: 2, separator: '.', delimiter: ',') %> </td>
+                          <td style="text-align: right;"> <%= number_with_precision( (repo['perdio_oc'].to_f * 2.5) / 100, precision: 2, separator: '.', delimiter: ',') %> </td>
+                          <td style="text-align: right;"> <%= number_with_precision( repo['perdio_oc'].to_f - ((repo['perdio_oc'].to_f * 2.5) / 100), precision: 2, separator: '.', delimiter: ',') %> </td>
+                          <td style="text-align: right;"> <%= number_with_precision( repo['comision_oc'].to_f, precision: 2, separator: '.', delimiter: ',') %> </td>
+                        </tr>
+                        <%total1 += repo['gano_oc'].to_f%>
+                        <%total2 += (repo['gano_oc'] * 2.5) /100 %>
+                        <%total3 += repo['gano_oc'] - ((repo['gano_oc'] * 2.5) /100) %>
+                        <%total4 += repo['perdio_oc'].to_f %>
+                        <%total5 += (repo['perdio_oc'].to_f * 2.5) / 100 %>
+                        <%total6 += repo['perdio_oc'].to_f - ((repo['perdio_oc'].to_f * 2.5) / 100) %>
+                        <%total7 += repo['comision_oc'].to_f %>
+
+
+                      <% end %>
+                    </tbody>
+                    <tfoot style="background-color: #A4A4A4;">
+                      <tr>
+                        <td style="font-weight: bold;"> Totales </td>
+                        <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total1 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                        <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total2 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                        <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total3 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                        <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total4 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                        <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total5 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                        <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total6 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                        <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total7 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+
+
+
+
+        </div>
+      </div>
+    </div>
+
+

@@ -1,0 +1,42 @@
+
+          <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+               <p style="margin-left: 15px;"><input type="text" id="searchInput" placeholder="Filtrar por fecha..." onkeyup="filterTable()" /> </p>
+
+                <table id="user_index" class="table table-bordered table-striped dataTable" role="grid" >
+                  <thead>
+                    <tr>
+                      <th style="text-align: left;">Fecha</th>
+                      <th style="text-align: left;">Ticket</th>
+                      <th style="text-align: left;">G-Ticket</th>
+                      <th style="text-align: right;">Apuesta</th>
+                      <th style="text-align: right;">Total</th>
+                      <th style="text-align: center;">Estado</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% pendientes['tickets'].each do |movimiento| %>
+                      <tr>
+                        <td class="titulo" style="cursor: zoom-in;color: black;font-weight: bold;width: 15%;line-height:20pt;font-size: 11px;" >
+                          <%= movimiento['fecha'].split('-').reverse.join('/') %>
+                        </td>
+                        <td class="titulo" style="cursor: zoom-in;color: black;font-weight: bold;width: 15%;line-height:20pt;font-size: 11px;" >
+                          <%= movimiento['ticket'] %>
+                        </td>
+                        <td  class="titulo" style="cursor: zoom-in;color: black;font-weight: bold;width: 15%;text-align: left;font-size: 12px;">
+                          <%= movimiento['gtickets'] %>
+                        </td>
+                        <td   class="titulo" style="cursor: zoom-in;color: black;font-weight: bold;width: 15%;text-align: right;font-size: 12px;" >
+                          <%= number_with_precision(movimiento['apuesta'], precision: 2, separator: '.', delimiter: ',') %>
+                        </td>
+                        <td  class="titulo"  style="cursor: zoom-in;color: black;font-weight: bold;width: 15%;text-align: right;font-size: 12px;" >
+                          <%= number_with_precision(movimiento['total'], precision: 2, separator: '.', delimiter: ',') %>
+                        </td>
+                        <td   class="titulo" style="cursor: zoom-in;color: black;font-weight: bold;text-align: center;width: 15%;font-size: 12px;">
+                          <%= movimiento['estado']%>
+                        </td>
+                    <% end %>
+                  </tbody>
+
+                </table>
+            </div>

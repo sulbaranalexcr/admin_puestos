@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  socios: one
+  app: one
+  referencia: MyString
+  monto_participacion: 1.5
+  monto_pagdo: 1.5
+  saldo: 1.5
+  moneda: 1
+
+two:
+  socios: two
+  app: two
+  referencia: MyString
+  monto_participacion: 1.5
+  monto_pagdo: 1.5
+  saldo: 1.5
+  moneda: 1

@@ -1,0 +1,26 @@
+                <table id="user_index" class="table table-bordered table-striped dataTable" role="grid">
+                  <thead>
+                    <tr>
+                      <th>Hipodromo</th>
+                      <th>Carrera</th>
+                      <th>Hora Pautada</th>
+                      <th>Hora Cierre</th>
+                      <th>Usuario Cierra</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @carreras.each do |carrera| %>
+                     <%if carrera.jornada.hipodromo.activo %>
+                      <tr>
+                        <td> <%= carrera.jornada.hipodromo.nombre%> </td>
+                        <td> <%= carrera.numero_carrera%> </td>
+                        <td> <%= carrera.hora_pautada.to_time.strftime("%I:%M %p") %> </td>
+                        <td> <%= carrera.cierre_carrera.created_at.strftime('%I:%M:%S %p') if carrera.cierre_carrera.present?%> </td>
+                        <td> <%= update_cierre_carrera(carrera.cierre_carrera)  if carrera.cierre_carrera.present? %> </td>
+                       </tr>
+                       <%end%>
+                    <% end %>
+                  </tbody>
+
+                </table>

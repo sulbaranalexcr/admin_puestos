@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  grupo_id: 1
+  message: 
+
+two:
+  grupo_id: 1
+  message: 

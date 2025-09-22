@@ -1,0 +1,99 @@
+<script>
+   function imprimir(tipo){
+     desde = $('#desde').val();
+     hasta = $('#hasta').val();
+     tipo_reporte = $("#tipo_reporte").val() ;
+     if (tipo == "GRP"){
+       url = '/reportes/cuadre_general_por_grupo_caballos';
+     }else{
+       url = '/reportes/cuadre_general_por_grupo_cobradores';
+     }
+     window.open ( url + ".pdf?desde=" +desde+"&hasta="+hasta+"&tipo="+tipo_reporte, '_target' );
+   }
+</script>
+
+
+<div class="box-footer">
+     <input type="button" value="Imprimir" class="btn btn-success" onclick="imprimir('<%=@tipo_reporte_url%>')"/>
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Listado</h3>
+        </div>
+
+        <div class="box-body">
+          <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+
+            <div class="row">
+              <div class="col-sm-12">
+                <table id="user_index" class="table table-bordered table-striped dataTable" role="grid" style="width: 100%;">
+                  <thead>
+                    <tr>
+                      <th style="width: 50px;text-align: left;">Tipo</th>
+                      <th style="text-align: left">Nombre</th>
+                      <th  style="text-align: right;"><%= @tipo_cruzado%></th>
+                      <th  style="text-align: right;">Premiado</th>
+                      <th  style="text-align: right;">Comisi&oacute;n</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <%total1 = 0%>
+                    <%total2 = 0%>
+                    <%total4 = 0%>
+                    <%total5 = 0%>
+                    <%total6 = 0%>
+                    <%total8 = 0%>
+                    <% @reporte.each do |repo| %>
+                      <tr>
+                        <td> <%= repo['tipo'] %></td>
+                        <td> <%= repo['nombre'] %></td>
+                        <td style="text-align: right;"> <%= number_with_precision( repo['venta'].to_f , precision: 2, separator: '.', delimiter: ',')%> </td>
+                        <td style="text-align: right;"> <%= number_with_precision(repo['premio'].to_f + repo['gano_oc'].to_f, precision: 2, separator: '.', delimiter: ',') %> </td>
+                        <td style="text-align: right;"> <%= number_with_precision( repo['comision'].to_f + repo['comision_oc'].to_f , precision: 2, separator: '.', delimiter: ',') %> </td>
+                       </tr>
+                       <%total5 += repo['venta'].to_f%>
+                       <%total6 += repo['premio'].to_f + repo['gano_oc'].to_f%>
+                       <%total8 += repo['comision'].to_f + repo['comision_oc'].to_f%>
+                    <% end %>
+                  </tbody>
+                  <tfoot style="background-color: #A4A4A4;">
+                    <tr>
+                      <td>  </td>
+                      <td style="font-weight: bold;"> Totales </td>
+                      <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total5 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                      <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total6 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                      <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total8 , precision: 2, separator: '.', delimiter: ',')%> </td>
+                    </tr>
+                    <%if session[:usuario_actual]['tipo'] == "GRP"%>
+                    <% por_usd_ban = (total8 * @porcentaje_banca) / 100%>
+                      <tr>
+                        <td>  </td>
+                        <td style="font-weight: bold;"> Comision Banca </td>
+                        <td style="text-align: right;font-weight: bold;">  </td>
+                        <td style="text-align: right;font-weight: bold;">  </td>
+                        <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( por_usd_ban , precision: 2, separator: '.', delimiter: ',')%> </td>
+                      </tr>
+                      <tr>
+                        <td>  </td>
+                        <td style="font-weight: bold;"> Ganancia Neta </td>
+                        <td style="text-align: right;font-weight: bold;">  </td>
+                        <td style="text-align: right;font-weight: bold;">  </td>
+                        <td style="text-align: right;font-weight: bold;"> <%= number_with_precision( total8 - por_usd_ban.to_f , precision: 2, separator: '.', delimiter: ',')%> </td>
+                      </tr>
+                    <%end%>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+    </div>
+  </div>
+</div>

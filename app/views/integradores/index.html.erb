@@ -1,0 +1,82 @@
+<div class="row">
+  <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Listado de Integradores</h3>
+        </div>
+
+        <div class="box-body">
+          <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+
+            <div class="row">
+              <div class="col-sm-12">
+                <table id="user_index" class="table table-bordered table-striped dataTable" role="grid">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Representante</th>
+                      <th>Tel&eacute;fono</th>
+                      <th>Activo</th>
+                      <th class="col-xs-1">Acci&oacute;n</th>
+                      <th>Generar Demo</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @integradores.each do |integrador| %>
+                      <tr>
+                        <td> <%= integrador.nombre %> </td>
+                        <td> <%= integrador.representante %> </td>
+                        <td> <%= integrador.telefono %> </td>
+                        <td> <%= integrador.activo ? "SI":"NO" %> </td>
+                        <td>
+                          <div class="btn-row">
+                            <%= link_to raw('<i class="fa fa-edit"></i>'), '/integradores/'+ integrador.id.to_s + '/edit', class: 'btn btn-sm btn-warning' %>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="btn-row">
+                            <a class="btn btn-sm btn-warning" onclick="generar_demo(<%= integrador.id%>)"><i class="fa fa-cogs"></i></a>
+                          </div>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-2 col-md-offset-10">
+    <%= link_to 'Nuevo Integrador', '/integradores/new', class: 'btn btn-success pull-right' %>
+  </div>
+</div>
+
+<script>
+  function generar_demo(id) {
+    $.ajax({
+      type : "POST",
+      url : '/api/generate_demo',
+      data : {
+        integrator_id: id
+      },
+      success : function(request) {
+        swal("Token demo:", request.token, "success").then((aceptar) => {
+        });
+      },
+      error : function(request) {
+        swal("Error", request.responseJSON.message, "error").then((aceptar) => {
+        });
+      }
+    });
+  }
+</script>

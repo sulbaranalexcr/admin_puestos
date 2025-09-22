@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  moneda_id: 1
+  tasa_anteior: 1.5
+  tasa_nueva: 1.5
+  ip_remota: MyString
+
+two:
+  user: two
+  moneda_id: 1
+  tasa_anteior: 1.5
+  tasa_nueva: 1.5
+  ip_remota: MyString

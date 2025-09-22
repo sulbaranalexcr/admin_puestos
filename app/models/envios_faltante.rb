@@ -1,0 +1,2 @@
+class EnviosFaltante < ApplicationRecord
+end

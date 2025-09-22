@@ -1,0 +1,89 @@
+
+  <div  style="overflow: auto;height:60vh;width: 100%;"  class="contenedor mt-1">
+    <label>Usuario: <%= @nombre_cliente.capitalize %></label><br>
+    <label>Correo: <%= @correo_cliente %></label>
+    <table style="width: 100%;" id="user_index" class="table table-bordered table-striped dataTable" role="grid" >
+        <thead>
+        <tr>
+            <th style="width: 5%">ID</th>
+            <th style="width: 8%">Jugadas</th>
+            <th style="width: 40%;text-align: center;">Tipo</th>
+            <th style="text-align: right;width: 20%;">Monto (<%= @simbolo_moneda_default%>)</th>
+            <th style="text-align: center;width: 15%;">Estado</th>
+            <th style="text-align: center;width: 12%;">Hora</th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+        <% @jugadas.each do |movimiento| %>
+            <tr>
+            <td style="vertical-align: top; color: black;font-weight: bold;line-height:20pt;font-size: 12px;" >
+                <%= movimiento['transaction_id'] %>
+            </td>
+            <td style="vertical-align: top;color: black;font-weight: bold;line-height:20pt;font-size: 12px;" >
+                <%= movimiento['titulo'] %>
+            </td>
+            <td style="vertical-align: top;color: black;font-weight: bold;line-height:20pt;font-size: 12px;" >
+                <%= movimiento['jugada_completa'].to_s.strip.html_safe %>
+            </td>
+            <td  style="vertical-align: top;color: black;font-weight: bold;text-align: right;font-size: 12px;" >
+                <%= number_with_precision(movimiento['monto'].to_f.to_s, precision: 2, separator: '.', delimiter: ',') %>
+            </td>
+            <td style="vertical-align: top;color: black;font-weight: bold;text-align: center;font-size: 12px;">
+                <%=  text_status2(movimiento['status2'].to_i) %>
+            </td>
+            <td   style="vertical-align: top;color: black;font-weight: bold;text-align: center;font-size: 12px;" >
+            <%= movimiento['created_at'].strftime('%I:%M %p')%>
+            </td>
+        </tr>
+            <% if movimiento['hijos'].present? %>
+                <%for hijo in movimiento['hijos']%>
+                <tr>
+                <td style="vertical-align: top;color: black;font-weight: bold;line-height:20pt;font-size: 12px;" >
+                </td>
+                <td style="vertical-align: top;color: black;font-weight: bold;line-height:20pt;font-size: 12px;" >
+                    <%= hijo['titulo'] %>
+                </td>
+                <td style="vertical-align: top;color: black;font-weight: bold;line-height:20pt;font-size: 12px;" >
+                    <%= hijo['jugada_completa'].to_s.strip.html_safe %>
+                    <%if hijo['otro'].strip.length.positive? %>
+                      (<%= hijo['otro'].to_s.strip.html_safe.humanize %>)
+                    <%end%>  
+                </td>
+                <td  style="vertical-align: top;color: black;font-weight: bold;text-align: right;font-size: 12px;" >
+                    <%if hijo['corte_id'].to_i > 0 %>
+                    <font color='gray'>
+                    <%= number_with_precision(hijo['monto'], precision: 2, separator: '.', delimiter: ',') %>
+                    </font>
+                    <%else%>
+                    <%= number_with_precision(hijo['monto'], precision: 2, separator: '.', delimiter: ',') %>
+                    <%end%>
+                </td>
+                <td style="vertical-align: top;color: black;font-weight: bold;text-align: center;font-size: 12px;">
+                    <%if hijo['corte_id'].to_i > 0 %>
+                    <font color='gray'>
+                    <%=  text_status2(hijo['status2'].to_i) %>
+                    </font>
+                    <%else%>
+                    <%=  text_status2(hijo['status2'].to_i) %>
+                    <%end%>
+                </td>
+                <td   style="vertical-align: top;color: black;font-weight: bold;text-align: center;font-size: 12px;" >
+                <%if hijo['corte_id'].to_i > 0 %>
+                <font color='gray'>
+                    <%= hijo['created_at'].strftime('%I:%M %p')%>
+                </font>
+                <%else%>
+                <%= hijo['created_at'].strftime('%I:%M %p')%>
+                <%end%>
+                </td>
+            </tr>
+
+            <% end %>
+        <% end %>
+        <% end %>
+        </tbody>
+
+    </table>
+</div>

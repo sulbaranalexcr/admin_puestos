@@ -1,0 +1,2 @@
+class TipoApuesta < ApplicationRecord
+end

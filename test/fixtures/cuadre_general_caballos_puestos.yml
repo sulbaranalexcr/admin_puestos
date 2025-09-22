@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  estructura: one
+  venta: 1.5
+  premio: 1.5
+  comision: 1.5
+  utilidad: 1.5
+  moneda: 1
+  carrera: one
+  hipodromo: one
+  monto_otro_grupo: 1.5
+  gano_oc: 1.5
+  perdio_oc: 1.5
+  comision_oc: 1.5
+
+two:
+  estructura: two
+  venta: 1.5
+  premio: 1.5
+  comision: 1.5
+  utilidad: 1.5
+  moneda: 1
+  carrera: two
+  hipodromo: two
+  monto_otro_grupo: 1.5
+  gano_oc: 1.5
+  perdio_oc: 1.5
+  comision_oc: 1.5

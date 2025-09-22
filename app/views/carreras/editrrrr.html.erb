@@ -1,0 +1,64 @@
+<%= form_for @carrera, url: @url, role: :form, html: { multipart: true } do |f| %>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Editar Carrera</h3>
+        </div>
+
+        <div class="box-body">
+          <div class="form-group">
+            <label for="hipodromo_tipo">Hipodromo</label>
+            <select size=1 class="form-control" placeholder="Tipo"  name="carrera[hipodromo_id]" id="carrera_hipodromo_id" />
+            <%for hipodromo in @hipodromos%>
+            <option value="<%= hipodromo.id %>" <%= hipodromo.id == @hip_act ? "selected":""%>><%= hipodromo.nombre %></option>
+            <%end%>
+
+          </select>
+          </div>
+
+          <div class="form-group">
+            <%= f.label 'Nombre de carrera' %>
+            <%= f.text_field :nombre, class: "form-control", placeholder: "Nombre", required: true %>
+            <span class="help-block"><i>* Este campo es requerido</i><span>
+          </div>
+
+          <div class="form-group">
+            <%= f.label 'Fecha y hora de carrera' %>
+            <%= f.datetime_field :fecha_carrera, min: Time.now, max: Time.now.end_of_year,class: "form-control", style: 'width: 20%' %>
+            <span class="help-block"><i>* Este campo es requerido</i><span>
+          </div>
+
+
+          <div class="form-group">
+            <%= f.label 'Cantidad de caballos' %>
+            <%= f.text_field :cantidad_caballos, class: "form-control", placeholder: "Nombre", required: true %>
+            <span class="help-block"><i>* Este campo es requerido</i><span>
+          </div>
+
+
+          <div class="form-group">
+            <label for="hipodromo_tipo">Caballos</label>
+            <%numero_caballo = 0%>
+            <%for caballo in @caballos%>
+            <%numero_caballo += 1%>
+               <input type="text" value="<%= caballo.nombre%>", class= "form-control" name="cab<%= numero_caballo %>"/>
+            <%end%>
+            <%(@carrera.cantidad_caballos - @caballos.count).times do%>
+            <%numero_caballo += 1%>
+               <input type="text" value="", class= "form-control" placeholder="Ingrese nombre del caballo"  name="cab<%= numero_caballo %>" />
+            <%end%>
+
+          </div>
+        </div>
+
+        <div class="box-footer">
+          <%= link_to 'Cancelar', admin_carreras_path, class: 'btn btn-danger' %>
+          <%= f.submit 'Enviar', class: "btn btn-success" %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+<% end %>

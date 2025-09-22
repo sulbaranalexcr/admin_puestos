@@ -1,0 +1,36 @@
+
+          <div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                <table id="user_index" class="table table-bordered table-striped dataTable" role="grid" style="width: 100%">
+                  <thead>
+                    <tr>
+                      <th style="text-align: left;width: 10%">Operacion</th>
+                      <th style="text-align: left;width: 20%">Usuario</th>
+                      <th style="text-align: right;width: 15%">Monto</th>
+                      <th style="text-align: left;width: 25%">Fecha/Hora</th>
+                      <th style="text-align: left;width: 30%">Detalle</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @movimientos.each do |movimiento| %>
+                      <tr>
+                        <td class="titulo" style="cursor: zoom-in;color: black;font-weight: bold;;line-height:20pt;font-size: 11px;">
+                          <%= movimiento.type_operation %>
+                        </td>
+                        <td class="titulo" style="cursor: zoom-in;color: black;font-weight: bold;;line-height:20pt;font-size: 11px;" >
+                          <%= movimiento.usuarios_taquilla.nombre %>
+                        </td>
+                        <td  class="titulo" style="cursor: zoom-in;color: black;font-weight: bold;;text-align: right;font-size: 12px;">
+                        <%= number_with_precision(movimiento.monto, precision: 2, separator: '.', delimiter: ',') %>
+                        </td>
+                        <td   class="titulo" style="cursor: zoom-in;color: black;font-weight: bold;text-align: left;;font-size: 12px;">
+                          <%= movimiento.created_at.strftime('%d/%m/%Y %I:%M %p')%>
+                        </td>
+                        <td style="color: black;font-weight: bold;text-align: left;font-size: 12px;">
+                         <%= movimiento.detalle %>      </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+
+                </table>
+            </div>

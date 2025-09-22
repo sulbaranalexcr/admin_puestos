@@ -1,0 +1,2 @@
+class InternationalVideo < ApplicationRecord
+end

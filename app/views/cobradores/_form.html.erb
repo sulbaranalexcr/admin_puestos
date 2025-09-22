@@ -1,0 +1,83 @@
+
+
+<div class="form-group">
+  <%= f.label 'Nombre' %>
+  <%= f.text_field :nombre, class: "form-control", style: 'width: 50%' %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+
+</div>
+
+
+<div class="form-group">
+  <%= f.label 'Apellido' %>
+  <%= f.text_field :apellido, class: "form-control", style: 'width: 50%' %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+<div class="form-group">
+  <%= f.label 'Telefono' %>
+  <%= f.text_field :telefono, class: "form-control", style: 'width: 50%' %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+<div class="form-group">
+  <%= f.label 'E-mail' %>
+  <%= f.email_field :correo, class: "form-control", style: 'width: 50%' %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+
+<div class="form-group">
+  <%= f.label 'Asigne Moneda' %>
+  <select size=1 class="form-control" name="cobradore[moneda_id]" id="cobradore_moneda_id" style="width: 50%">
+    <%for moneda in Moneda.all.order(:id) %>
+      <option value="<%=moneda.id%>"><%=moneda.nombre%> (<%= moneda.abreviatura%>)</option>
+    <%end%>
+  </select>
+</div>
+
+
+<div class="form-group">
+  <%= f.label 'Asigne Deportes' %>
+  <select size=10 multiple class="form-control" name="cobradore[deporte_id][]" multiple="multiple" id="cobradore_deporte_id" style="width: 50%">
+    <%for deporte in Juego.all.order(:nombre) %>
+      <option value="<%=deporte.juego_id%>" ><%=deporte.nombre%> </option>
+    <%end%>
+  </select>
+</div>
+
+
+<div class="form-group">
+  <%= f.label 'Comision Banca' %>
+  <%= f.number_field :comision_banca, class: "form-control", style: 'width: 50%' %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+<div class="form-group">
+  <%= f.label 'Comision Integrador' %>
+  <%= f.number_field :comision_integrador, class: "form-control", style: 'width: 50%' %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+<div class="form-group">
+  <%= f.label 'Comision Grupo' %>
+  <%= f.number_field :comision_grupo, class: "form-control", style: 'width: 50%' %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+
+<div class="form-group">
+  <%= f.label 'Asigne Integrador' %>
+  <select size=1 class="form-control" name="cobradore[integrador_id]" id="cobradore_integrador_id" style="width: 50%">
+    <option value="0">Sin integrador</option>
+    <%for integrador in @integradores %>
+      <option value="<%=integrador.id%>"><%=integrador.nombre%></option>
+    <%end%>
+  </select>
+</div>
+
+
+<div class="form-group">
+  <%= f.label 'Activo' %>
+  <%= f.check_box :activo, {}%>
+</div>

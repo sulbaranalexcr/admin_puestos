@@ -1,0 +1,87 @@
+
+<script>
+   function buscar(id){
+     if (id == "ADM"){
+        $('#grupo_select').hide();
+        $('#intermediario_select').hide();
+     }else if (id == "INT"){
+         $('#intermediario_select').show();
+         $('#grupo_select').hide();
+      }else{
+        $('#intermediario_select').hide();
+         $('#grupo_select').show();
+      }
+   }
+</script>
+
+
+
+<%= form_for @usuario, url: @url, role: :form, html: { multipart: true } do |f| %>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+
+
+        <div class="box-body">
+          <div class="form-group">
+            <%= f.label 'Nombre' %>
+            <%= f.text_field :username, class: "form-control", style: 'width: 50%' %>
+          </div>
+
+
+          <div class="form-group">
+            <%= f.label 'Clave' %>
+            <%= f.text_field :password, class: "form-control", style: 'width: 50%' %>
+          </div>
+
+          <div class="form-group">
+            <label for="tpipo">Tipo</label>
+            <select size=1 class="form-control" name="user[tipo]" id="user_tipo" style="width: 50%;" onchange="buscar(this.value)" />
+             <% if session[:usuario_actual]['tipo'] == "ADM" %>
+                <option value="ADM">Banca</option>
+                <option value="INT">Intermediario</option>
+                <option value="GRP">Grupo</option>
+            <%else%>
+                <option value="GRP">Seleccione Grupo</option>
+                <option value="GRP">Grupo</option>
+            <%end%>
+            </select>
+          </div>
+
+          <div id="intermediario_select" class="form-group" style="display: none;">
+            <label for="grupo_id">Intermediario</label>
+            <select size=1 class="form-control" placeholder="Grupo"  name="user[intermediario_id]" id="user_intermediario_id" style="width: 50%;"/>
+              <%for inter in Intermediario.all.order(:nombre)%>
+              <option value="<%= inter.id %>" ><%= inter.nombre %></option>
+            <%end%>
+          </select>
+          </div>
+
+
+          <div id="grupo_select" class="form-group" style="display: none;">
+            <label for="grupo_id">Grupo</label>
+            <select size=1 class="form-control" placeholder="Grupo"  name="user[grupo_id]" id="user_grupo_id" style="width: 50%;"/>
+            <% if session[:usuario_actual]['tipo'] == "ADM" %>
+              <%grupos = Grupo.all.order(:nombre)%>
+            <%else%>
+              <%grupos = Grupo.where(intermediario_id: session[:usuario_actual]['intermediario_id']).order(:nombre)%>
+            <%end%>
+            <%for grupo in grupos%>
+              <option value="<%= grupo.id %>" ><%= grupo.nombre %></option>
+            <%end%>
+          </select>
+          </div>
+
+          <div class="form-group">
+            <%= f.label 'Activo' %>
+            <%= f.check_box :activo, {}%>
+          </div>
+
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+<% end %>

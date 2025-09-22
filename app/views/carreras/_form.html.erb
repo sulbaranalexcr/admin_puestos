@@ -1,0 +1,37 @@
+
+<div class="form-group">
+  <label for="hipodromo_tipo">Hipodromo</label>
+  <select size=1 class="form-control" placeholder="Tipo"  name="carrera[hipodromo_id]" id="carrera_hipodromo_id" />
+  <%for hipodromo in @hipodromos%>
+  <option value="<%= hipodromo.id %>"><%= hipodromo.nombre %></option>
+  <%end%>
+
+</select>
+</div>
+
+
+
+<div class="form-group">
+  <%= f.label 'Fecha de jornada' %>
+  <%= f.date_field :fecha, min: Time.now, max: Time.now.end_of_year,class: "form-control", style: 'width: 20%' %>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+
+<div class="form-group">
+  <%= f.label 'Cantidad de carreras' %>
+  <table border=0>
+    <tr>
+      <td>
+        <%= f.text_field :cantidad_carreras, class: "form-control", placeholder: "Cantidad", required: true, id: 'cantidad_carreras'%>
+      </td>
+      <td>
+        <input type="button" value="Crear caballos" onclick="caballos($('#cantidad_caballos').val())"  class="btn btn-success" style="margin-left: 10px"/>
+      </td>
+    </tr>
+  </table>
+  <span class="help-block"><i>* Este campo es requerido</i><span>
+</div>
+
+<div id="caballos">
+</div>

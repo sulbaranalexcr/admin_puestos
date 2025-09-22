@@ -1,0 +1,166 @@
+<script>
+
+function mostrar_tasa(id){
+  $.ajax({
+    type : "POST",
+    url : '/solicitudes/verificar_tasa',
+    data : {
+      id: id
+    },
+    success : function(request) {
+      $('#detalle2').val("USD " + numeral(request.monto_original).format("0,0.00") + " a una tasa de: " + numeral(request.tasa).format("0,0.00") + ", Total Retiro:  " + request.simbolo + " " + numeral(request.monto_cambio).format("0,0.00"));
+    },
+    error : function(request) {
+      $('#detalle2').val("");
+    }
+  });
+
+}
+
+
+
+function mostrar_imagen(id){
+    if (Number(id) > 0){
+      $.ajax({
+        type : "POST",
+        url : '/solicitudes/mostrar_imagen',
+        data : {
+          id: id
+        },
+        success : function(request) {
+          $('#img_prev').show();
+          $('#img_prev').attr('src',"http://142.93.57.62:3003"+request.archivo);
+        },
+        error : function(request) {
+          $('#img_prev').hide();
+        }
+      });
+    }else{
+       $('#img_prev').hide();
+    }
+
+}
+
+function procesar(){
+  detalle = $('#detalle').val();
+  id_solicitud = $('#solicitud').val();
+  if (Number(id_solicitud > 0)){
+      swal({
+           title: "Estan correctos los datos de el retiro?" ,
+           text:   $('#solicitud Option:selected').text() + ", Verifique y pulse 'Aceptar' para confirmar.",
+           icon: "warning",
+           buttons: {
+             confirm: "Aceptar",
+              cancel: "Cancelar",
+            },
+         }).then((aceptar) => {
+           if (aceptar || aceptar == ""){
+             $.ajax({
+               type : "POST",
+               url : '/solicitudes/procesar_retiro',
+               data : {
+                 id: id_solicitud,
+                 detalle: detalle,
+                 status: $('#estado_proceso').val()
+               },
+               success : function(request) {
+                  swal("Procesada", "Retiro procesado con exito.", "success").then((aceptar) => {
+                    window.location.href = "/solicitudes/retiros?id=" + request.id
+                  });
+               }
+             });
+
+         }else{
+           }
+
+         });
+  }else{
+    swal("Error", "Debe seleccionar una recarga.", "error");
+  }
+
+
+}
+
+</script>
+<form>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+
+        <div class="box-header">
+          <h3 class="box-title">Retirar Saldo</h3>
+        </div>
+        <div class="box-body">
+          <table border=0>
+            <tr>
+              <td style="width: 40%;">
+              <div class="form-group">
+                <label> Nombre </label>
+                <p><%= @usuario.nombre %></p>
+              </div>
+
+
+              <div class="form-group">
+                <label> Cedula </label>
+                <p><%= @usuario.cedula %></p>
+              </div>
+
+              <div class="form-group">
+                <label> Correo </label>
+                <p><%= @usuario.correo %></p>
+              </div>
+
+
+              <div class="form-group"  style="width: 60%;">
+                <label for="grupo_id">Solicitud</label>
+                <select size=1 class="form-control" placeholder="Solicitud"  name="solicitud" id="solicitud"  onchange="mostrar_tasa(this.value);">
+                  <option value="0">Seleccion Retiro</option>
+                  <%for solicitud in @solicitudes%>
+                  <option value="<%= solicitud.id %>" > USD: <%=  number_with_precision(solicitud.monto, precision: 2, separator: '.', delimiter: ',') %>  Cuenta: <%= solicitud.cuentas_cliente.nombre_banco %> <%= solicitud.cuentas_cliente.numero_cuenta %> Solicitado: (<%= solicitud.created_at.strftime('%d/%m/%Y %I:%M %p') %>)</option>
+                <%end%>
+              </select>
+              </div>
+
+              <div class="form-group"  style="width: 60%;">
+                <label for="grupo_id">Estatus</label>
+                <select size=1 class="form-control" name="estado_proceso" id="estado_proceso"  />
+                  <option value="2">Procesado</option>
+                  <option value="3">Rechazado</option>
+                </select>
+              </div>
+
+
+              <div class="form-group"  style="width: 100%;">
+                <label> Detalle</label>
+                <input type="text" name="detalle" id="detalle" class="form-control"   >
+              </div>
+
+              <div class="form-group"  style="width: 100%;">
+                <label> Operacion</label>
+                <input type="text" name="detalle2" id="detalle2" class="form-control"   readonly>
+              </div>
+
+            </td>
+            <td style="width: 60%;" valign="top">
+                 <%for cuenta in @cuentascliente%>
+                   <div class="form-group" style="margin-left: 5%;">
+                     <label> Banco</label>
+                     <p><%= Banco.find_by(banco_id: cuenta.banco_id).nombre%></p>
+                     <label> Numero de cuenta</label>
+                     <p><%= cuenta.numero_cuenta%> (<%= cuenta.moneda == 1 ? "Bs." : "USD"%>)</p>
+                     <hr>
+                   </div>
+                 <%end%>
+            </td>
+          </tr>
+        </table>
+
+        <div class="box-footer">
+          <a href="/taquillas" class='btn btn-danger' />Cancelar</a>
+          <input type="button" value='Enviar' class="btn btn-success" onclick="procesar();"/>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</form>

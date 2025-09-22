@@ -1,0 +1,79 @@
+<div class="box">
+
+
+  <div class="box-body">
+
+    <div class="box-body">
+    <div class="form-group col-sm-4">
+        <label for="banco">Banco</label>
+        <select size=1 class="form-control" placeholder="banco"  name="cuentas_banca[banco_id]" id="cuentas_banca_banco_id" onchange="mostrar_nombre_banco(this.value);">
+        <option value="0">Introducir manual</option>
+        <%for banco in @bancos%>
+           <option value="<%= banco.banco_id%>" <%= @cuentas_banca.banco_id == banco.banco_id ? "selected":"" %>><%= banco.nombre%></option>
+        <%end%>
+        </select>
+          <input type="text" value="" placeholder="Nombre de Banco" id="nombre_banco" name="nombre_banco" class="form-control" autofocus>
+      </div>
+
+
+
+      <div class="form-group col-sm-4">
+        <%= f.label :numero_cuenta %>
+        <%= f.text_field :numero_cuenta, class: "form-control", placeholder: "Numero de Cuenta", required: true %>
+        <span class="help-block"><i>* Este campo es requerido</i><span>
+      </div>
+
+      <div class="form-group  col-sm-4">
+        <label for="cuenta_tipo">Tipo</label>
+        <select size=1 class="form-control" placeholder="Tipo"  name="cuentas_banca[tipo_cuenta]" id="cuentas_banca_tipo_cuenta">
+           <!--option value=1 <%= @cuentas_banca.tipo_cuenta == 1 ? "selected":"" %>>Ahorro</option-->
+          <option value=3 <%= @cuentas_banca.tipo_cuenta == 3 ? "selected":"" %>>Efectivo</option>
+          <option value=2 <%= @cuentas_banca.tipo_cuenta == 2 ? "selected":"" %>>Cuenta</option>
+          <option value=4 <%= @cuentas_banca.tipo_cuenta == 4 ? "selected":"" %>>Cryptomoneda</option>
+        </select>
+      </div>
+   </div>
+   <div class="box-body">
+
+      <div class="form-group  col-sm-4">
+        <label for="moneda">Moneda</label>
+        <select size=1 class="form-control" placeholder="Moneda"  name="cuentas_banca[moneda]" id="cuentas_banca_moneda" />
+        <%for moneda in Moneda.where("length(abreviatura) > 0")%>
+           <option value="<%= moneda.id%>" <%= @cuentas_banca.moneda == moneda.id ? "selected":"" %>><%= moneda.abreviatura + " - " + moneda.pais%></option>
+        <%end%>
+        </select>
+      </div>
+
+
+      <div class="form-group col-sm-4">
+        <label for="nombre">Nombre a quien pertenece la cuenta</label>
+        <%= f.text_field :nombre_cuenta, class: "form-control", placeholder: "Nombre", required: true %>
+        <span class="help-block"><i>* Este campo es requerido</i><span>
+      </div>
+
+      <div class="form-group col-sm-4">
+        <label for="cedula">Cedula/Rif de la cuenta</label>
+        <%= f.text_field :cedula_cuenta, class: "form-control", placeholder: "cedula", required: true %>
+        <span class="help-block"><i>* Este campo es requerido</i><span>
+      </div>
+   </div>
+   <div class="box-body">
+      <div class="form-group col-sm-12">
+        <label for="correo">Correo de la cuenta</label>
+        <%= f.text_field :email_cuenta, class: "form-control", placeholder: "Correo", required: true %>
+        <span class="help-block"><i>* Este campo es requerido</i><span>
+      </div>
+  </div>
+</div>
+</div>
+
+
+<script>
+   function mostrar_nombre_banco(id){
+     if (id == "0"){
+       $('#nombre_banco').show();
+     }else{
+       $('#nombre_banco').hide();
+     }
+   }
+</script>

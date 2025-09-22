@@ -1,0 +1,71 @@
+<div class="box">
+
+
+  <div class="box-body">
+
+    <div class="box-body">
+    <div class="form-group col-sm-4">
+        <label for="banco">Moneda</label><br>
+        <label for="banco"><%= @moneda.abreviatura%> - <%= @moneda.nombre%></label>
+        <input type='hidden' value="<%= @moneda.id%>" id="id_moneda" >
+      </div>
+      <div class="form-group col-sm-4">
+        <label for="banco">Valor x Dollar</label><br>
+        <input type="number" step="0.01" class="form-control" placeholder="Tasa" required="true" name="tasa" id="tasa" value="<%= @valor_anterior%>">
+        <span class="help-block"><i>* Este campo es requerido</i><span>
+      </div>
+
+   </div>
+</div>
+</div>
+
+<div class="box-footer">
+  <%= link_to 'Cancelar', :back, class: 'btn btn-danger' %>
+  <input type='button' value='Enviar' class ='btn btn-success' onclick="grabar()">
+</div>
+
+
+<script>
+  function grabar(){
+    console.log(Number($('#tasa').val()));
+    if (Number($('#tasa').val()) == 0){
+        console.log('aaa');
+       swal("Error", "Debe ingresar valor de la tasa.", "error");
+       return ;
+    }
+    mensaje = "" ;
+        swal({
+          title: "ESTA SEGURO DE REALIZAR ESTE CAMBIO?" ,
+          text: "Este cambio afectara todos sus agentes? \n  Moneda: <%= @moneda.abreviatura %>, Tasa: " + $('#tasa').val(),
+          icon: "warning",
+          dangerMode: true,
+          buttons: {
+          confirm: "Cancelar",
+          cancel: "Aceptar",
+          },
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+          } else {
+              axios({
+                  method: 'POST',
+                    url: '/tasas_cambio/por_agentes',
+                  data: {
+                      "id_moneda": $('#id_moneda') .val(),
+                      "valor_moneda": $('#tasa') .val(),
+                  },
+                })
+                .then(function(response) {
+                  swal("Completo", "Datos almacenados.", "success") ;
+                  document.location.href = "/tasas_cambio?tipo=2";
+                }
+
+              )
+              .catch(function (error) {
+                swal("Lo siento", "Ocurrio un error.", "error");
+              });
+          }
+        });
+
+  }
+</script>

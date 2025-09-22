@@ -1,0 +1,2 @@
+class ErroresTaquillaVenta < ApplicationRecord
+end

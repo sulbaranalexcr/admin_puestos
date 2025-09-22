@@ -1,0 +1,27 @@
+
+
+<div id="user_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+
+  <div class="row">
+    <div class="col-sm-5 text-right">
+      <table id="caballos_enter" class="table table-bordered table-striped dataTable" role="grid">
+        <thead>
+          <tr>
+            <th class="col-sm-1 text-right">Numero</th>
+            <th class="col-sm-2 text-left">Nombre</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @caballos_array.each do |caba| %>
+            <tr>
+              <td class="col-sm-1 text-right"> <%= caba['numero_puesto'] %> </td>
+              <td class="col-sm-2 text-left"><input type="text" readOnly id="numcab<%= caba['numero_puesto'] %>" value="<%= caba['nombre'] %>" class="form-control" /> </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+

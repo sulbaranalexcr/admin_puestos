@@ -1,0 +1,14 @@
+development:
+  adapter: redis
+  url: redis://<%= Figaro.env.REDIS_HOST %>:6379/1
+  channel_prefix: taquilla_puestos_production
+
+test:
+  adapter: redis
+  url: redis://<%= Figaro.env.REDIS_HOST %>:6379/1
+  channel_prefix: taquilla_puestos_production
+
+production:
+  adapter: redis
+  url: redis://<%= Figaro.env.REDIS_HOST %>:6379/1
+  channel_prefix: taquilla_puestos_production

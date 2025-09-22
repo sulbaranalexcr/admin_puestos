@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  hipodromo: one
+  carrera: one
+  premio: 1.5
+  disponible: 1
+  comision: 1.5
+  activo: false
+
+two:
+  hipodromo: two
+  carrera: two
+  premio: 1.5
+  disponible: 1
+  comision: 1.5
+  activo: false

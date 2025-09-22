@@ -1,0 +1,53 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  grupo: one
+  hipodromo: one
+  carrera: one
+  caballos_carrera: one
+  puesto: MyString
+  accion_id: 1
+  tipo_apuesta: one
+  texto_jugada: MyString
+  moneda: 1
+  monto: 9.99
+  id_propone: 1
+  id_juega: 1
+  id_banquea: 1
+  id_gana: 1
+  cuanto_gana: 9.99
+  cuanto_gana_completo: 9.99
+  cuanto_pierde: 9.99
+  status: 1
+  status2: 1
+  activa: false
+  id_padre: 1
+  corte_id: 1
+  tipo_juego: 1
+  operaciones_cajero: one
+
+two:
+  grupo: two
+  hipodromo: two
+  carrera: two
+  caballos_carrera: two
+  puesto: MyString
+  accion_id: 1
+  tipo_apuesta: two
+  texto_jugada: MyString
+  moneda: 1
+  monto: 9.99
+  id_propone: 1
+  id_juega: 1
+  id_banquea: 1
+  id_gana: 1
+  cuanto_gana: 9.99
+  cuanto_gana_completo: 9.99
+  cuanto_pierde: 9.99
+  status: 1
+  status2: 1
+  activa: false
+  id_padre: 1
+  corte_id: 1
+  tipo_juego: 1
+  operaciones_cajero: two

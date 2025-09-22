@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  match_id: 1
+  nombre: MyString
+  utc: 2019-08-15 15:42:01
+  local: 2019-08-15 15:42:01
+  match: MyText
+  juego: one
+  liga: one
+
+two:
+  match_id: 1
+  nombre: MyString
+  utc: 2019-08-15 15:42:01
+  local: 2019-08-15 15:42:01
+  match: MyText
+  juego: two
+  liga: two

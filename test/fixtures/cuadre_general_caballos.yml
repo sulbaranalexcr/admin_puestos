@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  estructura: one
+  venta: 9.99
+  premio: 9.99
+  comision: 9.99
+  utilidad: 9.99
+  moneda: 1
+
+two:
+  estructura: two
+  venta: 9.99
+  premio: 9.99
+  comision: 9.99
+  utilidad: 9.99
+  moneda: 1

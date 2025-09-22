@@ -1,0 +1,118 @@
+<%= javascript_include_tag "axios.js" %>
+<script>
+function consultar(){
+  swalert_espera("Espere, generando reporte...")
+  axios({
+      method: 'POST',
+        url: '/unica/reportes/cuadre_paginas_grupo',
+      data: {
+              "desde": $('#desde').val(),
+              "hasta": $('#hasta').val(),
+              "taquilla_id": $('#taquilla').val()
+            },
+    })
+    .then(function(response) {
+      Swal.close();
+        $('#cuerpo_div').html(response.data);
+      }
+
+  )
+  .catch(function (error) {
+    Swal.close();
+    swal("Lo siento", "Ocurrio un error.", "error");
+  });
+
+  }
+
+  function printReport() {
+    const printContents = document.getElementById('cuerpo_div').innerHTML;
+    
+    // Crear una nueva ventana
+    const printWindow = window.open('', '_blank', 'width=800,height=600');
+    
+    // Escribir el contenido
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Vista Previa de Impresión</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 20px;
+            }
+            @media print {
+              body {
+                margin: 0;
+                padding: 0;
+              }
+              .no-print {
+                display: none !important;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div id="print-content">
+            ${printContents}
+          </div>
+          <div class="no-print" style="position:fixed;bottom:20px;right:20px;">
+            <button onclick="window.print()" style="padding:10px;background:#4CAF50;color:white;border:none;border-radius:4px;">
+              Imprimir
+            </button>
+            <button onclick="window.close()" style="padding:10px;background:#f44336;color:white;border:none;border-radius:4px;margin-left:10px;">
+              Cerrar
+            </button>
+          </div>
+        </body>
+      </html>
+    `);
+    
+    printWindow.document.close();
+    
+    // Enfocar la nueva ventana
+    printWindow.focus();
+  }
+</script>
+
+<form>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">Cuadre por paginas</h3>
+      </div>
+      <div class="form-group">
+        <div class="container" style="margin-left: inherit; width:fit-content;">
+          <div class="box">
+            <div class="form-group">
+              <label for="desde_fecha">Desde</label>
+              <input type="date" class="form-control" id="desde" name="desde" required="true" value="<%= Time.now.strftime('%Y/%m/%d') %>">
+            </div>
+            <div class="form-group">
+              <label for="hasta_fecha">Hasta</label>
+              <input type="date" class="form-control" id="hasta" name="hasta" required="true" value="<%= Time.now.strftime('%Y/%m/%d') %>">
+            </div>
+          </div>
+          <div class="box-footer">
+            <input type="button" value="Aceptar" class="btn btn-success" onclick="consultar()">
+            <input type="button" value="Imprimir" class="btn btn-success" onclick="printReport()">
+          </div>
+        </div>
+        <div class="form-group">
+          <div id='cuerpo_div'>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</form>
+
+<script>
+  window.boton_check() ;
+  $('#desde').val("<%= Time.now.strftime('%Y-%m-%d')%>");
+  $('#hasta').val("<%= Time.now.strftime('%Y-%m-%d')%>");
+
+</script>
+
