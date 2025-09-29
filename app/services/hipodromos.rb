@@ -140,7 +140,6 @@ module Hipodromos
         datos_carrera_nyra.ids_carrera.find { |a| a[0] == numero_carrera.to_i }[1]
       else
         data_aws_api = Hipodromos::Carreras.scratches
-        Rails.logger.info "Datos AWS: #{data_aws_api}"
         codigos_carrera_nyra = data_aws_api[hipodromo.codigo_nyra].pluck(:race_number, :race_id)
         CarrerasIdsNyra.create(codigo_nyra: hipodromo.codigo_nyra, ids_carrera: codigos_carrera_nyra)
         codigos_carrera_nyra.find { |a| a[0] == numero_carrera.to_i }[1]

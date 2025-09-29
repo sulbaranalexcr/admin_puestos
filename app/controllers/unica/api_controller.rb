@@ -134,11 +134,7 @@ module Unica
       caballos = [{"id"=> buscar_caballo.numero_puesto, "cab_id"=> buscar_caballo.id_api, "hid"=> hipodromo.id.to_s, "carr_id"=> bus_carrera.id.to_s, "retirado"=> true}]
 
       begin
-        # id_carrera_nyra = Hipodromos::Carreras.extrac_nyra_id_race(hipodromo, numero_carrera)
-        # scratches = Hipodromos::Carreras.results(bus_carrera.id, id_carrera_nyra)[1]
         scratches = find_scratches(hipodromo.codigo_nyra, numero_carrera)
-        Rails.logger.info "***************************************************"
-        Rails.logger.info "Scratches NYRA: #{scratches}"
 
         unless verificar_retirado(scratches, numero_caballo).present?
           if params[:reintentar].present?
