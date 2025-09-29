@@ -142,7 +142,7 @@ module Unica
 
         unless verificar_retirado(scratches, numero_caballo).present?
           if params[:reintentar].present?
-            notify_scratches(hipodromo.id, numero_carrera, buscar_caballo.id, 9)
+            notify_scratches(hipodromo.id, bus_carrera.id, buscar_caballo.id, 9)
           else
             dos_minutos = Time.now + 2.minutes
             data_reenvio = { integrator_id: params[:integrator_id].to_i, api_key: params[:api_key],
