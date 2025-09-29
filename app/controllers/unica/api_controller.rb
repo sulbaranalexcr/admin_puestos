@@ -43,27 +43,27 @@ module Unica
       api_key_in = params[:api_key]
       integrator = verificar_integrador(integrador_in, api_key_in)
       render json: { 'code' => -1, 'msg' => 'Integrador no valido.' }, status: 400 and return unless integrator.present?
-
+Rails.logger.info "Pase por integrador"
       numero_carrera = params[:race_number].to_i
       hipodromo = Hipodromo.find_by(abreviatura: params[:racecourse_track_id])
       render json: { 'code' => -1, 'msg' => 'Hipodromo no existe.' }, status: 400 and return unless hipodromo.present?
-
+Rails.logger.info "Pase por hipodormo"
       bus_jornada = hipodromo.jornada.where(fecha: Time.now.all_day)
       unless bus_jornada.present?
         render json: { 'code' => -1, 'msg' => 'Jornada no creada para la fecha.' }, status: 400 and return
       end
-
+Rails.logger.info "Pase por jornada"
       bus_carrera = bus_jornada.last.carrera.find_by(numero_carrera: numero_carrera)
       unless bus_carrera.present?
         render json: { 'code' => -1, 'msg' => "Carrera #{numero_carrera} no existe." }, status: 400 and return
       end
       render json: { 'code' => 1, 'msg' => 'Carrera cerrada con exito.' } and return unless hipodromo.cierre_api
-
+Rails.logger.info "Pase por carrera"
       bus_carrera.update(activo: false)
       hipodromo_id = bus_carrera.jornada.hipodromo.id
       CierreCarrera.create(hipodromo_id: hipodromo_id, carrera_id: bus_carrera.id, user_id: 0)
       CierresApi.create(es_api: true, hipodromo_id: hipodromo.id, carrera_id: bus_carrera.id)
-
+Rails.logger.info "Pase por todo"
       SISTEMAS.each do |sis_url|
         Thread.new { 
           sis_url = "#{sis_url}configuracion/cerrar_carrera"
