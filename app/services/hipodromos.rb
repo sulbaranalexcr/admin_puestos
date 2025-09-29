@@ -19,7 +19,7 @@ module Hipodromos
       hip_ids.each do |hip|
         races_all = []
         extract_data_races(data, hip, races_all)
-        insert_racetracks(racetracks, hip, races_all)
+        # insert_racetracks(racetracks, hip, races_all)
       end
       racetracks
     end
