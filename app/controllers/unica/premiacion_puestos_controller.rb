@@ -141,6 +141,10 @@ module Unica
       # logger.info("***************************************************")
       # logger.info(@caballos_array.to_json)
       # logger.info("***************************************************")
+      Rails.logger.info "***************************************************"
+      Rails.logger.info @caballos_array
+      Rails.logger.info @caballos_array.to_json
+      
       @comparacion = @caballos_array.map { |a| a['sugerido_nyra'] } == @caballos_array.map { |b| b['sugerido'] }
       render partial: 'unica/premiacion_puestos/caballos', layout: false
     end
