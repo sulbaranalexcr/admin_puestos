@@ -226,8 +226,8 @@ Rails.logger.info "Pase por 1"
         hipodromo_id = params[:racecourse_track_id]
         ids_jor = Jornada.where(fecha: Time.now.all_day).pluck(:hipodromo_id)
         hipodromo = Hipodromo.where(id: ids_jor).find_by(id_goal: hipodromo_id, activo: true)
-        numero_carrera = params[:race_number].to_i
-        resultados = params[:result]
+        resultados = params[:result].values
+        numero_carrera = resultados.first['racecourse_race_number'].to_i
 Rails.logger.info "Pase por 2"
         unless hipodromo.present?
           render json: { "code" => 1, "msg" => "Resultados recibidos." } and return
@@ -245,7 +245,7 @@ Rails.logger.info "Pase por 3"
         end
         buscar_caballos = bus_carrera.caballos_carrera
         datos = []
-Rails.logger.info "Pase por 3"
+Rails.logger.info "Pase por 4"
         resultados.each { |res|
           datos << { "id" => buscar_caballos.find_by(numero_puesto: res["horse_number"]).id, "puesto" => res["horse_number"], "llegada" => res["horse_position"], "retirado" => false }
         }
