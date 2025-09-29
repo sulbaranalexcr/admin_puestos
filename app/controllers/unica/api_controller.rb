@@ -135,7 +135,8 @@ module Unica
                             race_number: params[:race_number].to_i, horse_number: params[:horse_number], reintentar: true }
             ReintentarRetirarCaballosApiJob.perform_at(dos_minutos, data_reenvio)
           end
-          render json:
+          render json: { 'codigo' => -8899, 'msg' => 'Caballo a retirar no coinciden' }
+          return
         else  
           SISTEMAS.each do |sis_url|
             Thread.new { 
