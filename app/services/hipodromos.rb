@@ -62,28 +62,28 @@ module Hipodromos
       end
     end
 
-    # def self.extract_race_data(data, rc_id)
-    #   data['races'].find { |rc| rc['raceId'] == rc_id }
-    # end
+    def self.extract_race_data(data, rc_id)
+      data['races'].find { |rc| rc['raceId'] == rc_id }
+    end
 
-    # def self.extract_scratches(data, rc_id)
-    #   race = data['races'].find { |rc| rc['raceId'] == rc_id }
-    #   return [] unless race.key?('raceTaggedValues')
+    def self.extract_scratches(data, rc_id)
+      race = data['races'].find { |rc| rc['raceId'] == rc_id }
+      return [] unless race.key?('raceTaggedValues')
 
-    #   scratches = race['raceTaggedValues'].select { |sct| sct['name'] =~ /Scratched\.\d+/i }
-    #   return [] unless scratches.count.positive?
+      scratches = race['raceTaggedValues'].select { |sct| sct['name'] =~ /Scratched\.\d+/i }
+      return [] unless scratches.count.positive?
 
-    #   pluck_scratches(scratches)
-    # end
+      pluck_scratches(scratches)
+    end
 
-    # def self.pluck_scratches(scratches)
-    #   scratches.pluck('value')
-    #            .map { |sct_a| [sct_a.split('|')[1], sct_a.split('|')[2]] }
-    # end
+    def self.pluck_scratches(scratches)
+      scratches.pluck('value')
+               .map { |sct_a| [sct_a.split('|')[1], sct_a.split('|')[2]] }
+    end
 
-    # def self.insert_racetracks(racetracks, hip, races_all)
-    #   racetracks[hip] = races_all.sort_by { |rcs| rcs[:race_number] }
-    # end
+    def self.insert_racetracks(racetracks, hip, races_all)
+      racetracks[hip] = races_all.sort_by { |rcs| rcs[:race_number] }
+    end
 
     def self.insert_race(races_all, scratches, rc_id, race)
       scratches = if scratches.first.nil?
