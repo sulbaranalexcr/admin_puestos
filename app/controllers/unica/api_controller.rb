@@ -118,7 +118,6 @@ module Unica
               status: 400 and return
       end
       return if PremiosIngresado.where(carrera_id: bus_carrera.id).present?
-Rails.logger.info "Pase por premiosa"
 
       caballos = [{"id"=> buscar_caballo.numero_puesto, "cab_id"=> buscar_caballo.id_api, "hid"=> hipodromo.id.to_s, "carr_id"=> bus_carrera.id.to_s, "retirado"=> true}]
 
@@ -136,23 +135,22 @@ Rails.logger.info "Pase por premiosa"
                             race_number: params[:race_number].to_i, horse_number: params[:horse_number], reintentar: true }
             ReintentarRetirarCaballosApiJob.perform_at(dos_minutos, data_reenvio)
           end
-          render json: { 'codigo' => -8899, 'msg' => 'Caballo a retirar no coinciden' }
-          return
+          render json:
+        else  
+          SISTEMAS.each do |sis_url|
+            Thread.new { 
+              uri = URI.parse("#{sis_url}retirados/retirar")
+              https = Net::HTTP.new(uri.host, uri.port)
+              https.use_ssl = true
+              req = Net::HTTP::Post.new(uri.path, initheader = { 'Content-Type' => 'application/json' })
+              req.body = { 'id' => bus_carrera.id, 'id_api' => bus_carrera.id_api, 'caballos' => caballos, 'premia_api' => true, 'recibe_puestos' => true }.to_json
+              https.request(req)
+            }
+          end
         end
       rescue StandardError => e
         puts 'Error en nyra'
         puts e
-      end
-
-      SISTEMAS.each do |sis_url|
-        Thread.new { 
-          uri = URI.parse("#{sis_url}retirados/retirar")
-          https = Net::HTTP.new(uri.host, uri.port)
-          https.use_ssl = true
-          req = Net::HTTP::Post.new(uri.path, initheader = { 'Content-Type' => 'application/json' })
-          req.body = { 'id' => bus_carrera.id, 'id_api' => bus_carrera.id_api, 'caballos' => caballos, 'premia_api' => true, 'recibe_puestos' => true }.to_json
-          https.request(req)
-        }
       end
 
     end
