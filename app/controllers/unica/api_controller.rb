@@ -152,8 +152,8 @@ Rails.logger.info "***************************************************"
           end
         end
       rescue StandardError => e
-        puts 'Error en nyra'
-        puts e
+        Rails.logger.error 'Error en nyra'
+        Rails.logger.error e
       end
 
     end
