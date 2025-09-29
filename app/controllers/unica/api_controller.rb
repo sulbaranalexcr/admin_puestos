@@ -36,8 +36,6 @@ module Unica
     end
 
     def close_race
-      render json: { status: "OK"} and return 
-
       CierreLog.create(parametros: params.to_json)
       integrador_in = params[:integrator_id].to_i
       api_key_in = params[:api_key]
@@ -98,7 +96,6 @@ Rails.logger.info "Pase por todo"
     end
 
     def invalidate_horse
-      render json: { status: "OK"} and return 
       integrador_in = params[:integrator_id].to_i
       api_key_in = params[:api_key]
       integrator = verificar_integrador(integrador_in, api_key_in)
@@ -187,7 +184,7 @@ Rails.logger.info "Pase por todo"
 
     def premiar_interno
     
-      sistemas = ["https://admin-puesto.aposta2..com/unica/premiacion_puestos/premiar_puestos", 
+      sistemas = ["https://admin-puesto.aposta2.com/unica/premiacion_puestos/premiar_puestos", 
                   "https://admin_tablas.betingxchange.com/unica/premiacion_tablas/premiar_tablas",
                   "https://adminrojonegro.betingxchange.com/unica/premiacion_rojonegro/premiar_rojonegro"]
 
@@ -218,7 +215,6 @@ Rails.logger.info "Pase por todo"
     end
     
     def award_race
-      render json: { status: "OK"} and return 
       begin
         integrador_in = params[:integrator_id].to_i
         api_key_in = params[:api_key]
@@ -264,12 +260,9 @@ Rails.logger.info "Pase por todo"
         end
 
         if validate_nyra(resultados, bus_carrera, hipodromo.codigo_nyra)
-          sistemas = ["https://admin.betsolutiongroup.com/unica/premiacion_puestos/premiar_puestos", 
-                      "https://admin.betsolutionsgroup.com/unica/premiacion_puestos/premiar_puestos",
-                      "https://admintablas.gamehorses.com/unica/premiacion_tablas/premiar_tablas",
-                      "https://admin.tablasdinamica.com/unica/premiacion_tablas/premiar_tablas",
-                      "https://adminrojonegro.gamehorses.com/unica/premiacion_rojonegro/premiar_rojonegro", 
-                      "https://admin.rojosynegros.com/unica/premiacion_rojonegro/premiar_rojonegro"]
+          sistemas = ["https://admin-puesto.aposta2.com/unica/premiacion_puestos/premiar_puestos", 
+                      "https://admin_tablas.betingxchange.com/unica/premiacion_tablas/premiar_tablas",
+                      "https://adminrojonegro.betingxchange.com/unica/premiacion_rojonegro/premiar_rojonegro"]
     
           sistemas.each do |sis_url|
             Thread.new { 
