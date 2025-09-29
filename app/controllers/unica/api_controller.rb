@@ -61,7 +61,6 @@ Rails.logger.info "Pase por carrera"
       hipodromo_id = bus_carrera.jornada.hipodromo.id
       CierreCarrera.create(hipodromo_id: hipodromo_id, carrera_id: bus_carrera.id, user_id: 0)
       CierresApi.create(es_api: true, hipodromo_id: hipodromo.id, carrera_id: bus_carrera.id)
-Rails.logger.info "Pase por todo"
       SISTEMAS.each do |sis_url|
         Thread.new { 
           sis_url = "#{sis_url}configuracion/cerrar_carrera"
@@ -222,18 +221,20 @@ Rails.logger.info "Pase por todo"
         unless integrator.present?
           render json: { "code" => -1, "msg" => "Integrador no valido." }, status: 400 and return
         end
+Rails.logger.info "Pase por 1"
 
         hipodromo_id = params[:racecourse_track_id]
         ids_jor = Jornada.where(fecha: Time.now.all_day).pluck(:hipodromo_id)
         hipodromo = Hipodromo.where(id: ids_jor).find_by(id_goal: hipodromo_id, activo: true)
         numero_carrera = params[:race_number].to_i
         resultados = params[:result]
-
+Rails.logger.info "Pase por 2"
         unless hipodromo.present?
           render json: { "code" => 1, "msg" => "Resultados recibidos." } and return
         end
         CierreLog.create(parametros: params.to_json)
 
+Rails.logger.info "Pase por 3"
         bus_jornada = hipodromo.jornada.where(fecha: Time.now.all_day)
         unless bus_jornada.present?
           render json: { "code" => 1, "msg" => "Resultados recibidos." } and return
@@ -244,7 +245,7 @@ Rails.logger.info "Pase por todo"
         end
         buscar_caballos = bus_carrera.caballos_carrera
         datos = []
-
+Rails.logger.info "Pase por 3"
         resultados.each { |res|
           datos << { "id" => buscar_caballos.find_by(numero_puesto: res["horse_number"]).id, "puesto" => res["horse_number"], "llegada" => res["horse_position"], "retirado" => false }
         }
@@ -252,13 +253,13 @@ Rails.logger.info "Pase por todo"
         buscar_caballos.where.not(id: datos.map { |d| d["id"] }).each do |cab|
             datos << { "id" => cab.id, "puesto" => cab.numero_puesto, "llegada" => 0, "retirado" => cab.retirado }
         end
-
+Rails.logger.info "Pase por51"
         enviar = { "id" => bus_carrera.id, "caballos" => datos, "fecha" => Time.now.strftime("%Y-%m-%d"), "premia_api" => true }
         busca_antes = PremiosIngresado.find_by(hipodromo_id: hipodromo.id, carrera_id: bus_carrera.id)
         unless busca_antes.present?
           PremioasIngresadosApi.create(hipodromo_id: hipodromo.id, carrera_id: bus_carrera.id, resultado: datos.to_json)
         end
-
+Rails.logger.info "Pase por61"
         if validate_nyra(resultados, bus_carrera, hipodromo.codigo_nyra)
           sistemas = ["https://admin-puesto.aposta2.com/unica/premiacion_puestos/premiar_puestos", 
                       "https://admin_tablas.betingxchange.com/unica/premiacion_tablas/premiar_tablas",
