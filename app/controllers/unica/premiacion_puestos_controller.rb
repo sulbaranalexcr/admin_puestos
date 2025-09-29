@@ -225,7 +225,7 @@ module Unica
     #   puts e  
     # end
     def send_to_api(carrera_id, id_api, data_cab)
-      uri = URI.parse('https://horses.betsolutiongroup.com/api/premiar_interno')
+      uri = URI.parse('https://admin-puesto.aposta2.com/api/premiar_interno')
       https = Net::HTTP.new(uri.host, uri.port)
       https.use_ssl = true
       req = Net::HTTP::Post.new(uri.path, initheader = { 'Content-Type' => 'application/json' })
