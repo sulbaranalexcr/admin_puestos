@@ -99,7 +99,7 @@ module Unica
 
     def notify_scratches(hipodromo_id, numero_carrera, numero_caballo, status = 1)
       ActionCable.server.broadcast 'web_notifications_banca_channel', { data: { 'tipo' => 2501 } }
-      retirar_pendiente(hipodromo_id, numero_carrera, numero_caballo, status)
+      retirar_pendiente(hipodromo_id, numero_carrera, numero_caballo)
     end
 
     def invalidate_horse
