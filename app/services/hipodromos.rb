@@ -53,14 +53,14 @@ module Hipodromos
       buscar
     end
 
-    # def self.extract_data_races(data, hip, races_all)
-    #   data['races'].select { |rc| rc['iTSPEventCode'] == hip }.pluck('raceId').each do |rc_id|
-    #     scratches = []
-    #     race = extract_race_data(data, rc_id)
-    #     scratches << extract_scratches(data, rc_id)
-    #     insert_race(races_all, scratches, rc_id, race)
-    #   end
-    # end
+    def self.extract_data_races(data, hip, races_all)
+      data['races'].select { |rc| rc['iTSPEventCode'] == hip }.pluck('raceId').each do |rc_id|
+        scratches = []
+        race = extract_race_data(data, rc_id)
+        scratches << extract_scratches(data, rc_id)
+        insert_race(races_all, scratches, rc_id, race)
+      end
+    end
 
     # def self.extract_race_data(data, rc_id)
     #   data['races'].find { |rc| rc['raceId'] == rc_id }
@@ -85,14 +85,14 @@ module Hipodromos
     #   racetracks[hip] = races_all.sort_by { |rcs| rcs[:race_number] }
     # end
 
-    # def self.insert_race(races_all, scratches, rc_id, race)
-    #   scratches = if scratches.first.nil?
-    #                 []
-    #               else
-    #                 scratches.uniq(&:first).sort_by { |scrat| scrat[0] }
-    #               end
-    #   races_all << { race_number: race['raceNumber'], race_id: rc_id, scratches: scratches.first, name: race['raceMeetingName'] }
-    # end
+    def self.insert_race(races_all, scratches, rc_id, race)
+      scratches = if scratches.first.nil?
+                    []
+                  else
+                    scratches.uniq(&:first).sort_by { |scrat| scrat[0] }
+                  end
+      races_all << { race_number: race['raceNumber'], race_id: rc_id, scratches: scratches.first, name: race['raceMeetingName'] }
+    end
 
     def self.races_by_hipodromo(hipodromo, numero_carrera = nil)
       redis = Redis.new
