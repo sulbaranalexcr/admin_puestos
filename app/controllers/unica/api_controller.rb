@@ -175,7 +175,7 @@ module Unica
       begin
         buscar = CaballosRetiradosConfirmacion.where(hipodromo_id: hip, carrera_id: carr, caballos_carrera_id: cab)
         unless buscar.present?
-          CaballosRetiradosConfirmacion.create(hipodromo_id: hip, carrera_id: carr, caballos_carrera_id: cab, status: 1 )
+          CaballosRetiradosConfirmacion.create(hipodromo_id: hip, carrera_id: carr, caballos_carrera_id: cab, status: 1, user_id: User.first.id )
         end
       end
     end
