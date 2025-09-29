@@ -85,6 +85,18 @@ module Unica
       data.find { |ret| ret.to_s == numero_caballo.to_s }
     end
 
+    def find_scratches(codigo, carrera)
+      scratches = Hipodromos::Carreras.scratches
+      find_hip = scratches[codigo]
+      if find_hip.present?
+        find_carrera = find_hip.find{|a| a[:race_number] == carrera.to_i}
+        if find_hip.present?
+          return find_carrera[:scratches].uniq.map {|a| a[0]}
+        end
+      end
+      []  
+    end
+
     def notify_scratches(hipodromo_id, numero_carrera, numero_caballo, status = 1)
       ActionCable.server.broadcast 'web_notifications_banca_channel', { data: { 'tipo' => 2501 } }
       retirar_pendiente(hipodromo_id, numero_carrera, numero_caballo, status)
@@ -123,8 +135,9 @@ module Unica
 
       begin
         id_carrera_nyra = Hipodromos::Carreras.extrac_nyra_id_race(hipodromo, numero_carrera)
-        scratches = Hipodromos::Carreras.results(bus_carrera.id, id_carrera_nyra)[1]
-Rails.logger.info "***************************************************"
+        # scratches = Hipodromos::Carreras.results(bus_carrera.id, id_carrera_nyra)[1]
+        scratches = find_scratches(codigo, carrera)
+        Rails.logger.info "***************************************************"
         Rails.logger.info "Scratches NYRA: #{scratches}"
 
         unless verificar_retirado(scratches, numero_caballo).present?
