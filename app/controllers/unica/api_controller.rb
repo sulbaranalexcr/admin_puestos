@@ -124,6 +124,8 @@ module Unica
       begin
         id_carrera_nyra = Hipodromos::Carreras.extrac_nyra_id_race(hipodromo, numero_carrera)
         scratches = Hipodromos::Carreras.results(bus_carrera.id, id_carrera_nyra)[1]
+Rails.logger.info "***************************************************"
+        Rails.logger.info "Scratches NYRA: #{scratches}"
 
         unless verificar_retirado(scratches, numero_caballo).present?
           if params[:reintentar].present?
