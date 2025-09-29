@@ -106,6 +106,8 @@ module Hipodromos
       return buscar['races'] unless numero_carrera.present?
 
       buscar
+    rescue StandardError => e
+      []  
     end
 
     def self.results(race_id, nyra_race_id)
