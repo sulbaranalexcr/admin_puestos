@@ -83,20 +83,24 @@ scheduler = Rufus::Scheduler.new
 
 scheduler.cron '00 08 * * *' do ### llenado
   buscar_jornada()
+  Hipodromos::Carreras.cargar_hipodromo()
 end
 
 
 scheduler.cron '30 08 * * *' do ### llenado
   buscar_jornada()
+  Hipodromos::Carreras.cargar_hipodromo()
 end
 
 scheduler.cron '00 09 * * *' do ### llenado
   buscar_jornada()
+  Hipodromos::Carreras.cargar_hipodromo()
 end
 
 
 scheduler.cron '00 10 * * *' do ### llenado
   buscar_jornada()
+  Hipodromos::Carreras.cargar_hipodromo()
 end
 
 scheduler.join
